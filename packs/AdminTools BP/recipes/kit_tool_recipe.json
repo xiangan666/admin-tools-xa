@@ -1,0 +1,17 @@
+{
+  "format_version": "1.21.130",
+  "minecraft:recipe_shaped": {
+    "description": { "identifier": "jm_at:kit_tool" },
+    "tags": ["crafting_table"],
+
+    "pattern": [" C ", " R ", "   "],
+    "key": {
+      "C": { "item": "minecraft:chest" },
+      "R": { "item": "minecraft:redstone" }
+    },
+    "result": { "item": "jm_at:kit_tool" },
+    "unlock": {
+      "context": "AlwaysUnlocked"
+    }
+  }
+}

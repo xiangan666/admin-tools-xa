@@ -1,0 +1,23 @@
+{
+  "format_version": "1.21.130",
+  "minecraft:item": {
+    "description": {
+      "identifier": "jm_at:chest_sorter",
+      "menu_category": {
+        "category": "equipment"
+      }
+    },
+    "components": {
+      "minecraft:icon": {
+        "textures": {
+          "default": "jm_at_chest_sorter"
+        }
+      },
+      "minecraft:display_name": {
+        "value": "item.jm_at:chest_sorter.name"
+      },
+      "minecraft:max_stack_size": 1,
+      "minecraft:glint": true
+    }
+  }
+}

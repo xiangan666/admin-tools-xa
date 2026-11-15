@@ -1,0 +1,9 @@
+{
+  "resource_pack_name": "Admin Tools",
+  "texture_name": "atlas.terrain",
+  "texture_data": {
+    "jm_at_elevator_pad": {
+      "textures": "textures/blocks/jm_at_elevator_pad_texture"
+    }
+  }
+}

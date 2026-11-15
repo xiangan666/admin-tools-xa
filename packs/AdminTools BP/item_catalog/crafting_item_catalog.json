@@ -1,0 +1,28 @@
+{
+  "format_version": "1.21.60",
+  "minecraft:crafting_items_catalog": {
+    "categories": [
+      {
+        "category_name": "equipment",
+        "groups": [
+          {
+            "group_identifier": {
+              "icon": "jm_at:admin_tool",
+              "name": "jm_at:admin_tools"
+            },
+            "items": [
+              "jm_at:admin_tool",
+              "jm_at:ticket_menu",
+              "jm_at:claim_wand",
+              "jm_at:claim_viewer",
+              "jm_at:hologram_tool",
+              "jm_at:chest_sorter",
+              "jm_at:kit_tool",
+              "jm_at:elevator"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

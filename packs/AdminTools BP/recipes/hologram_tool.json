@@ -1,0 +1,15 @@
+{
+  "format_version": "1.21.130",
+  "minecraft:recipe_shapeless": {
+    "description": { "identifier": "jm_at:hologram_tool" },
+    "tags": ["crafting_table"],
+    "ingredients": [
+      { "tag": "minecraft:sign" },
+      { "item": "minecraft:glow_ink_sac" }
+    ],
+    "result": { "item": "jm_at:hologram_tool" },
+    "unlock": {
+      "context": "AlwaysUnlocked"
+    }
+  }
+}

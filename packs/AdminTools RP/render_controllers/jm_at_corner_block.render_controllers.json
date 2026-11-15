@@ -1,0 +1,15 @@
+{
+  "format_version": "1.10.0",
+  "render_controllers": {
+    "controller.render.jm_at_corner_block": {
+      "geometry": "Geometry.default",
+      "materials": [{ "*": "Material.default" }],
+      "textures": ["Array.variants[query.property('jm_at:variant')]"],
+      "arrays": {
+        "textures": {
+          "Array.variants": ["Texture.one", "Texture.two"]
+        }
+      }
+    }
+  }
+}

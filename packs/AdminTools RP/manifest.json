@@ -1,0 +1,61 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Admin Tools 相安版 资源包 2.5.3",
+    "description": "管理员家园统一管理、床传送开关、双层规则与税务收益、礼包提示清理、中文修复及3原木玩家工具配方。二改：相安 3199912548@qq.com\n原作：JM ADDONS / Admin Tools 2.3 Beta (v2.2.2)",
+    "uuid": "5d31bcd8-8682-42e2-8860-ce75e7a3c742",
+    "version": [
+      2,
+      5,
+      3
+    ],
+    "min_engine_version": [
+      1,
+      26,
+      30
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "2a8bfe3d-099b-44e6-9167-9dea07c3d015",
+      "version": [
+        2,
+        5,
+        3
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "uuid": "e700a3a7-14b3-44d3-8b57-fd05498fc778",
+      "version": [
+        2,
+        5,
+        3
+      ]
+    }
+  ],
+  "capabilities": [
+    "pbr"
+  ],
+  "subpacks": [
+    {
+      "folder_name": "default_font",
+      "name": "默认按钮字体",
+      "memory_tier": 0
+    },
+    {
+      "folder_name": "smooth_font",
+      "name": "平滑按钮字体",
+      "memory_tier": 1
+    }
+  ],
+  "metadata": {
+    "authors": [
+      "JM (原作)",
+      "相安 (二改)"
+    ],
+    "product_type": "addon"
+  }
+}

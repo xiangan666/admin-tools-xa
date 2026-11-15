@@ -1,0 +1,17 @@
+{
+  "format_version": "1.21.130",
+  "minecraft:recipe_shaped": {
+    "description": { "identifier": "jm_at:admin_tool" },
+    "tags": ["crafting_table"],
+
+    "pattern": [" P ", " L ", "   "],
+    "key": {
+      "P": { "tag": "minecraft:planks" },
+      "L": { "tag": "minecraft:logs" }
+    },
+    "result": { "item": "jm_at:admin_tool" },
+    "unlock": {
+      "context": "AlwaysUnlocked"
+    }
+  }
+}

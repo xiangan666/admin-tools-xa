@@ -1,0 +1,33 @@
+{
+  "format_version": "1.21.60",
+  "minecraft:block": {
+    "description": {
+      "identifier": "jm_at:elevator",
+      "menu_category": {
+        "category": "equipment",
+        "group": "jm_at:admin_tools"
+      }
+    },
+    "components": {
+      "minecraft:geometry": "geometry.jm_at_elevator_pad",
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "jm_at_elevator_pad",
+          "render_method": "alpha_test"
+        }
+      },
+      "minecraft:collision_box": {
+        "origin": [-8, 0, -8],
+        "size": [16, 1, 16]
+      },
+      "minecraft:selection_box": {
+        "origin": [-8, 0, -8],
+        "size": [16, 1, 16]
+      },
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 2.5
+      },
+      "minecraft:loot": "loot_tables/blocks/elevator.json"
+    }
+  }
+}

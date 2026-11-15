@@ -1,0 +1,16 @@
+node_modules/
+upstream/
+dist/
+*.log
+__pycache__/
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+worlds/
+server.properties
+permissions.json
+allowlist.json

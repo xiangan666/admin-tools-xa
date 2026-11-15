@@ -1,0 +1,24 @@
+{
+  "format_version": "1.21.130",
+  "minecraft:recipe_shaped": {
+    "description": {
+      "identifier": "jm_at:elevator"
+    },
+    "tags": ["crafting_table"],
+    "pattern": [" I ", "IPI", " I "],
+    "key": {
+      "I": {
+        "item": "minecraft:iron_ingot"
+      },
+      "P": {
+        "item": "minecraft:piston"
+      }
+    },
+    "result": {
+      "item": "jm_at:elevator"
+    },
+    "unlock": {
+      "context": "AlwaysUnlocked"
+    }
+  }
+}

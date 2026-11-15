@@ -1,0 +1,15 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "jm_at:corner_block",
+      "materials": { "default": "entity_alphablend" },
+      "textures": {
+        "one": "textures/entity/jm_at_corner_block_one",
+        "two": "textures/entity/jm_at_corner_block_two"
+      },
+      "geometry": { "default": "geometry.jm_at.corner_block" },
+      "render_controllers": ["controller.render.jm_at_corner_block"]
+    }
+  }
+}

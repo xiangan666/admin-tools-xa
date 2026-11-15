@@ -1,0 +1,3778 @@
+## ===========================
+## Admin Tools - zh_TW
+## ===========================
+## All player-facing script strings live here, referenced from scripts via
+## t("jm_at.<module>.<name>") in scripts/i18n.js. Positional params %1$s, %2$s
+## let translators reorder. Color codes (§a) and literal \n belong in values.
+##
+## NOT in this file (cannot be translated, stays in server language):
+##   entity nameTags (graves/holograms/rank prefixes), DDUI live status lines,
+##   stored logs & queued notifications, user-authored content, search terms,
+##   support-tech diagnostics (support-access.js diag menu).
+##
+## Lines starting with "## [tx]" are context notes for translators — feed this
+## file together with translation-glossary.md (BP root) to the translation
+## software so ambiguous terms (Claim, Resume, Back, Kick…) resolve correctly.
+
+## ----- Items -----
+## [tx] item.jm_at:* — Display names of the addon's seven custom held items (shown in
+## [tx] inventory/hotbar): the admin-panel opener, the player/ticket menu opener, the land-claim
+## [tx] wand and viewer, the hologram editor, the chest sorter, and the kit editor. These names are
+## [tx] proper nouns reused verbatim in other UI sentences — translate once and keep identical
+## [tx] everywhere.
+item.jm_at:admin_tool.name=管理員工具
+item.jm_at:ticket_menu.name=玩家工具
+item.jm_at:claim_wand.name=領地工具
+item.jm_at:claim_viewer.name=領地檢視器
+item.jm_at:hologram_tool.name=全息圖工具
+item.jm_at:chest_sorter.name=箱子整理器
+item.jm_at:kit_tool.name=禮包編輯器
+
+## ----- Item group -----
+## [tx] jm_at:admin_tools* — The creative-inventory item group (category tab) name under which all
+## [tx] the addon's custom items appear; it is also the addon's title, "Admin Tools".
+jm_at:admin_tools=Admin Tools
+
+## ----- Entities -----
+## [tx] entity.jm_at:* — Spawn/display names of the addon's two custom entities: the Hologram (a
+## [tx] floating-text display) and the Grave (spawned at a player's death spot to hold their items).
+entity.jm_at:hologram.name=全息圖
+entity.jm_at:grave.name=墓碑
+
+## ----- Blocks -----
+## [tx] tile.jm_at:* — Display name of the custom Elevator block — players jump/sneak on it to
+## [tx] teleport between vertically aligned elevator blocks (no moving cab).
+tile.jm_at:elevator.name=電梯
+
+## ===========================
+## Script UI strings (i18n)
+## ===========================
+
+## ----- jm_at.adm.* (admin panel UI) -----
+## [tx] Admin Panel UI — every staff-only menu opened with the Admin Tool: the action log with
+## [tx] filters and reports (Rollcall, Staff Activity, Storage Health), moderation
+## [tx] (ban/kick/warn/freeze), scheduled broadcasts, saved commands, the config editor and control
+## [tx] panel, server controls (lock, whitelist), dimension locks, player inspection (inventory,
+## [tx] ender chest, gear, effects, homes, notes, punishments), Item Watch, warp/rank/privilege
+## [tx] administration, playtime ranks, spy sessions, admin-side tickets, and world settings (time,
+## [tx] weather, spawn, game rules). All strings are seen only by server staff inside form dialogs.
+
+## [tx] Status tag appended to a warning row when the player has acknowledged (read) the warning —
+## [tx] translate as a short "seen/confirmed" tag and keep the leading space.
+jm_at.adm.acked_tag= §2[已確認]
+jm_at.adm.actions_body=§r選擇 §g%1$s§r 的操作
+jm_at.adm.actions_title=操作：%1$s
+jm_at.adm.admin_assigned_admin=§2%1$s 現在是管理員。
+jm_at.adm.admin_granted=§2您現在擁有管理員存取權限。
+jm_at.adm.admin_tool_received=§2您已取得管理員工具。
+jm_at.adm.al_btn_clear_filters=§l清除過濾器
+jm_at.adm.al_btn_clear_log=§c§l清除日誌§r\n§8僅服主
+jm_at.adm.al_btn_clear_log_confirm=§l§c清除日誌
+jm_at.adm.al_btn_filters=§l§9過濾器
+jm_at.adm.al_btn_filters_active=§6§l過濾器（已啟用）
+jm_at.adm.al_clear_body=§c這將永久刪除所有操作日誌項目。\n\n此操作無法撤消。
+jm_at.adm.al_clear_title=清除操作日誌
+jm_at.adm.al_cleared=§2操作日誌已清除。
+jm_at.adm.al_filter_action=行動：§9%1$s§r
+jm_at.adm.al_filter_admin=管理員：§g%1$s§r
+jm_at.adm.al_filter_source=來源：§s%1$s§r
+## [tx] Prefix concatenated directly before the list of active filters in the Action Log body — the
+## [tx] trailing space is required, do not trim it.
+jm_at.adm.al_filters_prefix=§r過濾器： 
+jm_at.adm.al_no_entries=§8沒有項目與目前過濾器匹配。
+## [tx] Source badge prefixed to each Action Log line (ADM = admin; siblings al_src_plr = player,
+## [tx] al_src_sys = system) — keep it very short and keep the trailing space.
+jm_at.adm.al_src_adm=§9[管理]§r 
+jm_at.adm.al_src_plr=§a[玩家]§r 
+jm_at.adm.al_src_sys=§7[系統]§r 
+## [tx] Appended after the acting admin's name in a log line; %1$s = the player the action was done
+## [tx] TO — keep the leading space and the arrow.
+jm_at.adm.al_target_arrow= §r→ %1$s§r
+jm_at.adm.al_title=操作日誌（%1$s 項目）
+jm_at.adm.alf_dd_action=按操作類型過濾：
+jm_at.adm.alf_dd_players=或從已紀錄玩家中選擇：
+jm_at.adm.alf_dd_source=按來源過濾：
+jm_at.adm.alf_field_name=輸入玩家名稱（將覆蓋下拉選擇）：
+jm_at.adm.alf_field_name_ph=玩家名稱
+jm_at.adm.alf_no_player=§c找不到名為「%1$s」的玩家。
+jm_at.adm.alf_show_all=（顯示全部）
+jm_at.adm.alf_src_admin=管理員 / 協管員
+jm_at.adm.alf_src_player=玩家
+jm_at.adm.alf_src_system=系統
+jm_at.adm.alf_title=過濾操作日誌
+jm_at.adm.alh_body=§r選擇視圖：
+jm_at.adm.alh_btn_action_log=§l操作日誌§r\n管理員和玩家操作
+jm_at.adm.alh_btn_back_panel=§l返回面板
+jm_at.adm.alh_btn_log_settings=§l日誌設定§r\n開關與保留設定
+jm_at.adm.alh_btn_rollcall=§l上線紀錄§r\n玩家加入和離開紀錄
+jm_at.adm.alh_btn_staff_activity=§l管理團隊活動§r\n按管理成員檢視操作
+jm_at.adm.alh_btn_storage=§l儲存狀態§r\n資料容量與使用情況
+jm_at.adm.alh_title=操作日誌和報告
+jm_at.adm.appeal_accepted_admin=§2申訴已接受 - %1$s 的警告已刪除。
+jm_at.adm.appeal_accepted_line=\n §2申訴已接受§r
+jm_at.adm.appeal_accepted_msg=§2您對警告「§r%1$s§2」的申訴已被接受 - 警告已刪除。
+jm_at.adm.appeal_denied_admin=§c%1$s 的申訴被拒絕。
+jm_at.adm.appeal_denied_line=\n §c申訴被拒絕§r
+jm_at.adm.appeal_denied_msg=§c您對警告「§r%1$s§c」的申訴被拒絕。
+jm_at.adm.appeal_denied_suffix=\n§c申訴被拒絕。
+jm_at.adm.appeal_pending_line=\n §8申訴待決§r
+jm_at.adm.appeal_section=\n\n§r申訴：§r%1$s\n§8提交：%2$s
+jm_at.adm.appeal_tag= §c[申訴]
+jm_at.adm.ba_action_assign=指定 §9%1$s§r (%2$s§r)
+jm_at.adm.ba_action_clear=§c清除身分組§r
+jm_at.adm.ba_btn_all=§l§m應用於所有玩家§r\n指派給所有人
+jm_at.adm.ba_btn_confirm=§l§2確認
+jm_at.adm.ba_btn_grant_all=§l§c授予所有人
+jm_at.adm.ba_btn_pick=§l§2選擇玩家§r\n個別選擇
+jm_at.adm.ba_btn_unranked=§l§6適用於所有無身分組§r\n僅適用於沒有身分組的玩家
+jm_at.adm.ba_clear_pg_title=清除身分組（第 %1$s/%2$s 頁）
+## [tx] Bulk-assign confirm: %1$s = action fragment from ba_action_assign ("Assign <rank> (<tag>)")
+## [tx] or ba_action_clear ("Clear rank"), %2$s = player count, %3$s = comma-separated names, %4$s =
+## [tx] optional "...and N more", %5$s = optional role warning.
+jm_at.adm.ba_confirm_body=§9%2$s§r 玩家的 %1$s：\n\n%3$s%4$s%5$s
+jm_at.adm.ba_confirm_title=確認批次指派
+jm_at.adm.ba_done=§2批次指派完成：§9%1$s§2線上，§9%2$s§2離線（將在加入時同步）。
+jm_at.adm.ba_mode_body=標籤：%1$s§r\n玩家總數：§9%2$s§r\n無身分組玩家：§9%3$s§r
+jm_at.adm.ba_mode_title=指派：%1$s
+jm_at.adm.ba_need_manage_roles=§c只有具備「管理角色」權限的管理成員才能指派會授予角色的身分組。
+jm_at.adm.ba_no_ranks=§c未定義身分組。首先在身分組資料庫中新增身分組。
+jm_at.adm.ba_no_unranked=§e找不到無身分組的玩家。
+jm_at.adm.ba_pick_body=選擇要指派的身分組。\n只有註冊表中的玩家（之前已加入）才能批次指派。
+jm_at.adm.ba_pick_pg_title=指派：%1$s（第%2$s/%3$s頁）
+jm_at.adm.ba_pick_title=批次指派 - 選擇身分組
+jm_at.adm.ba_player_row_tag=%1$s§8(%2$s§8)
+jm_at.adm.ba_rank_row=§l%1$s§r\n%2$s
+jm_at.adm.ba_registry_empty=§c註冊表中還沒有玩家。
+jm_at.adm.ba_role_warn=\n\n§c§l警告：§r此身分組會授予§l%1$s§r權限。確認後，所有選取的玩家都會取得該角色。
+## [tx] Confirm dialog: %1$s = player name, %2$s = duration fragment substituted from ban_dur_for
+## [tx] ("for 2d") or ban_dur_perm ("PERMANENTLY"), %3$s = reason — translate all three keys
+## [tx] together so the sentence composes.
+jm_at.adm.ban_confirm_body=封鎖 §g%1$s§r%2$s？\n\n§r原因：§r%3$s
+jm_at.adm.ban_confirm_perm_title=⚠ 確認永久封鎖
+jm_at.adm.ban_confirm_title=確認封鎖
+## [tx] Line in a player summary: %1$s = the ban REASON text (not a duration), %2$s = "(until
+## [tx] <date>)" or "(permanent)" from ban_until/ban_permanent.
+jm_at.adm.ban_detail=\n§r封鎖：§c%1$s§r %2$s
+## [tx] Fragment inserted as %2$s of ban_confirm_body; %1$s = a duration like "2d 4h" — must read
+## [tx] naturally inside "Ban <name> ___?".
+jm_at.adm.ban_dur_for=，為期 §c%1$s§r
+jm_at.adm.ban_dur_perm=（§m永久§r）
+jm_at.adm.ban_perm_note=\n\n§m這是永久封鎖，請謹慎使用。
+jm_at.adm.ban_permanent=（永久）
+jm_at.adm.ban_title_perm=永久封鎖：%1$s
+jm_at.adm.ban_title_temp=暫時封鎖：%1$s
+jm_at.adm.ban_title_temp24=暫時封鎖（最長 24 小時）：%1$s
+jm_at.adm.ban_until=（直到%1$s）
+jm_at.adm.banned_perm_done=§m已永久封鎖：§r%1$s
+jm_at.adm.banned_perm_offline=§m永久封鎖：§r%1$s（離線）
+jm_at.adm.banned_temp_done=§c已封鎖：§r%2$s§c，為期 %1$s
+jm_at.adm.banned_temp_offline=§c已封鎖：§r%2$s§c，為期 %1$s（離線）
+jm_at.adm.bc_added=§2新增了預定公告。
+jm_at.adm.bc_bad_interval=§c無效間隔。使用數字+單位，例如30s、10m、6h。
+jm_at.adm.bc_body=已計劃：§9%1$s§r 個啟用 / 共 %2$s 個\n\n公告用於向所有線上玩家發送訊息。
+jm_at.adm.bc_btn_add_line=新增行
+jm_at.adm.bc_btn_add_sched=§l新增定時公告
+jm_at.adm.bc_btn_create=建立公告
+jm_at.adm.bc_btn_edit=§l§9編輯
+jm_at.adm.bc_btn_immediate=§l發送即時公告
+jm_at.adm.bc_btn_manage_sched=§l管理預定的公告
+jm_at.adm.bc_btn_pause=§g§l暫停
+## [tx] Button: restarts a paused scheduled broadcast ("continue", opposite of Pause — not the
+## [tx] CV/résumé sense).
+jm_at.adm.bc_btn_resume=§2§l繼續
+jm_at.adm.bc_btn_send=發送公告
+jm_at.adm.bc_delete_body=刪除預定公告§9%1$s§r？\n\n此操作無法撤消。
+jm_at.adm.bc_delete_title=刪除公告
+jm_at.adm.bc_deleted=§2公告已刪除。
+jm_at.adm.bc_detail_body=§r訊息：§r %1$s§r\n§r間隔：§r %2$s\n§r活動：§r %3$s
+jm_at.adm.bc_field_interval=重複每個
+jm_at.adm.bc_field_interval_desc=例如30s、10m、6h
+jm_at.adm.bc_field_label=標籤（可選）
+jm_at.adm.bc_field_label_desc=預定清單中顯示的內部名稱
+jm_at.adm.bc_header_preview=預覽
+jm_at.adm.bc_line1=1號線（必填）
+jm_at.adm.bc_line_optional=第 %1$s 行（可選）
+jm_at.adm.bc_max=§c最多 %1$s 個預定公告。請先移除一個。
+jm_at.adm.bc_need_line=§c 首先新增至少一行訊息。
+jm_at.adm.bc_no=§c否§r
+jm_at.adm.bc_none_sched=§r沒有預定的公告。
+jm_at.adm.bc_paused=§2公告暫停。
+jm_at.adm.bc_resumed=§2公告恢復。
+jm_at.adm.bc_sched_body=選擇要管理的公告。
+## [tx] List row for one scheduled broadcast: %1$s = its label/name, %2$s = status tag "[Running]"
+## [tx] or "[Paused]", %3$s = repeat interval, so line 2 reads "every 10m".
+jm_at.adm.bc_sched_row=§l%1$s %2$s\n每 %3$s
+jm_at.adm.bc_sched_title=預定公告
+jm_at.adm.bc_sent=§2公告已發送。
+jm_at.adm.bc_tag_paused=§c[暫停]§r
+jm_at.adm.bc_tag_running=§2[執行]§r
+## [tx] Keep the codes "&c", "&6" and the "§" character literal (they are game formatting codes);
+## [tx] only translate the color names red/gold.
+jm_at.adm.bc_tip=§7提示：可使用 "&" 或 "§" 程式碼新增顏色，例如 &c 紅色、&6 金色。
+jm_at.adm.bc_title_edit=編輯預定公告
+jm_at.adm.bc_title_immediate=即時公告
+jm_at.adm.bc_title_new=新預定的公告
+jm_at.adm.bc_updated=§2公告已更新。
+jm_at.adm.bc_yes=§2是§r
+jm_at.adm.bi_add_title=新增禁止項目
+jm_at.adm.bi_added=§2禁止 §s%1$s§2 — 將從玩家中自動刪除。
+jm_at.adm.bi_btn_add=§2§l新增禁止物品§r\n自動從玩家中刪除
+jm_at.adm.bi_btn_remove=§l§c刪除違禁物品§r
+jm_at.adm.bi_field_id=物品 ID（例如，minecraft:tnt）
+jm_at.adm.bi_none=§r未設定禁止項目。
+jm_at.adm.bi_none_remove=§r沒有要刪除的違禁物品。
+jm_at.adm.bi_remove_body=選擇要取消禁止的項目：
+jm_at.adm.bi_remove_title=刪除違禁物品
+jm_at.adm.bi_removed=§2取消禁止§s%1$s§2。
+jm_at.adm.bi_row=  §c%1$s
+jm_at.adm.bi_title=禁止物品 (%1$s)
+jm_at.adm.blocked_cmd_msg=§c該指令無法透過 Admin Tools 執行。角色、操作員、函數和 scriptevent 指令均會被阻止。請在「管理團隊與權限」中管理成員。
+## [tx] Toast after adjusting bonus playtime: %1$s = an AMOUNT OF PLAYTIME (e.g. "2h 30m"), %2$s =
+## [tx] player name; "[Ranks]" is a fixed module prefix — nothing here is a rank being added.
+jm_at.adm.bp_added=§2[身分組] %1$s 新增到 §g%2$s§2。
+jm_at.adm.bp_adjust_title=獎金：%1$s
+jm_at.adm.bp_body=選擇一名玩家來調整他們的獎勵遊玩時間。\n獎勵遊玩時間將新增到身分組門檻的追蹤時間中。
+jm_at.adm.bp_bonus_suffix= · 獎金：§9%1$s
+jm_at.adm.bp_btn_apply_close=申請並關閉
+jm_at.adm.bp_btn_next=§l下一頁
+jm_at.adm.bp_btn_prev=§l上一頁
+jm_at.adm.bp_field_hours=要新增的小時數
+jm_at.adm.bp_field_hours_desc=例如10或-5
+jm_at.adm.bp_field_mins=需要新增的分鐘數
+jm_at.adm.bp_field_mins_desc=例如30或-15
+jm_at.adm.bp_hint=§7正數表示新增，負數表示刪除。
+jm_at.adm.bp_offline=§8離線
+jm_at.adm.bp_online=§2線上
+## [tx] Same as bp_added but for negative adjustments: %1$s = playtime amount removed (e.g. "5h"),
+## [tx] %2$s = player name; "[Ranks]" is a module prefix.
+jm_at.adm.bp_removed=§2[身分組] %1$s 從 §g%2$s§2 中刪除。
+jm_at.adm.bp_row=§l%1$s§r\n%2$s · %3$s%4$s
+jm_at.adm.bp_stats=§7追蹤：%1$s\n獎勵：%2$s\n生效：%3$s
+jm_at.adm.bp_title=獎勵遊玩時間
+jm_at.adm.br_body=刪除玩家的身分組。
+jm_at.adm.br_btn_by_tag=§l按標籤刪除§r\n匹配特定身分組標籤
+jm_at.adm.br_btn_clear=§l清除身分組§r\n刪除玩家身分組
+jm_at.adm.br_btn_clear_filter=§l清除過濾器
+jm_at.adm.br_btn_filter=§l按文字過濾
+jm_at.adm.br_btn_filter_set=§l過濾器：§r%1$s§r\n§8點選即可變更
+jm_at.adm.br_btn_pick=§l選擇玩家§r\n個別選擇
+jm_at.adm.br_btn_remove_all=§l§c從全部中刪除§r\n從每個匹配的玩家中刪除
+jm_at.adm.br_bytag_body=選擇要從玩家身上刪除的標籤。
+jm_at.adm.br_bytag_title=按標籤刪除
+jm_at.adm.br_confirm_body=移除 §c%1$s§r — 受影響玩家：§9%2$s§r\n\n%3$s%4$s
+jm_at.adm.br_confirm_title=確認批次刪除
+jm_at.adm.br_filter_field=顯示包含以下內容的標籤
+jm_at.adm.br_filter_field_desc=匹配標籤文字，忽略顏色和大小寫
+jm_at.adm.br_filter_line=\n§8過濾器：§r%1$s
+jm_at.adm.br_filter_title=過濾標籤
+jm_at.adm.br_mode_body=標籤：%1$s§r\n具有此標籤的玩家：§9%2$s§r
+jm_at.adm.br_no_filter_match=\n\n§c沒有標籤與您的過濾器匹配。
+jm_at.adm.br_no_tags=§r目前沒有玩家擁有身分組標籤。
+jm_at.adm.br_pick_title=刪除：%1$s§r（第 %2$s/%3$s 頁）
+jm_at.adm.br_removed=§2已移除 §c%1$s§2 — 受影響玩家：§9%2$s§2。
+jm_at.adm.br_tag_gone=§c那些玩家不再擁有該標籤。
+jm_at.adm.br_tag_row=%1$s§r\n§8%2$s 名玩家
+jm_at.adm.br_tag_row_one=%1$s§r\n§8%2$s 玩家
+jm_at.adm.br_title=批次刪除
+jm_at.adm.btn_accept_appeal=§2§l接受申訴§r\n刪除此警告
+jm_at.adm.btn_actions=§l操作§r\n工具和傳送選項
+jm_at.adm.btn_add=新增
+jm_at.adm.btn_add_close=新增並關閉
+jm_at.adm.btn_add_note=§l新增備註
+jm_at.adm.btn_admin_notes=§l管理員備註§r\n僅授權管理成員可見
+jm_at.adm.btn_already_banned=§8§l已被封鎖
+jm_at.adm.btn_assign_admin=§v§l指派為管理員§r\n完全控制
+jm_at.adm.btn_assign_mod=§v§l指定為協管員
+jm_at.adm.btn_back_r=§l返回§r
+jm_at.adm.btn_ban_close=封鎖並關閉
+jm_at.adm.btn_ban_confirm=§l§c封鎖
+jm_at.adm.btn_ban_plain=封鎖
+jm_at.adm.btn_cannot_mod_admin=§8§l不能讓管理員成為管理員§r
+jm_at.adm.btn_cannot_owner_admin=§8§l無法將服主改為管理員§r
+jm_at.adm.btn_change_gamemode=§l變更遊戲模式
+jm_at.adm.btn_clear_warning=§c§l明確警告§r\n不申訴即刪除
+jm_at.adm.btn_delete_all=§l全部刪除
+jm_at.adm.btn_delete_plain=刪除
+jm_at.adm.btn_delete_red=§l§c刪除
+jm_at.adm.btn_deny_appeal=§c§l拒絕申訴
+jm_at.adm.btn_edit_green=§l§2編輯
+jm_at.adm.btn_enter_spectator=§l§9進入旁觀者模式
+jm_at.adm.btn_feed=§l補充飽食度
+jm_at.adm.btn_freeze=§l凍結
+jm_at.adm.btn_grant_role=§l§c授予 %1$s
+jm_at.adm.btn_heal=§l恢復生命值
+jm_at.adm.btn_homes_saved=§l家§r\n已儲存 %1$s 個
+jm_at.adm.btn_kick=§l踢出§r\n（區域網路/本機世界：伺服器內必須無人後，該玩家才能重新加入）
+jm_at.adm.btn_kick_close=踢出並關閉
+jm_at.adm.btn_kick_confirm=§l§c踢出
+jm_at.adm.btn_kick_plain=踢出
+jm_at.adm.btn_manage_priv_admin=§l管理權限§r\n每管理員覆蓋
+jm_at.adm.btn_manage_priv_mod=§l管理權限§r\n個別協管員覆寫
+jm_at.adm.btn_offline_players=§l離線玩家
+jm_at.adm.btn_ok_plain=好的
+jm_at.adm.btn_online_players=§l線上玩家
+jm_at.adm.btn_panel_admin_log=§l管理日誌§r\n最近操作和過濾器
+jm_at.adm.btn_panel_broadcasts=§l公告§r\n管理伺服器公告
+jm_at.adm.btn_panel_commands=§l指令§r\n執行/儲存指令
+jm_at.adm.btn_panel_control=§l控制面板§r\n伺服器設定
+jm_at.adm.btn_panel_customize=§l自訂選單§r\n隱藏/顯示視圖中的按鈕
+jm_at.adm.btn_panel_info=§l說明§r\n附加元件指南與狀態
+jm_at.adm.btn_panel_players=§l玩家§r\n玩家審核
+jm_at.adm.btn_panel_search=§l搜尋§r\n查找面板或設定
+jm_at.adm.btn_panel_teleport=§l傳送§r\n傳送至玩家或召喚玩家
+## [tx] Panel button: %1$s = number of open support tickets, %2$s = number already claimed (taken)
+## [tx] by a staff member — "claimed" is ticket assignment, NOT a land claim.
+jm_at.adm.btn_panel_tickets=§l回報單§r\n待處理：%1$s，已接單：%2$s
+jm_at.adm.btn_panel_warps=§l傳送點§r\n管理伺服器傳送點
+jm_at.adm.btn_perm_ban_close=永久封鎖並關閉
+jm_at.adm.btn_perm_ban_confirm=§l§m永久封鎖
+jm_at.adm.btn_perm_ban_lan=§l永久封鎖§r\n（LAN/本機：伺服器必須清空才能重新加入）
+jm_at.adm.btn_perm_ban_plain=永久封鎖
+jm_at.adm.btn_perm_ban_r=§l永久封鎖§r
+jm_at.adm.btn_pun_history=§l處分歷史§r\n過去的封鎖、警告等
+jm_at.adm.btn_rank=§l身分組§r\n設定或移除名稱標籤
+jm_at.adm.btn_rank_manager=§l身分組管理器§r\n管理伺服器身分組
+jm_at.adm.btn_remove_admin=§c§l刪除管理員
+jm_at.adm.btn_remove_admin_confirm=§l§c刪除管理員
+jm_at.adm.btn_remove_mod=§c§l刪除協管員
+jm_at.adm.btn_remove_my_admin=§l§c刪除我的管理員
+jm_at.adm.btn_search=搜尋
+jm_at.adm.btn_search_by_name=§l按名稱搜尋
+jm_at.adm.btn_search_for=§l搜尋「%1$s」
+jm_at.adm.btn_select=選擇
+jm_at.adm.btn_set_gamemode=設定遊戲模式
+jm_at.adm.btn_set_gamemode_close=設定遊戲模式並關閉
+jm_at.adm.btn_spy=§l監視攝影機
+jm_at.adm.btn_spy_history=§l監視歷史紀錄§r\n檢視過去的監視工作階段
+jm_at.adm.btn_stop_spy=§l§c停止監視
+## [tx] Button: teleports the chosen player TO YOU ("bring here") — not Minecraft's /summon that
+## [tx] spawns mobs.
+jm_at.adm.btn_summon_plain=§l召喚玩家
+jm_at.adm.btn_summon_player=§l召喚玩家§r\n為您帶來一名玩家
+jm_at.adm.btn_teleport_plain=傳送
+jm_at.adm.btn_temp_ban_24_lan=§6§l暫時封鎖（<=24小時）§r\n（區域網路/本機世界：伺服器內必須無人後才能重新加入）
+jm_at.adm.btn_temp_ban_24_r=§l暫時封鎖 (<=24h)§r
+jm_at.adm.btn_temp_ban_lan=§l暫時封鎖§r\n（LAN/本機：伺服器必須清空才能重新加入）
+jm_at.adm.btn_temp_ban_r=§l暫時封鎖§r
+jm_at.adm.btn_tp_to_plain=§l傳送至玩家
+jm_at.adm.btn_tp_to_player=§l傳送至玩家§r\n將自己傳送到玩家身邊
+jm_at.adm.btn_tp_to_warp=§l將玩家傳送至傳送點§r\n選擇玩家與目的地
+jm_at.adm.btn_unban_plain=§l解除封鎖
+jm_at.adm.btn_unban_r=§l解除封鎖§r
+jm_at.adm.btn_unfreeze=§l解凍
+jm_at.adm.btn_view_inventory=§l檢視物品欄和終界箱
+jm_at.adm.btn_view_tickets=§l檢視回報單§r\n該玩家提交的回報單
+jm_at.adm.btn_warn=§l警告
+jm_at.adm.btn_warn_close=警告並關閉
+jm_at.adm.btn_warn_plain=警告
+jm_at.adm.btn_warnings_active=§l警告§r\n§8有效：%1$s
+jm_at.adm.btn_warnings_active_plain=§l警告§r\n有效：%1$s
+jm_at.adm.btn_warnings_appeals=§l警告§r\n§c%1$s 待決申訴
+jm_at.adm.bulk_and_more=\n...還有%1$s
+jm_at.adm.bulk_goto_page=前往頁面：
+jm_at.adm.bulk_none_selected=§e未選擇任何玩家。
+jm_at.adm.bulk_page_n=頁 %1$s
+jm_at.adm.cannot_change_owner=§c無法變更服主的管理狀態。
+jm_at.adm.cannot_mod_admin_warn=§c無法將協管員角色指派給管理員。
+jm_at.adm.cannot_remove_owner_admin=§c無法從服主中刪除管理員。
+jm_at.adm.cat_add_title=新增類別
+jm_at.adm.cat_added=§2新增：%1$s
+jm_at.adm.cat_btn_add=§l§2新增類別
+jm_at.adm.cat_btn_remove=§l§c刪除類別
+jm_at.adm.cat_field_name=類別名稱
+jm_at.adm.cat_field_name_desc=例如垃圾郵件
+## [tx] Shown alone as the form body when the ticket-category list is empty (replaces the
+## [tx] comma-separated list); lowercase is intentional.
+jm_at.adm.cat_none=§r無
+jm_at.adm.cat_none_to_remove=§r沒有要刪除的類別。
+jm_at.adm.cat_remove_body=選擇要刪除的類別：
+jm_at.adm.cat_remove_title=刪除類別
+jm_at.adm.cat_removed=§2已刪除：%1$s
+jm_at.adm.cat_title=類別（%1$s）
+jm_at.adm.cbtn_add_title=新增指令按鈕
+jm_at.adm.cbtn_added=§2按鈕已新增：§r%1$s
+jm_at.adm.cbtn_body=§r點擊按鈕即可立即執行其指令。§7（%1$s 個可用）
+jm_at.adm.cbtn_body_empty=§r尚未設定任何指令按鈕。
+jm_at.adm.cbtn_body_empty_owner=§r還沒有指令按鈕。點擊§l管理按鈕§r來新增一個。
+jm_at.adm.cbtn_btn_add=§l§2新增按鈕
+jm_at.adm.cbtn_btn_manage=§l§6管理按鈕
+jm_at.adm.cbtn_btn_remove=§l§c刪除
+jm_at.adm.cbtn_cap_reached=§c已達到 %1$s 個指令按鈕的上限。請先移除一個。
+jm_at.adm.cbtn_edit_title=編輯指令按鈕
+jm_at.adm.cbtn_err_blocked=§c該指令無法使用：身分組、管理員（op）和 function/scriptevent 指令已被封鎖。
+jm_at.adm.cbtn_err_command=§c請輸入指令。
+jm_at.adm.cbtn_err_dup=§c已存在同名按鈕。
+jm_at.adm.cbtn_err_name=§c請輸入按鈕名稱。
+jm_at.adm.cbtn_field_command_desc=點擊時以你的身分執行，例如 time set day
+jm_at.adm.cbtn_field_name=按鈕名稱
+jm_at.adm.cbtn_field_name_desc=顯示在按鈕上，例如「設為白天」
+jm_at.adm.cbtn_gone=§c該指令按鈕不再存在。
+jm_at.adm.cbtn_manage_body=§r%1$s/%2$s 個按鈕。\n點擊§l新增按鈕§r來建立，或點擊某個按鈕以編輯或刪除。\n\n
+jm_at.adm.cbtn_manage_body_empty=§r還沒有按鈕。\n點擊§l新增按鈕§r來建立第一個。\n\n
+jm_at.adm.cbtn_manage_title=管理指令按鈕
+jm_at.adm.cbtn_remove_body=刪除按鈕§c「%1$s」§r？\n\n§7此操作無法復原。
+jm_at.adm.cbtn_remove_title=刪除指令按鈕
+jm_at.adm.cbtn_removed=§2已刪除：§r%1$s
+jm_at.adm.cbtn_row=§l%1$s§r\n§8%2$s
+jm_at.adm.cbtn_title=指令按鈕
+jm_at.adm.cbtn_updated=§2按鈕已更新：§r%1$s
+## [tx] jm_at.adm.cfg_* — The Config Editor form where admins tune player-facing features: homes
+## [tx] limits, TPA teleport requests, warning thresholds, Deathback, gravestones, and AFK
+## [tx] detection/kick timers.
+## [tx] Dropdown label (options: No tools on death / Tools in inventory only / Always give tools):
+## [tx] controls whether this addon's own special tool items are handed back when a player respawns
+## [tx] — not generic pickaxes.
+jm_at.adm.cfg_dd_tools=重生時的附加元件工具
+jm_at.adm.cfg_grave_safezone_note=§7清除墓碑周圍20格內的敵對生物——與領地相同的保護——讓玩家可以安全地取回物品。
+jm_at.adm.cfg_graves_disabled=§c墓碑已停用。 keepInventory 也被關閉了——死亡現在以一般的方式分散物品。
+jm_at.adm.cfg_graves_enabled=§2墓碑已啟用。 keepInventory 現在由附加元件保留。
+jm_at.adm.cfg_graves_note=§7墓碑將玩家的物品儲存在死亡地點的墳墓中，以便透過互動來恢復。\n需要啟用 keepInventory 遊戲規則，該附加元件會為您保留該規則。
+jm_at.adm.cfg_header_afk=AFK
+jm_at.adm.cfg_header_deathback=死亡返回
+jm_at.adm.cfg_header_homes=家
+jm_at.adm.cfg_header_tpa=傳送（TPA）
+jm_at.adm.cfg_header_warnings=警告
+jm_at.adm.cfg_saved=§2玩家設定已儲存。
+jm_at.adm.cfg_slider_afk_kick=踢球後（分鐘）
+jm_at.adm.cfg_slider_afk_warn=之後（分鐘）發出警告
+jm_at.adm.cfg_slider_max_homes=每個玩家的最大家數量
+jm_at.adm.cfg_slider_tpa_delay=請求延遲（秒，0 = 立即發送）
+## [tx] Slider (1-20): how many moderation warnings a player must accumulate before being flagged
+## [tx] for staff attention; 'Warn' = disciplinary warning, 'flag' = mark for review.
+jm_at.adm.cfg_slider_warn=警告標記門檻
+jm_at.adm.cfg_toggle_afk=啟用 AFK 偵測
+jm_at.adm.cfg_toggle_afk_exempt=免除管理成員 AFK 踢
+jm_at.adm.cfg_toggle_afk_kick=啟用 AFK 踢
+jm_at.adm.cfg_toggle_deathback=啟用死亡返回
+jm_at.adm.cfg_toggle_grave_safezone=墓碑安全區
+jm_at.adm.cfg_toggle_graves=啟用墓碑
+jm_at.adm.cfg_toggle_homes=啟用家
+jm_at.adm.cfg_toggle_tpa=允許玩家 TPA
+jm_at.adm.cfg_tools_always=總是給工具
+jm_at.adm.cfg_tools_inventory=僅物品欄中的工具
+jm_at.adm.cfg_tools_none=死亡時沒有工具
+## [tx] jm_at.adm.ci_* — 'Clear Dropped Items' confirmation dialog: deletes all item entities lying
+## [tx] on the ground in loaded chunks across every dimension.
+jm_at.adm.ci_body=§r這會移除所有維度中已載入區塊內的§l全部§r掉落物。\n\n§7• 未載入區塊內的物品不會被清除。\n• 墓碑不受影響。§r\n\n§c此操作無法復原。是否繼續？
+jm_at.adm.ci_btn_clear=§l§c清除物品
+jm_at.adm.ci_done=§2清除掉落的物品。
+jm_at.adm.ci_title=清除掉落的物品
+## [tx] jm_at.adm.cm_* — 'Customize Menu' screen where each admin shows/hides buttons on their own
+## [tx] admin panel and pins sub-menu actions as quick shortcuts on the main page.
+jm_at.adm.cm_btn_reset=重設為預設值
+jm_at.adm.cm_header_main=主選單按鈕
+jm_at.adm.cm_header_shortcuts=捷徑
+jm_at.adm.cm_main_note=§7顯示或隱藏管理面板上的按鈕。部分按鈕可能會被服主控制的設定隱藏。
+jm_at.adm.cm_none=§r沒有可自訂的選單項。
+jm_at.adm.cm_reset_done=§2選單自訂重設為預設值。
+jm_at.adm.cm_saved=§2選單首選項已儲存。
+jm_at.adm.cm_shortcuts_note=§7將子選單操作直接釘選到首頁。
+## [tx] Toggle label in Customize Menu: 'Show' = display this button on the admin panel (visibility,
+## [tx] not a reveal action); %1$s = a menu button's name.
+jm_at.adm.cm_show_quoted=顯示「%1$s」
+jm_at.adm.cm_title=自訂選單
+## [tx] jm_at.adm.cmd* — The Commands feature (cmds_ = list, cmdd_ = detail, cmde_ = add/edit form):
+## [tx] admins save named game commands and run them once, on a repeating interval, for a set
+## [tx] count/duration, or forever until stopped.
+jm_at.adm.cmdd_btn_edit=§6§l編輯
+jm_at.adm.cmdd_btn_edit_locked=§8§l編輯（先停止）
+jm_at.adm.cmdd_btn_run=§l§2執行
+jm_at.adm.cmdd_btn_stop=§l§c停止
+jm_at.adm.cmdd_command_line=§r指令：§9%1$s§r
+## [tx] Suffix glued directly after a command name in the 'Started:' message; keep the leading
+## [tx] space; means the command's start delay is still counting down before the first run.
+jm_at.adm.cmdd_delay_active_suffix= §8（延遲激活）
+jm_at.adm.cmdd_delay_line=§r延遲：§9%1$s§r
+jm_at.adm.cmdd_delete_active_body=§c「%1$s」§r 目前正在執行。\n刪除它將立即停止執行。\n\n§c此操作無法撤消。
+jm_at.adm.cmdd_delete_active_title=刪除活動指令
+jm_at.adm.cmdd_delete_body=刪除§c「%1$s」§r？\n\n§c此操作無法撤消。
+jm_at.adm.cmdd_delete_title=刪除指令
+jm_at.adm.cmdd_interval_line=§r間隔：§9%1$s§r 重複：§9%2$s§r
+jm_at.adm.cmdd_mode_once=§r模式：§9執行一次§r
+jm_at.adm.cmdd_ran=§2已執行：§r%1$s
+jm_at.adm.cmdd_removed=§2已刪除：§r%1$s
+jm_at.adm.cmdd_run_failed=§c[指令] 指令「%1$s」失敗。
+jm_at.adm.cmdd_runs_left=§r剩餘執行次數：§9%1$s§r
+## [tx] Chat message after starting a saved command: %1$s = command name, %2$s = the ' (delay
+## [tx] active)' suffix or empty — do not add a space between them.
+jm_at.adm.cmdd_started=§2開始：§r%1$s%2$s
+jm_at.adm.cmdd_status_idle=§r狀態：§8空閒§r
+jm_at.adm.cmdd_status_running=§r狀態：§2正在執行●§r
+jm_at.adm.cmdd_stop_before_edit=§c在編輯指令之前停止該指令。
+jm_at.adm.cmdd_stopped=§6已停止：§r%1$s
+jm_at.adm.cmdd_title=指令：%1$s
+jm_at.adm.cmde_added=§2新增指令：§r%1$s
+jm_at.adm.cmde_btn_add=新增指令
+jm_at.adm.cmde_btn_add_close=新增指令並關閉
+jm_at.adm.cmde_btn_save_close=儲存變更並關閉
+jm_at.adm.cmde_dd_end=應該如何結束呢？
+jm_at.adm.cmde_field_command=指令（不帶 /）
+jm_at.adm.cmde_field_command_desc=例如時間設定晚上
+jm_at.adm.cmde_field_count=次數
+jm_at.adm.cmde_field_count_desc=例如10
+jm_at.adm.cmde_field_delay=首次執行前的延遲
+jm_at.adm.cmde_field_delay_desc=例如 0s、30s、1m、5t
+jm_at.adm.cmde_field_duration=總執行時間
+jm_at.adm.cmde_field_duration_desc=例如30m，1小時
+jm_at.adm.cmde_field_interval=執行間隔
+jm_at.adm.cmde_field_interval_desc=例如10t、30s、5m、1h
+jm_at.adm.cmde_field_name=按鈕名稱
+jm_at.adm.cmde_field_name_desc=例如夜間
+jm_at.adm.cmde_mode_count=執行設定次數
+jm_at.adm.cmde_mode_duration=執行設定的時間
+jm_at.adm.cmde_mode_forever=永遠執行（直到停止）
+jm_at.adm.cmde_title_add=新增指令
+jm_at.adm.cmde_title_edit=編輯指令
+jm_at.adm.cmde_toggle_repeating=重複（按間隔觸發）
+jm_at.adm.cmde_updated=§2指令已更新：§r%1$s
+jm_at.adm.cmds_active_dot= §2●
+jm_at.adm.cmds_body_count=§r%1$s/%2$s 指令 · §2%3$s 活動§r\n• 使用「新增指令」按鈕建立新指令。\n• 使用「快速執行」按鈕立即執行一次性指令。\n\n
+jm_at.adm.cmds_body_empty=尚未儲存指令。\n• 使用「新增指令」按鈕建立指令。\n• 使用「快速執行」按鈕立即執行一次性指令。\n\n
+jm_at.adm.cmds_body_gameonly=§r執行您有權存取的內置遊戲指令。\n\n
+jm_at.adm.cmds_body_buttonsonly=§r點擊下方的指令按鈕即可執行。\n\n
+jm_at.adm.cmds_btn_add_command=§l§2新增指令
+jm_at.adm.cmds_btn_command_buttons=§l§2指令按鈕
+jm_at.adm.cmds_btn_game_commands=§l§2遊戲指令
+jm_at.adm.cmds_btn_quick_run=§l§2快速執行
+jm_at.adm.cmds_gone=§c該指令不再存在。
+jm_at.adm.cmds_max_reached=§c已達到最多 %1$s 個指令。請先移除一個。
+## [tx] Button for a saved command: %1$s = status color code, %2$s = the command's button name, %3$s
+## [tx] = '[once]' or '[repeat]' tag, %4$s = green running dot or empty, %5$s = first 25 characters
+## [tx] of the command text.
+jm_at.adm.cmds_row=%1$s§l%2$s§r %3$s%4$s\n§8%5$s
+jm_at.adm.cmds_tag_once=§9[一次]§r
+jm_at.adm.cmds_tag_repeat=§5[重複]§r
+## [tx] jm_at.adm.color_* — Display names of Minecraft Bedrock chat text colors shown in
+## [tx] color-picker dropdowns (used for ranks etc.); match official Bedrock color names, and keep
+## [tx] 'Minecoin' untranslated.
+jm_at.adm.color_aqua=水藍色
+jm_at.adm.color_black=黑色
+jm_at.adm.color_blue=藍色
+jm_at.adm.color_dark_aqua=深青色
+jm_at.adm.color_dark_blue=深藍色
+jm_at.adm.color_dark_gray=深灰色
+jm_at.adm.color_dark_green=深綠色
+jm_at.adm.color_dark_purple=深紫色
+jm_at.adm.color_dark_red=深紅色
+jm_at.adm.color_gold=金色
+jm_at.adm.color_gray=灰色
+jm_at.adm.color_green=綠色
+jm_at.adm.color_light_purple=淺紫色
+jm_at.adm.color_material_amethyst=材質紫水晶
+jm_at.adm.color_material_copper=材質 銅
+jm_at.adm.color_material_diamond=材質鉆石
+jm_at.adm.color_material_emerald=材質 綠寶石
+jm_at.adm.color_material_gold=材質黃金
+jm_at.adm.color_material_iron=材質 鐵
+jm_at.adm.color_material_lapis=材質青金石
+jm_at.adm.color_material_netherite=材料地獄合金
+jm_at.adm.color_material_quartz=材質石英
+jm_at.adm.color_material_redstone=材料紅石
+jm_at.adm.color_material_resin=材質樹脂
+jm_at.adm.color_minecoin_gold=Minecoin 金色
+jm_at.adm.color_none=無顏色（手動）
+jm_at.adm.color_red=紅色
+jm_at.adm.color_white=白色
+jm_at.adm.color_yellow=黃色
+## [tx] jm_at.adm.cp_* — The Control Panel hub: buttons linking to configuration sections (Config
+## [tx] Editor, Dimension Locks, Item Watch, Server Controls, Ticket Settings…), each with a live
+## [tx] status line; cp_state_*/cp_open/cp_closed are the status words substituted into those lines.
+jm_at.adm.cp_body=選擇要設定的部分。
+jm_at.adm.cp_btn_config=§l設定編輯器§r\n家、TPA、警告等
+jm_at.adm.cp_btn_dim_locks=§l維度鎖定§r\n地獄：%1$s - 終界：%2$s
+jm_at.adm.cp_btn_item_watch=§l物品觀察§r\n違禁物品和警示
+jm_at.adm.cp_btn_menu_vis=§l選單可見性§r\n顯示/隱藏選單項
+jm_at.adm.cp_btn_restore_holograms=§l還原全息圖§r\n恢復消失的全息圖
+jm_at.adm.cp_btn_server_controls=§l伺服器控制§r\n鎖定：%1$s - 白名單：%2$s
+jm_at.adm.cp_btn_staff_perms=§l管理團隊與權限§r\n權限和角色
+## [tx] Control Panel button, 2nd line is live status: %1$s = OPEN/CLOSED (whether players may
+## [tx] submit tickets), %2$s = cooldown number of seconds — the trailing 's' is the seconds unit,
+## [tx] not a plural.
+jm_at.adm.cp_btn_ticket_settings=§l回報單設定§r\n%1$s§r - 冷卻時間%2$ss
+jm_at.adm.cp_closed=§c關閉
+jm_at.adm.cp_none=§c沒有可用的控制面板部分。
+jm_at.adm.cp_open=§2開啟
+jm_at.adm.cp_state_closed=§c關閉§r
+jm_at.adm.cp_state_off=§2關閉§r
+jm_at.adm.cp_state_on=§c開啟§r
+jm_at.adm.cp_state_open=§2開啟§r
+## [tx] Suffix appended to 'time/weather set' confirmations; 'cycle' = the day-night or weather
+## [tx] cycle, now frozen so it stays as set — NOT a bicycle; keep the leading space.
+jm_at.adm.cycle_locked_suffix= §8（循環鎖定）
+## [tx] Tag appended to a warning's row meaning the player's appeal of that warning was DENIED
+## [tx] (rejected) — not 'access denied'; keep the leading space.
+jm_at.adm.denied_tag= §8[被拒絕]
+jm_at.adm.diff_btn_set=設定難度
+jm_at.adm.diff_btn_set_close=設定難度並關閉
+jm_at.adm.diff_easy=簡單
+jm_at.adm.diff_failed=§c該難度指令無法執行。
+jm_at.adm.diff_hard=困難
+jm_at.adm.diff_normal=普通
+jm_at.adm.diff_peaceful=和平
+jm_at.adm.diff_set_done=§2難度設定為§r%1$s§r。
+jm_at.adm.diff_title=難度
+jm_at.adm.dim_short_end=終界
+jm_at.adm.dim_short_nether=地獄
+jm_at.adm.dim_short_overworld=主世界
+## [tx] jm_at.adm.dl_* — Dimension Locks screen: lock or unlock the Nether and the End immediately
+## [tx] or on a schedule; locked = players can't enter and are sent to world spawn. Includes
+## [tx] server-wide broadcast messages announcing locks.
+## [tx] Button that cancels a scheduled dimension lock: %1$s = dimension (Nether/End), %2$s =
+## [tx] relative time phrase like 'in 10m'; 'locks' is a verb — 'the Nether locks in 10m'.
+jm_at.adm.dl_btn_cancel_lock=取消：%1$s 鎖定 %2$s
+## [tx] Button that cancels a scheduled dimension unlock: %1$s = dimension (Nether/End), %2$s =
+## [tx] relative time phrase like 'in 10m'; 'unlocks' is a verb.
+jm_at.adm.dl_btn_cancel_unlock=取消：%1$s 解鎖 %2$s
+jm_at.adm.dl_btn_schedule=安排它
+jm_at.adm.dl_dd_action=行動
+jm_at.adm.dl_dd_dimension=尺寸
+jm_at.adm.dl_end_locked_bc=§c[管理員]§r §g%1$s§r §c已鎖定§r終界。
+jm_at.adm.dl_end_unlocked_bc=§c[管理員]§r §g%1$s§r §2已解鎖§r終界。
+jm_at.adm.dl_field_when=多長時間（例如10m、1h、30s）
+jm_at.adm.dl_field_when_desc=向全服玩家公布
+jm_at.adm.dl_intro=§c已鎖定 = 玩家無法進入（會被傳送到世界重生點）。\n§2已解鎖 = 玩家可以進入。
+jm_at.adm.dl_nether_locked_bc=§c[管理員]§r §g%1$s§r §c已鎖定§r地獄。
+jm_at.adm.dl_nether_unlocked_bc=§c[管理員]§r §g%1$s§r §2解鎖§r地獄。
+jm_at.adm.dl_opt_lock=鎖
+jm_at.adm.dl_opt_unlock=解鎖
+jm_at.adm.dl_sched_end_lock_bc=§6[伺服器]§r終界§r將在 §6%1$s§r 後鎖定。
+jm_at.adm.dl_sched_end_unlock_bc=§6[伺服器]§r終界§r將在 §6%1$s§r 後解鎖。
+jm_at.adm.dl_sched_header=安排鎖定/解鎖
+jm_at.adm.dl_sched_nether_lock_bc=§6[伺服器]§r地獄§r將在 §6%1$s§r 後鎖定。
+jm_at.adm.dl_sched_nether_unlock_bc=§6[伺服器]§r地獄§r將在 §6%1$s§r 後解鎖。
+jm_at.adm.dl_title=維度鎖
+jm_at.adm.dl_toggle_end=鎖定終界
+jm_at.adm.dl_toggle_nether=鎖定地獄
+jm_at.adm.dropdown_none=（無）
+## [tx] jm_at.adm.eff_* — Viewer listing a player's active potion/status effects with strength level
+## [tx] and remaining time.
+jm_at.adm.eff_body=§8%1$s 上的即時效果：\n\n%2$s
+jm_at.adm.eff_btn_refresh=§l重新整理
+## [tx] Fragment inserted into eff_row as its %2$s (empty when the effect is level 1); %1$s = effect
+## [tx] strength number; KEEP the trailing space — it separates the level from the time.
+jm_at.adm.eff_level=%1$s 級 
+jm_at.adm.eff_none=§r%1$s 目前沒有任何狀態效果。
+## [tx] One row of a player's potion-effect list: %1$s = effect name, %2$s = 'Level N ' fragment or
+## [tx] empty, %3$s = remaining time like '1:30' or '45s'.
+jm_at.adm.eff_row=§s%1$s %2$s§r(%3$s)
+jm_at.adm.eff_title=%1$s 的效果 (%2$s)
+jm_at.adm.err_summon_failed=召喚失敗。
+jm_at.adm.err_teleport_failed=傳送失敗。
+jm_at.adm.err_unknown=未知錯誤。
+jm_at.adm.field_dur_desc_1h=例如1小時
+jm_at.adm.field_dur_desc_7d=例如 7d
+jm_at.adm.field_duration=持續時間（例如 7d / 1h / 1h30m）
+jm_at.adm.field_duration_24=持續時間（最長 24h，例如 1h / 30m / 1h30m）
+jm_at.adm.field_known_players=已紀錄玩家
+jm_at.adm.field_note_desc=輸入備註 - 所有管理員都可以看到它
+jm_at.adm.field_note_edit=編輯備註
+jm_at.adm.field_note_edit_desc=所有管理員可見
+jm_at.adm.field_note_label=備註（所有管理員可見）
+jm_at.adm.field_online_players=線上玩家
+jm_at.adm.field_reason=原因
+jm_at.adm.field_reason_ban_desc=封鎖原因
+jm_at.adm.field_reason_brief_desc=簡要理由
+jm_at.adm.field_reason_kick_desc=踢的原因
+jm_at.adm.field_select_gamemode=選擇遊戲模式
+jm_at.adm.gamemode_survival=生存
+jm_at.adm.gamemode_creative=創造
+jm_at.adm.gamemode_adventure=冒險
+jm_at.adm.gamemode_spectator=旁觀者模式
+jm_at.adm.field_type_or_pick=輸入玩家姓名（或在下方選擇）
+jm_at.adm.froze_done=§6凍結%1$s。
+## [tx] jm_at.adm.gc_* — Game Commands hub with shortcuts to built-in world commands: clear dropped
+## [tx] items, difficulty, gamemode, game rules, time, weather, world spawn. Related prefixes: diff_
+## [tx] (difficulty picker), gm_ (gamemode picker), gr_ (Game Rules toggles).
+jm_at.adm.gc_body=§r選擇一個內置指令。僅顯示您有權使用的內容。\n
+jm_at.adm.gc_body_none=§7您無權存取任何遊戲指令。\n
+jm_at.adm.gc_btn_clear_items=§l§c清除掉落的物品§r\n移除掉落的地面物品
+## [tx] Button subtitle: 'Peaceful > Hard' means the available range from Peaceful through Hard (use
+## [tx] vanilla difficulty names), not 'greater than'.
+jm_at.adm.gc_btn_difficulty=§l§2困難§r\n和平 > 困難
+jm_at.adm.gc_btn_gamemode=§l§2遊戲模式§r\n變更您自己的模式
+jm_at.adm.gc_btn_gamerules=§l§2遊戲規則§r\n切換通用世界規則
+jm_at.adm.gc_btn_time=§l§2時間§r\n白天/夜晚/中午/午夜
+## [tx] Button subtitle listing weather types: 'Clear' = sunny weather (vanilla weather name), NOT
+## [tx] 'remove/delete'.
+jm_at.adm.gc_btn_weather=§l§2天氣§r\n晴/雨/雷
+jm_at.adm.gc_btn_worldspawn=§l§2世界重生點§r\n設在此處 / 前往出生點
+## [tx] jm_at.adm.gear_* — Equipment ('Gear') viewer: staff inspect a player's armor and offhand
+## [tx] slots and, with the right permission, remove an item from a slot.
+jm_at.adm.gear_body_modify=選擇一個欄位來刪除該項目。
+jm_at.adm.gear_body_view=§8僅限檢視 - 移除裝備需要清除物品欄權限。
+jm_at.adm.gear_btn_remove=§l§c刪除
+jm_at.adm.gear_changed=§c設備發生變化。該物品不再位於該欄位中。
+jm_at.adm.gear_empty=§r未裝備盔甲或副手物品。
+jm_at.adm.gear_no_perm=§c您無權移除裝備。
+jm_at.adm.gear_open_failed=§c無法開啟該玩家的裝備。
+## [tx] Confirm dialog: %1$s = item name, %2$s = target player's name, %3$s = equipment slot name
+## [tx] (Head/Chest/Legs/Feet/Offhand); same params in gear_removed and gear_removed_target (there
+## [tx] %2$s is the slot).
+jm_at.adm.gear_remove_body=移除 §s%1$s§r — 玩家：§9%2$s§r，槽位：%3$s？
+jm_at.adm.gear_removed=§2已移除 §s%1$s§2 — 玩家：§9%2$s§2，槽位：%3$s。
+jm_at.adm.gear_removed_target=§c管理員從您的%2$s欄位中刪除了§s%1$s§c。
+jm_at.adm.gear_slot_empty=§l§8%1$s：空
+jm_at.adm.gear_slot_is_empty=§7%1$s 欄位為空。
+jm_at.adm.gear_slot_row=§l§s%1$s：%2$s
+jm_at.adm.gear_title=%1$s的裝備（%2$s）
+jm_at.adm.gear_view_only=§e僅可檢視：移除裝備需要「清空物品欄」權限。
+jm_at.adm.gm_set_done=§2將 %1$s 設定為 %2$s。
+jm_at.adm.gm_title=遊戲模式：%1$s
+jm_at.adm.gm_title_self=您的遊戲模式
+jm_at.adm.gr_fire_tick=火勢蔓延
+jm_at.adm.gr_immediate_respawn=立即重生（跳過死亡畫面）
+jm_at.adm.gr_intro=§7切換通用世界規則。變更適用於儲存。
+jm_at.adm.gr_keep_inventory=死亡時保留物品欄
+jm_at.adm.gr_keepinv_hint=§7關閉墓碑（控制面板→設定編輯器）以手動控制它。
+jm_at.adm.gr_keepinv_locked=§7死亡時保留物品欄：§2開啟§r\n§7（由墓碑功能鎖定）
+jm_at.adm.gr_mob_griefing=生物破壞（生物改變方塊）
+jm_at.adm.gr_mob_spawning=自然生物生成
+jm_at.adm.gr_pvp=PvP（玩家可以互相傷害）
+jm_at.adm.gr_show_coordinates=顯示坐標
+jm_at.adm.gr_title=遊戲規則
+jm_at.adm.gr_tnt_explodes=TNT爆炸
+jm_at.adm.gr_updated=§2遊戲規則更新。
+jm_at.adm.grant_role_body=§r此身分組為§l%1$s§r角色保留。\n\n將其指派給§g%2$s§r不僅會顯示該名稱標籤，還會授予§l%1$s權限§r。\n\n是否繼續？
+jm_at.adm.grant_role_title=授予 %1$s 角色嗎？
+## [tx] jm_at.adm.home* — Admin-side management of players' saved homes: list a player's homes with
+## [tx] dimension and coordinates, view details, and delete homes.
+jm_at.adm.home_delete_body=刪除 §9%1$s§r 的家 §9%2$s§r？\n§8%3$s（%4$s、%5$s、%6$s）§r\n\n此操作無法撤消。
+jm_at.adm.home_delete_title=刪除家
+jm_at.adm.home_deleted=§2從 §9%2$s§2 中刪除了家 §9%1$s§2。
+jm_at.adm.home_detail_body=§l%1$s§r\n%2$s（%3$s、%4$s、%5$s）
+jm_at.adm.home_row=§l%1$s§r\n%2$s %3$s、%4$s、%5$s
+jm_at.adm.homes_count=已儲存的家：%1$s 個。
+jm_at.adm.homes_detail_title=%1$s — %2$s
+jm_at.adm.homes_title=%1$s — 家
+## [tx] jm_at.adm.idx_* — Short feature titles used as the admin panel's search-index entries and
+## [tx] page names (Action Log, Rank Manager, Rollcall, Storage Health…); each must match the title
+## [tx] translation of the screen it opens.
+jm_at.adm.idx_action_log=操作日誌
+jm_at.adm.idx_admin_log=管理日誌
+jm_at.adm.idx_admin_privileges=管理員權限
+jm_at.adm.idx_banned_items=違禁物品
+jm_at.adm.idx_broadcasts=公告
+jm_at.adm.idx_bulk_assign=批次指派身分組
+jm_at.adm.idx_bulk_remove=批次刪除身分組
+jm_at.adm.idx_categories=管理類別
+jm_at.adm.idx_claims_admin=土地領地（管理）
+jm_at.adm.idx_commands=指令
+jm_at.adm.idx_command_buttons=指令按鈕
+jm_at.adm.idx_config_editor=設定編輯器
+jm_at.adm.idx_control_panel=控制面板
+jm_at.adm.idx_customize_menu=自訂選單
+jm_at.adm.idx_dimension_locks=維度鎖
+jm_at.adm.idx_game_commands=遊戲指令
+jm_at.adm.idx_gamemode_access=遊戲模式（管理員權限）
+jm_at.adm.idx_info=資訊
+jm_at.adm.idx_item_watch=物品監控
+jm_at.adm.idx_item_watch_log=物品監控日誌
+jm_at.adm.idx_kits_editor=禮包編輯器
+jm_at.adm.idx_log_settings=日誌設定
+jm_at.adm.idx_menu_visibility=選單可見性
+jm_at.adm.idx_mod_privileges=協管員權限
+jm_at.adm.idx_players_offline=離線玩家
+jm_at.adm.idx_players_online=線上玩家
+jm_at.adm.idx_players_search=搜尋玩家
+jm_at.adm.idx_playtime_ranks=遊玩時間身分組
+jm_at.adm.idx_rank_database=身分組資料庫
+jm_at.adm.idx_rank_manager=身分組管理器
+jm_at.adm.idx_restore_holograms=還原全息圖
+jm_at.adm.idx_rollcall=點名
+jm_at.adm.idx_server_controls=伺服器控制
+jm_at.adm.idx_staff_activity=管理團隊活動
+jm_at.adm.idx_staff_permissions=管理團隊與權限
+jm_at.adm.idx_staff_rank_settings=管理成員身分組設定
+jm_at.adm.idx_staff_tag_security=管理團隊標籤安全
+jm_at.adm.idx_storage_health=儲存健康狀況
+jm_at.adm.idx_teleport=傳送
+jm_at.adm.idx_ticket_settings=回報單設定
+jm_at.adm.idx_tickets=回報單
+jm_at.adm.idx_tracked_items=追蹤項目
+jm_at.adm.idx_warps=傳送點
+jm_at.adm.idx_whitelist=管理白名單
+jm_at.adm.inv_body=選擇要檢查的物品欄。
+jm_at.adm.inv_btn_armor=§l裝甲和副手§r\n裝備裝備
+jm_at.adm.inv_btn_clear=§c§l清除物品欄§r\n§8刪除所有物品
+jm_at.adm.inv_btn_clear_confirm=§l清除
+jm_at.adm.inv_btn_delete=§c§l刪除§r\n§8永久刪除
+jm_at.adm.inv_btn_effects=§l狀態效果§r\n藥水與其他狀態效果
+jm_at.adm.inv_btn_ender=§l終界箱§r\n個人終界儲存
+jm_at.adm.inv_btn_main=§l熱欄和物品欄§r\n主要物品欄
+jm_at.adm.inv_btn_take=§2§l將§r\n§8移至您的物品欄
+jm_at.adm.inv_btn_take_confirm=§l采取
+jm_at.adm.inv_btn_take_plain=采取
+jm_at.adm.inv_clear_body=§c清除§g%1$s§c中的所有項目？\n\n此操作無法撤消。
+jm_at.adm.inv_clear_title=清物品欄
+jm_at.adm.inv_cleared=§2清除了%1$s的物品欄。
+jm_at.adm.inv_cleared_target=§c您的物品欄已被管理團隊清空。
+jm_at.adm.inv_ender_empty=§r終界箱是空的。
+jm_at.adm.inv_ender_title=%1$s 的終界箱 (%2$s)
+jm_at.adm.inv_item_body=您想用這個物品做什麼？
+jm_at.adm.inv_item_row=§s§l%1$s §r×%2$s\n§8槽 %3$s
+jm_at.adm.inv_item_title=物品：%1$s ×%2$s
+jm_at.adm.inv_main_body_admin=選擇一個項目以獲取或刪除它。
+jm_at.adm.inv_main_body_mod=選擇一個項目將其刪除。
+jm_at.adm.inv_main_body_view=§8僅檢視 - 您可以檢查物品，但不能拿走或移除它們。
+jm_at.adm.inv_main_empty=§r物品欄為空。
+jm_at.adm.inv_main_title=%1$s 的物品欄 (%2$s)
+jm_at.adm.inv_no_perm_remove=§c您無權刪除項目。
+jm_at.adm.inv_no_perm_take=§c您無權拿走或移除物品。
+jm_at.adm.inv_open_ender_failed=§c無法開啟該玩家的終界箱。
+jm_at.adm.inv_open_failed=§c無法開啟該玩家的物品欄。
+jm_at.adm.inv_open_src_failed=§c無法開啟該玩家的%1$s。
+jm_at.adm.inv_owner_clear=§c[服主保護] 無法清空服主的物品欄。
+jm_at.adm.inv_owner_protected=§c服主的物品欄受到保護，無法檢視。
+jm_at.adm.inv_remove_failed=無法刪除項目。
+jm_at.adm.inv_remove_one_body=永久刪除 §s%1$s§r — 玩家：§9%2$s§r？
+jm_at.adm.inv_remove_slider=要移除的金額（%1$s 堆疊）
+jm_at.adm.inv_remove_title=刪除：%1$s
+## [tx] %1$s = amount, %2$s = the item's localized display name (or its custom name tag), %3$s =
+## [tx] player name, %4$s = container name substituted from jm_at.adm.src_* ('inventory' / 'ender
+## [tx] chest'). Same params in inv_took / inv_took_dropped; the *_target variants drop the player
+## [tx] name.
+jm_at.adm.inv_removed=§2已刪除 §s%1$sx %2$s§2 — 來自 §9%3$s§2 的%4$s。
+jm_at.adm.inv_removed_target=§c管理員從您的 %3$s 中刪除了 §s%1$sx %2$s§c。
+## [tx] %1$s = container name from jm_at.adm.src_* ('inventory' or 'ender chest'); shown when the
+## [tx] target's container changed while the admin had the item dialog open.
+jm_at.adm.inv_src_changed=§c%1$s 已變更。該物品不再位於該欄位中。
+jm_at.adm.inv_take_failed=領取物品失敗。
+jm_at.adm.inv_take_one_body=拿取 §s1× %1$s§r — 玩家：§9%2$s§r？
+jm_at.adm.inv_take_slider=領取金額（%1$s 堆疊）
+jm_at.adm.inv_take_title=采取：%1$s
+jm_at.adm.inv_title=物品欄：%1$s
+jm_at.adm.inv_took=§2已拿取 §s%1$sx %2$s§2 — 來自 §9%3$s§2 的%4$s。
+jm_at.adm.inv_took_dropped=§2已拿取 §s%1$sx %2$s§2 — 來自 §9%3$s§2 的%4$s。§6物品欄已滿，物品已掉落在您腳邊。
+jm_at.adm.inv_took_target=§c管理員從您的%3$s處拿走了§s%1$sx %2$s§c。
+jm_at.adm.inv_view_only=§e僅可檢視：拿取或移除物品需要「清空物品欄」權限。
+jm_at.adm.iw_body=§c禁止的物品§r（從非管理員玩家中自動刪除）：§9%1$s§r已設定。\n\n§s追蹤物品§r（當玩家達到門檻時提醒管理員）：§9%2$s§r已設定。
+jm_at.adm.iw_btn_banned=§m§l禁止的物品§r\n自動刪除禁止的物品
+jm_at.adm.iw_btn_log=§l物品監控日誌§r\n偵測和警示歷史紀錄
+jm_at.adm.iw_btn_tracked=§l§s追蹤物品§r\n已設定%1$s
+jm_at.adm.iw_field_id_desc=namespace:item
+jm_at.adm.iwl_empty=§8尚未紀錄項目觀看事件。
+jm_at.adm.iwl_page=§8頁 %1$s/%2$s
+## [tx] Log-source prefix: '[ADM]' = the event was an action by an admin (vs [SYS] automatic);
+## [tx] trailing space must be kept; abbreviation may stay.
+jm_at.adm.iwl_src_adm=§9[管理]§r 
+## [tx] Log-source prefix: '[SYS]' = automatic system detection (vs [ADM] admin action); trailing
+## [tx] space must be kept.
+jm_at.adm.iwl_src_sys=§c[系統]§r 
+## [tx] Fragment appended to an Item Watch log row pointing at the affected player; %1$s = target
+## [tx] player name; keep the leading space and arrow.
+jm_at.adm.iwl_target_arrow= §r→ §g%1$s§r
+jm_at.adm.iwl_title=物品監控日誌（%1$s）
+jm_at.adm.kick_confirm_body=§r是否踢出§g%1$s§r？\n\n§r原因：§r%2$s\n\n§c⚠ 在區域網路或本機世界中，伺服器內必須無人後，該玩家才能重新加入（基岩版限制）。
+jm_at.adm.kick_confirm_title=確認踢出
+jm_at.adm.kick_title=踢出：%1$s
+jm_at.adm.ls_dd_retention=最多儲存項目數
+jm_at.adm.ls_dd_retention_desc=§8調低此值會立即刪除超出新上限的最舊項目。
+jm_at.adm.ls_header_categories=記錄哪些內容
+jm_at.adm.ls_header_retention=保留設定
+jm_at.adm.ls_intro=§r選擇操作日誌要記錄哪些選用事件。稽核操作（封鎖、踢出、警告、身分組、權限、物品欄變更、支援存取、伺服器鎖定）一律會記錄，無法關閉。
+## [tx] Dropdown option for the log retention size; %1$s = a number (reads "400 entries").
+jm_at.adm.ls_opt_entries=%1$s 個項目
+jm_at.adm.ls_saved=§2日誌設定已儲存。
+## [tx] Toast after saving when lowering the limit deleted old entries; %1$s = how many were deleted.
+jm_at.adm.ls_saved_pruned=§2日誌設定已儲存。§7已移除的舊項目：%1$s
+jm_at.adm.ls_title=日誌設定
+jm_at.adm.ls_toggle_config=管理員設定變更（公告、傳送點、鎖定、物品清單）
+jm_at.adm.ls_toggle_item_alerts=追蹤項目警示（禁止物品的偵測一律會記錄）
+jm_at.adm.ls_toggle_player_activity=玩家活動（家、傳送點、TPA、死亡返回、回報單、禮包）
+jm_at.adm.ls_toggle_pvp=PvP 擊殺
+jm_at.adm.ls_toggle_tickets=管理團隊回報單流程（接單、解決、回覆、關閉）
+jm_at.adm.mod_assigned_admin=§2%1$s 現在是協管員。
+jm_at.adm.mod_assigned_target=§2您已被指定為協管員角色。
+jm_at.adm.mod_removed_admin=§6刪除了 %1$s 的協管員角色。
+jm_at.adm.mod_removed_target=§6您的協管員角色已被刪除。
+jm_at.adm.mv_btn_reset=重設管理按鈕
+jm_at.adm.mv_header_admin=管理員選單（僅服主）
+jm_at.adm.mv_header_player=玩家選單
+jm_at.adm.mv_no_perm=§c您無權變更選單可見性。
+jm_at.adm.mv_reset_done=§2選單可見性重設 - 所有管理按鈕可見。
+jm_at.adm.mv_updated=§2選單可見性已更新。
+jm_at.adm.no_active_warns=§8該玩家目前沒有有效警告。
+## [tx] Appended below a punishment entry; 'appeal' = the player's ban-appeal message; keep the two
+## [tx] leading \n.
+jm_at.adm.no_appeal=\n\n§8未提交申訴。
+jm_at.adm.no_homes=§c%1$s 沒有已儲存的家。
+jm_at.adm.no_longer_online=§c%1$s 不再線上。
+jm_at.adm.no_other_players=§r沒有其他玩家線上。
+jm_at.adm.no_perm_gamemode=§c您無權變更遊戲模式。
+jm_at.adm.no_perm_generic=§c您無權這樣做。
+jm_at.adm.no_perm_teleport=§c您無權使用傳送動作。
+jm_at.adm.no_tickets_for_player=§r該玩家沒有任何回報單紀錄。
+jm_at.adm.no_tickets_found=§r找不到回報單。§r
+jm_at.adm.no_warps_set=§r尚未設定傳送點。
+jm_at.adm.note_add_title=新增備註：%1$s
+jm_at.adm.note_added=§2新增備註。
+## [tx] Note detail, dated: %1$s = note text, %2$s = relative age ("3 days ago"), %3$s = staff name.
+jm_at.adm.note_body=%1$s\n\n§8%2$s由 %3$s 新增
+## [tx] Note detail for notes saved before dates were recorded: %1$s = note text, %2$s = staff name.
+jm_at.adm.note_body_undated=%1$s\n\n§8由 %2$s 新增（日期未知）
+jm_at.adm.note_delete_body=§c刪除此備註？\n\n§r%1$s
+jm_at.adm.note_delete_title=刪除備註
+jm_at.adm.note_deleted=§2備註已刪除。
+jm_at.adm.note_edit_title=編輯備註：%1$s
+## [tx] Note list row, dated: %1$s = note text (truncated), %2$s = relative age, %3$s = staff name.
+jm_at.adm.note_row=§l%1$s§r\n§8%2$s - %3$s
+## [tx] Note list row for notes saved before dates were recorded: %1$s = text, %2$s = staff name.
+jm_at.adm.note_row_undated=§l%1$s§r\n§8由 %2$s 新增
+jm_at.adm.note_title=注意：%1$s
+jm_at.adm.note_updated=§2備註已更新。
+jm_at.adm.notes_count=%1$s 條備註 — 最新的在前
+jm_at.adm.notes_empty=還沒有筆記。
+jm_at.adm.notes_title=管理員備註：%1$s
+jm_at.adm.offline_body=選擇一名玩家以檢視其離線檔案。
+jm_at.adm.offline_body_empty=§r沒有紀錄的離線玩家。§r
+jm_at.adm.offline_profile_1=§g%1$s§r %2$s\n§r• XUID：§r %3$s\n§r• 遊戲模式：§r %4$s\n§r• 首次出現：§r %5$s\n§r• 最後出現：§r %6$s
+jm_at.adm.offline_profile_2=§r• 位置：§r %1$s（%2$s、%3$s、%4$s）\n§r• 已提交回報單：§r %5$s §r警告：§r %6$s\n§r• 領地：§r %7$s
+jm_at.adm.offline_row=§l%1$s%2$s§r\n§8最後出現時間：%3$s
+jm_at.adm.offline_title=離線玩家 (%1$s)
+jm_at.adm.offline_title_name=離線：%1$s
+jm_at.adm.online_body=選擇一名玩家以檢視其個人資料。
+jm_at.adm.online_title=線上玩家 (%1$s)
+jm_at.adm.owner_claimed=§2管理員工具：您現在是服主。
+## [tx] Panel stats: %1$s = open support tickets, %2$s = tickets a staff member has claimed
+## [tx] (assigned to self) — NOT land claims.
+jm_at.adm.panel_body=§r待處理回報單：§r%1$s §r已接單：§r%2$s
+jm_at.adm.panel_title_admin=管理面板§nv%1$s§r
+jm_at.adm.panel_title_mod=§n協管員小組§nv%1$s§r
+jm_at.adm.players_online_count=§r%1$s 名玩家線上§r
+jm_at.adm.players_title=玩家
+jm_at.adm.pmf_deathback=死亡返回
+jm_at.adm.pmf_homes=家
+jm_at.adm.pmf_kits=禮包
+jm_at.adm.pmf_tickets=回報單/警告
+jm_at.adm.pr_body=狀態：%1$s§r\n覆寫手動身分組：%2$s§r\n門檻：§9%3$s§r / §9%4$s§r\n%5$s\n\n覆寫手動身分組：啟用後，遊玩時間晉升會取代手動指派的身分組。
+jm_at.adm.pr_btn_bonus=§l獎勵遊玩時間§r\n§8將未追蹤的時間計入玩家
+jm_at.adm.pr_btn_disable=§l停用遊玩時間身分組
+jm_at.adm.pr_btn_enable=§l啟用遊玩時間身分組
+jm_at.adm.pr_btn_override=§l覆蓋手動身分組§r\n目前：%1$s
+jm_at.adm.pr_btn_thresholds=§l管理門檻§r\n已設定§8%1$s
+## [tx] Shown in place of a rank's display tag when that rank was deleted from the database; %1$s =
+## [tx] the deleted rank's name.
+jm_at.adm.pr_deleted=§c（已刪除：%1$s）
+jm_at.adm.pr_disabled=§2遊玩時間身分組§c停用§2。
+jm_at.adm.pr_enabled=§2遊玩時間身分組§2已啟用§2。
+jm_at.adm.pr_line=  %1$s → %2$s§r
+## [tx] Status value 'No' shown for the 'Override manual ranks' setting; pairs with jm_at.adm.rm_yes
+## [tx] ('Yes').
+jm_at.adm.pr_no=§c號
+jm_at.adm.pr_override_off=§2覆蓋手動身分組§c停用§2。
+jm_at.adm.pr_override_on=§2覆蓋手動身分組§2啟用§2。
+jm_at.adm.priv_adminClaimBypass=管理員領地繞過（覆蓋管理員領地）
+jm_at.adm.priv_adminLog=管理日誌和報告
+jm_at.adm.priv_adminNotes=管理員備註
+jm_at.adm.priv_admin_intro=§7管理員預設啟用全部權限（管理禮包和變更遊戲模式除外）。關閉某項權限即可限制管理員；服主永遠不受限制。
+jm_at.adm.priv_admin_overrides_title=管理員權限：%1$s
+jm_at.adm.priv_admin_overrides_updated=§2更新了 %1$s 的管理員權限覆蓋。
+jm_at.adm.priv_admin_updated=§2更新了管理員權限。
+jm_at.adm.priv_claimBypass=領地繞過（覆蓋玩家領地）
+jm_at.adm.priv_claimsAdmin=理賠管理
+jm_at.adm.priv_commands=指令面板
+jm_at.adm.priv_command_buttons=指令按鈕
+jm_at.adm.priv_feed=補充飽食度
+jm_at.adm.priv_freeze=凍結
+jm_at.adm.priv_gamemode=改變遊戲模式
+jm_at.adm.priv_heal=恢復生命值
+jm_at.adm.priv_homes=傳送到家
+jm_at.adm.priv_kits=管理禮包（建立/編輯/刪除）
+jm_at.adm.priv_manageRoles=管理角色（指派/刪除管理成員）
+jm_at.adm.priv_modPrivileges=編輯協管員權限
+jm_at.adm.priv_mod_overrides_title=權限：%1$s
+jm_at.adm.priv_mod_overrides_updated=§2更新了 %1$s 的權限覆蓋。
+jm_at.adm.priv_mod_updated=§2協管員權限已更新。
+jm_at.adm.priv_no_perm_mod=§c您沒有編輯協管員權限的權限。
+jm_at.adm.priv_offlineModeration=離線審核
+## [tx] Suffix appended to a privilege toggle's label when that player has a per-player override of
+## [tx] the global setting; keep the leading space.
+jm_at.adm.priv_override_suffix= （覆蓋）
+jm_at.adm.priv_owner_only_admin=§c只有服主可以編輯管理員權限。
+jm_at.adm.priv_permBan=永久封鎖
+jm_at.adm.priv_punishmentHistory=處分歷史
+jm_at.adm.priv_rankPanel=身分組面板（每個玩家標籤）
+jm_at.adm.priv_sec_admin_powers=僅限管理員的權力
+jm_at.adm.priv_sec_inventory=物品欄與審核
+jm_at.adm.priv_sec_panels=面板
+jm_at.adm.priv_sec_player_actions=玩家行動
+jm_at.adm.priv_sec_ranks=身分組
+jm_at.adm.priv_spyCamera=監視攝影機
+jm_at.adm.priv_tempBan=暫時封鎖
+jm_at.adm.priv_unban=解禁
+jm_at.adm.priv_viewInventory=檢視物品欄
+jm_at.adm.profile_1=§g%1$s§r %2$s\n§r• XUID:§r %3$s
+jm_at.adm.profile_2=§r• 首次出現：§r %1$s\n§r• 最後出現：§r %2$s\n§r• 位置：§r %3$s（%4$s、%5$s、%6$s）
+jm_at.adm.profile_3=§r• 提交的回報單：§r %1$s\n§r• 警告：§r %2$s
+jm_at.adm.profile_claims_line=§r• 領地：§r %1$s
+jm_at.adm.profile_gamemode_line=\n§r• 遊戲模式：§r %1$s
+jm_at.adm.profile_rank_line=\n§r• 身分組：§r %1$s
+jm_at.adm.profile_spy_line=\n§r• 已記錄的監視工作階段：§r %1$s
+jm_at.adm.profile_title=個人資料：%1$s
+jm_at.adm.pt_add_title=新增遊玩時間門檻
+jm_at.adm.pt_added=§2新增了門檻：§9%1$s§2 → %2$s§2。
+jm_at.adm.pt_btn_add=§l§2+ 新增門檻
+jm_at.adm.pt_btn_edit=§l編輯
+jm_at.adm.pt_btn_row=§l%1$s§r\n§8→ %2$s§r
+jm_at.adm.pt_dd_rank=身分組
+jm_at.adm.pt_delete_body=刪除遊玩時間門檻§9%1$s§r → %2$s§r？\n\n此操作無法撤消。
+jm_at.adm.pt_delete_title=刪除門檻
+jm_at.adm.pt_deleted_short=§c（已刪除）
+jm_at.adm.pt_edit_body=時間：§9%1$s§r\n身分組：§9%2$s§r → %3$s§r
+jm_at.adm.pt_edit_form_title=編輯遊玩時間門檻
+jm_at.adm.pt_edit_title=編輯門檻
+jm_at.adm.pt_field_hours=時間
+jm_at.adm.pt_field_hours_desc=例如24
+jm_at.adm.pt_field_mins=分鐘
+jm_at.adm.pt_field_mins_desc=例如30
+jm_at.adm.pt_limit=§c達到門檻限制（%1$s）。請先移除一個。
+jm_at.adm.pt_no_ranks=§c資料庫中還沒有身分組。先加一個吧
+jm_at.adm.pt_no_ranks_short=§c資料庫中還沒有身分組。
+jm_at.adm.pt_none=§8未設定門檻。
+jm_at.adm.pt_removed=§2門檻已刪除：§9%1$s§2 → %2$s§2。
+jm_at.adm.pt_row=§9%1$s§r → %2$s§r
+jm_at.adm.pt_title=遊玩時間門檻 (%1$s/%2$s)
+jm_at.adm.pt_updated=§2門檻已更新：§9%1$s§2 → %2$s§2。
+## [tx] Punishment row: %1$s = color code or empty (used twice, keep both), %2$s = a translated
+## [tx] type badge (pun_type_ban/kick/warn/freeze), %3$s = staff name, %4$s = date, %5$s = reason,
+## [tx] %6$s = optional ' until <date>' or ' (perm)' fragment (may be empty).
+jm_at.adm.pun_entry=%1$s§c%2$s§r%1$s 由 §g%3$s\n %4$s — %5$s%6$s§r
+jm_at.adm.pun_none=§r無處分紀錄。§r
+## [tx] Fragment appended after a punishment row; 'perm' = permanent (never expires); keep the
+## [tx] leading space.
+jm_at.adm.pun_perm=（永久）
+jm_at.adm.pun_title=懲罰：%1$s
+## [tx] Short uppercase badges shown as %2$s of pun_entry — translate as short ALL-CAPS status words
+## [tx] consistent with your Ban / Kick / Warn / Freeze feature terms.
+jm_at.adm.pun_type_ban=封鎖
+jm_at.adm.pun_type_freeze=凍結
+jm_at.adm.pun_type_kick=踢出
+jm_at.adm.pun_type_warn=警告
+## [tx] Fragment appended right after the reason in a punishment row; keep the leading space; %1$s =
+## [tx] expiry date of a temporary punishment.
+jm_at.adm.pun_until= 直到%1$s
+jm_at.adm.qr_btn_run=執行
+jm_at.adm.qr_field_command_desc=例如：time set day
+jm_at.adm.qr_run_failed=§c該指令執行失敗：\n%1$s
+jm_at.adm.qr_title=快速執行
+jm_at.adm.rank_hidden_suffix=§8%1$s §8（隱藏）§r
+jm_at.adm.rank_none=§8無§r
+jm_at.adm.rankp_body=目前身分組：§r %1$s\n\n%2$s
+jm_at.adm.rankp_btn_edit_custom=§2§l編輯自訂身分組§r
+jm_at.adm.rankp_btn_hide=§6§l隱藏身分組§r\n§8隱藏姓名上方的身分組
+jm_at.adm.rankp_btn_pick_db=§l從資料庫中選擇§r\n選擇預定義的身分組
+jm_at.adm.rankp_btn_pick_db_disabled=§l從資料庫中選擇§r\n管理成員自訂身分組已停用
+jm_at.adm.rankp_btn_pick_db_none=§l從資料庫中選取§r\n未定義身分組
+jm_at.adm.rankp_btn_remove_custom=§c§l刪除自訂身分組§r
+jm_at.adm.rankp_btn_remove_custom_disabled=§l刪除自訂身分組§r\n管理成員自訂身分組已停用
+jm_at.adm.rankp_btn_remove_custom_none=§l刪除自訂身分組§r\n（未設定身分組）
+jm_at.adm.rankp_btn_set_custom=§2§l設定自訂身分組§r
+jm_at.adm.rankp_btn_set_custom_disabled=§l設定自訂身分組§r\n管理成員自訂身分組已停用
+jm_at.adm.rankp_btn_show=§2§l顯示身分組§r\n§8顯示姓名上方的身分組
+jm_at.adm.rankp_cannot_custom_staff=§8無法為管理成員設定自訂身分組。首先在身分組管理器中啟用管理成員自訂身分組。
+jm_at.adm.rankp_cannot_remove_auto=§8無法刪除自動管理成員身分組。
+jm_at.adm.rankp_desc=%1$s§r %2$s
+jm_at.adm.rankp_display_disabled=§2身分組顯示§8停用§2 §g%1$s§2。
+jm_at.adm.rankp_display_enabled=§2身分組顯示已§2啟用§2：§g%1$s§2。
+jm_at.adm.rankp_grant_failed=§c無法將 %1$s 授予 %2$s。
+jm_at.adm.rankp_hidden=§8（隱藏）§r
+jm_at.adm.rankp_no_custom_to_remove=§8沒有要刪除的自訂身分組。
+jm_at.adm.rankp_no_ranks_defined=§8沒有定義身分組。首先在身分組管理器中新增身分組。
+jm_at.adm.rankp_note_colors=使用顏色格式程式碼對標籤進行顏色排序。
+jm_at.adm.rankp_note_staff_auto=該玩家根據其管理角色自動取得身分組。\n§7在身分組管理器中啟用「管理成員自訂身分組」以允許為管理成員自訂身分組。
+jm_at.adm.rankp_note_staff_custom=該玩家的角色是%1$s§r。當啟用管理成員自訂身分組時，自訂身分組將覆蓋它。
+jm_at.adm.rankp_now_hidden=§8您的身分組標籤現已隱藏。
+jm_at.adm.rankp_now_visible=§2您的身分組標籤現在可見。
+jm_at.adm.rankp_pick_body=從資料庫中選擇一個身分組：
+jm_at.adm.rankp_pick_row=§l%1$s§r\n§8%2$s§r
+jm_at.adm.rankp_pick_title=選擇身分組：%1$s
+jm_at.adm.rankp_removed_done=§2身分組已從§g%1$s§2 中刪除。
+jm_at.adm.rankp_removed_target=§6您的身分組標籤已被刪除。
+jm_at.adm.rankp_role_requires_manage=§c此身分組會授予管理角色，因此需要「管理角色」權限。
+jm_at.adm.rankp_set_done=§2身分組集：§r%1$s§2 → §g%2$s§2。
+jm_at.adm.rankp_set_target=§2您的身分組已設定為§r%1$s§2。
+jm_at.adm.rankp_title=身分組：%1$s
+jm_at.adm.rankp_visible=§2（可見）§r
+jm_at.adm.rc_btn_clear=§l§c清除連線記錄
+jm_at.adm.rc_btn_clear_confirm=§l§c清除
+jm_at.adm.rc_clear_body=§r要清除連線記錄中的所有加入/離開事件嗎？\n\n§8此操作無法復原。
+jm_at.adm.rc_clear_title=清除連線記錄
+jm_at.adm.rc_cleared=§2連線記錄已清除。
+jm_at.adm.rc_empty=§8尚未記錄連線事件。\n§8附加內容執行後會記錄加入/離開事件。
+jm_at.adm.rc_more=§8…和 %1$s 較早的活動
+jm_at.adm.rc_row_join=§2▶ §g%1$s§r 已加入§r §8%2$s
+jm_at.adm.rc_row_left=§c◀ §g%1$s§r 左§r §8%2$s
+jm_at.adm.rc_title=點名（%1$s 活動）
+jm_at.adm.registry_entry_not_found=§c找不到註冊表項。
+jm_at.adm.registry_not_found=§c找不到玩家登錄資料。該玩家可能需要重新加入。
+jm_at.adm.remove_admin_body=§c⚠ 是否移除§g%1$s§c的 Admin Tools 管理權限？\n\n§r該玩家會保留操作員身分，但會失去全部管理權限，直到管理員重新授予。
+jm_at.adm.remove_admin_self_body=§c⚠ 您即將移除§l自己§r§c的 Admin Tools 管理權限。\n\n§r您會立即失去全部管理權限，且§l§c無法自行恢復§r。只有服主或其他管理員可以恢復您的權限。\n\n§r確定繼續嗎？
+jm_at.adm.remove_admin_self_title=刪除您的管理員存取權限？
+jm_at.adm.remove_admin_title=確認刪除管理員
+jm_at.adm.removed_admin_admin=§6已刪除 %1$s 的管理員工具存取權限。他們保留其操作員身分。
+jm_at.adm.removed_admin_target=§6您的管理員工具存取權限已被管理員刪除。
+jm_at.adm.removed_own_admin=§6您已移除自己的管理員工具存取權限。您仍保留操作員身分，但只有服主或其他管理員可以恢復您的管理員身分。
+jm_at.adm.rk_added=§2身分組 §9%1$s§2 新增了標籤：§r%2$s§2。
+jm_at.adm.rk_bad_name=§c輸入有效的清單名稱（字母、數字、空格、下劃線）。
+jm_at.adm.rk_btn_add=§l§2+ 新增身分組
+jm_at.adm.rk_btn_delete=§l§c刪除身分組
+jm_at.adm.rk_btn_edit_tag=§l§2編輯標籤
+jm_at.adm.rk_current_tag=§7目前標籤：§r%1$s
+jm_at.adm.rk_db_body=§r定義的身分組：§9%1$s§r
+jm_at.adm.rk_db_body_empty=§r尚未定義身分組。
+jm_at.adm.rk_db_row=§l%1$s§r\n§8標籤：%2$s§r
+jm_at.adm.rk_db_title=身分組資料庫（%1$s/%2$s）
+jm_at.adm.rk_dd_color=顏色
+jm_at.adm.rk_delete_q=§c刪除身分組「%1$s」？
+jm_at.adm.rk_delete_title=刪除身分組：%1$s
+## [tx] %1$s = rank name; %2$s is either empty or the jm_at.adm.rk_deleted_stripped sentence —
+## [tx] translate so it reads well with and without it.
+jm_at.adm.rk_deleted=§2身分組 §9%1$s§2 已刪除。%2$s
+## [tx] Sentence appended to jm_at.adm.rk_deleted when the tag was also stripped from players; keep
+## [tx] the leading space; %1$s = number of players.
+jm_at.adm.rk_deleted_stripped= 從 §9%1$s§2 玩家中刪除。
+jm_at.adm.rk_detail_body=顯示標記：§r%1$s§r
+jm_at.adm.rk_dupe=§c名為「%1$s」的身分組已存在或已達到限制。
+jm_at.adm.rk_field_name=清單名稱（字母、數字、空格、下劃線）
+jm_at.adm.rk_field_name_desc=顯示在身分組清單中 - 例如貴賓
+jm_at.adm.rk_field_tag=標籤文字（顯示在玩家姓名上方）
+jm_at.adm.rk_field_tag_desc=例如[貴賓]
+jm_at.adm.rk_header_preview=標籤預覽
+jm_at.adm.rk_limit=§c達到身分組限制（%1$s）。請先移除一個。
+jm_at.adm.rk_need_text=§c首先輸入標籤文字。
+jm_at.adm.rk_not_found=§c找不到身分組。
+jm_at.adm.rk_tag_updated=§2標籤已更新：§r%1$s§2。
+jm_at.adm.rk_title_add=新增身分組
+jm_at.adm.rk_title_edit=編輯標籤：%1$s
+jm_at.adm.rk_title_set=設定身分組：%1$s
+jm_at.adm.rk_toggle_strip=還要從所有擁有此標籤的人身上刪除此標籤嗎？
+## [tx] "Admin Tool" here = the held ITEM that opens the admin panel — must match the
+## [tx] item.jm_at:admin_tool.name translation. The path segments (Players → Online Players → Rank)
+## [tx] must match those screens' translated titles/buttons.
+jm_at.adm.rm_body=已定義身分組：§9%1$s§r / §9%2$s§r\n管理員標籤：%3$s§r  ·  協管員標籤：%4$s§r\n隱藏管理團隊標籤：%5$s§r  ·  為成員個別設定自訂身分組：%6$s§r\n\n如需給玩家設定身分組但不將其加入資料庫，請開啟該玩家的詳細資料頁並設定自訂身分組。（管理員工具 → 玩家 → 線上玩家 → <player> → 身分組）
+jm_at.adm.rm_btn_bulk_assign=§l批次指派§r\n為許多玩家指派身分組
+jm_at.adm.rm_btn_bulk_remove=§l批次刪除§r\n從所有玩家中刪除身分組
+jm_at.adm.rm_btn_database=§l身分組資料庫§r\n新增、編輯和刪除身分組
+jm_at.adm.rm_btn_playtime=§l遊玩時間身分組§r\n目前：%1$s
+jm_at.adm.rm_btn_staff_settings=§l管理成員身分組設定§r\n預設標籤和每名管理成員覆蓋
+jm_at.adm.rm_disabled=§c停用
+jm_at.adm.rm_enabled=§2啟用
+jm_at.adm.rm_no=§7否
+jm_at.adm.rm_tag_mod_default=§g[協管員]§r
+jm_at.adm.rm_yes=§2是
+jm_at.adm.role_admin=管理員
+jm_at.adm.role_moderator=協管員
+jm_at.adm.sa_empty=§8尚未紀錄任何管理操作。
+## [tx] Lowercase filler shown inside a staff-activity row where the per-action breakdown list (e.g.
+## [tx] "BAN×3, KICK×2") would go; keep lowercase mid-line style.
+jm_at.adm.sa_no_breakdown=沒有故障
+jm_at.adm.sa_row=§g%1$s§r — §9%2$s§r 操作\n §8%3$s
+jm_at.adm.sa_title=管理團隊活動總結
+jm_at.adm.sc_body=伺服器鎖定: %1$s\n白名單模式: %2$s 白名單: §9%3$s§r\n• 鎖定伺服器將阻止新玩家加入。\n• 開啟白名單模式將只允許白名單上的玩家加入。\n\n
+jm_at.adm.sc_btn_lock=§c§l鎖定伺服器§r\n防止新玩家加入
+jm_at.adm.sc_btn_manage_wl=§l管理白名單
+jm_at.adm.sc_btn_unlock=§2§l解鎖伺服器§r\n允許新玩家加入
+jm_at.adm.sc_btn_wl_disable=§2§l停用白名單§r\n允許所有玩家加入
+jm_at.adm.sc_btn_wl_enable=§m§l啟用白名單§r\n僅允許白名單玩家
+jm_at.adm.sc_locked_bc=§c[管理員]§r 伺服器§c已鎖定§r，被§g%1$s§r 鎖定。
+jm_at.adm.sc_unlocked_bc=§c[管理員]§r 伺服器§2已解鎖§r，由 §g%1$s§r 完成。
+jm_at.adm.sc_wl_off_bc=§c[管理員]§r §g%1$s§r §2已停用§r白名單。
+jm_at.adm.sc_wl_on_bc=§c[管理員]§r §g%1$s§r §c已啟用§r白名單。
+jm_at.adm.search_blocked_body=§c您無權存取「§f%1$s§c」的匹配結果。§r\n\n受限：%2$s\n\n§8請管理員授予您所需的權限。§r
+jm_at.adm.search_field_desc=例如：白名單、AFK、身分組、封鎖……
+jm_at.adm.search_none=§c找不到「%1$s」的結果。
+jm_at.adm.search_player_title=搜尋玩家
+jm_at.adm.search_title=搜尋管理面板
+jm_at.adm.send_to_warp_body=選擇一個傳送點將§g%1$s§r傳送到：
+jm_at.adm.send_to_warp_title=發送 %1$s 到 傳送點
+jm_at.adm.sh_claims=領地：%1$s
+jm_at.adm.sh_footer=§8儲存使用率超過百分之 90 時會通知管理員。接近上限時，請清理舊回報單、日誌和不再使用的領地。§8總大小僅為估算值；實際限制針對單條紀錄，而不是全部資料總和。§r
+jm_at.adm.sh_header=§l儲存容量§r\n
+jm_at.adm.sh_log_pages=日誌頁：%1$s
+jm_at.adm.sh_read_failed=§c[儲存] 無法讀取儲存執行狀況。
+jm_at.adm.sh_registry=註冊表：%1$s
+## [tx] Storage usage cell: %1$s = a color code (§2/§6/§c by fullness), %2$s = used count, %3$s =
+## [tx] maximum; keep %1$s immediately before %2$s.
+jm_at.adm.sh_row=%1$s%2$s§r / %3$s
+jm_at.adm.sh_tickets=回報單：%1$s
+## [tx] "store" = total saved data (storage usage), not a shop. %1$s = a formatted usage line like
+## [tx] "312 KB / ~1 MB (31%)".
+jm_at.adm.sh_total=商店總數：%1$s
+jm_at.adm.sh_total_row=%1$s%2$s KB§r / 約%3$s MB（%4$s）
+## [tx] Armor slot label: the torso/chestplate slot — NOT a storage chest container.
+jm_at.adm.slot_chest=胸部
+jm_at.adm.slot_feet=腳
+jm_at.adm.slot_head=頭
+jm_at.adm.slot_legs=腿
+jm_at.adm.slot_offhand=副手
+jm_at.adm.sp_body=管理角色特權和能力。
+jm_at.adm.sp_btn_admin_priv=§l管理員權限§r\n控制管理員能力（僅服主）
+jm_at.adm.sp_btn_mod_priv=§l修改權限§r\n設定協管員能力
+jm_at.adm.sp_btn_tag_security=§l管理團隊標籤安全§r\n透過 /tag 授權：寬鬆或嚴格
+jm_at.adm.sp_no_perm=§c您無權編輯管理成員設定。
+jm_at.adm.spectator_body=§r在§9旁觀者模式§r中，您無法點選物品、方塊或實體，因此管理選單不會以通常的方式開啟。\n\n§r要退出：\n§r• 同時按§l蹲下 + 跳躍§r\n§r• 或者當您重生時它會自動重新開啟\n§r• 或要求其他管理員變更它\n\n§r繼續嗎？
+jm_at.adm.spectator_title=進入旁觀者模式？
+jm_at.adm.spy_ended=§2監視工作階段已結束。
+jm_at.adm.spy_history_body=§8顯示最近 %1$s 個監視工作階段。
+jm_at.adm.spy_history_title=監視歷史：%1$s
+jm_at.adm.spy_none=§r目前沒有進行中的監視工作階段。
+jm_at.adm.spy_none_recorded=§8沒有該玩家的監視紀錄。
+## [tx] Spy-history line: %1$s = row number, %2$s = the STAFF member who did the watching, %3$s =
+## [tx] date/time; the player who was watched is named in the form title.
+jm_at.adm.spy_row=§r%1$s。§g%2$s§r 監視了§8%3$s
+jm_at.adm.spy_watching=§6[監視] §r正在監視§g%1$s§r。蹲下即可停止。
+## [tx] Lowercase noun inserted mid-sentence ("from Alex's ender chest"); use the vanilla Minecraft
+## [tx] translation of Ender Chest, lowercased to fit mid-sentence.
+jm_at.adm.src_ender_chest=終界箱
+## [tx] Lowercase noun inserted mid-sentence at runtime, e.g. "Took 3 x Diamond from Alex's
+## [tx] inventory"; keep lowercase and a form that works after a possessive.
+jm_at.adm.src_inventory=物品欄
+jm_at.adm.srs_admin_intro=§7向所有管理員顯示，沒有每個玩家的自訂身分組。\n\n
+jm_at.adm.srs_custom_note=§7讓個別管理成員擁有覆蓋上面預設標籤的自訂身分組。
+jm_at.adm.srs_dd_admin_color=管理員顏色
+jm_at.adm.srs_dd_mod_color=流行色
+jm_at.adm.srs_field_admin_text=管理標籤文字
+jm_at.adm.srs_field_admin_text_desc=例如[管理員]
+jm_at.adm.srs_field_mod_text=Mod 標籤文字
+jm_at.adm.srs_field_mod_text_desc=例如 [協管員]
+jm_at.adm.srs_header_admin=預設管理標籤
+jm_at.adm.srs_header_mod=預設協管員標籤
+jm_at.adm.srs_header_options=選項
+jm_at.adm.srs_hide_note=§7為所有管理成員隱藏上面的[Admin]/[Mod]標籤。每名管理成員的自訂身分組仍然顯示。
+jm_at.adm.srs_mod_intro=§7顯示給所有未設定個別自訂身分組的協管員。\n\n
+jm_at.adm.srs_toggle_custom=允許每名管理成員自訂身分組
+jm_at.adm.srs_toggle_hide=隱藏管理成員身分組
+jm_at.adm.srs_updated=§2更新了管理成員身分組設定。
+jm_at.adm.staff_only=§c 僅限管理員或協管員存取。
+## [tx] Player status line meaning the player is in good standing (no ban/freeze/mute tags) — not an
+## [tx] on/off feature toggle.
+jm_at.adm.status_active=§2執行中§r
+## [tx] Keep the literal command "/tag add admin" and the tag names admin/mod/moderator in English;
+## [tx] "Assign as Admin/Moderator" must match those button labels' translations elsewhere; %1$s =
+## [tx] current mode ("Lenient"/"Strict").
+jm_at.adm.sts_body=§7控制是否信任原版 §fadmin§7/§fmod§7/§fmoderator§7 標籤來授予管理身分。\n\n§r目前模式：%1$s§r\n\n§2寬鬆§7（預設）：§r/tag add admin§7 可以生效並保留。首次使用新的管理標籤時，系統會紀錄並通知線上管理員，便於發現意外授權。\n\n§c嚴格：§7只有 §f設為管理員/協管員§7 按鈕可以授予管理身分。未透過介面授予的管理標籤會在玩家下次加入時移除。\n\n§8無論使用哪種模式，角色、操作員和函數指令都會被指令執行器阻止；現有管理成員不會自動降級，服主和操作員始終屬於管理團隊。
+jm_at.adm.sts_btn_lenient=§l§2切換為寬鬆
+jm_at.adm.sts_btn_strict=§l§c切換為嚴格
+jm_at.adm.sts_lenient=§2寬鬆
+jm_at.adm.sts_owner_only=§c只有服主可以變更管理團隊標籤安全設定。
+jm_at.adm.sts_set_lenient=§2管理團隊標籤安全已設為§l寬鬆§r§2。允許透過 /tag 授權，並會公布新的授權。
+jm_at.adm.sts_set_strict=§c管理團隊標籤安全已設為§l嚴格§r§c。玩家加入時會移除未透過介面授予的 admin/mod 標籤。
+jm_at.adm.sts_strict=§c嚴格
+## [tx] Form title: teleports the selected player TO the admin — not spawning a mob (/summon) or a
+## [tx] legal summons.
+jm_at.adm.summon_title=召喚玩家
+jm_at.adm.tag_admin=§c[管理員]§r
+jm_at.adm.tag_ban=§c[封鎖]§r
+jm_at.adm.tag_banned=§c[已封鎖]§r
+jm_at.adm.tag_frozen=§s[凍結]§r
+jm_at.adm.tag_mod=§s[協管員]§r
+jm_at.adm.tag_offline=§7[離線]§r
+jm_at.adm.teleport_body=選擇一個傳送動作。
+jm_at.adm.ti_add_title=新增追蹤項目
+jm_at.adm.ti_added=§2追蹤 §s%1$s§2 — ≥ §9%2$s§2 處發出警示。
+jm_at.adm.ti_body=當非管理員玩家持有的數量至少達到設定數量時提醒管理員。\n\n%1$s
+jm_at.adm.ti_btn_add=§2§l新增追蹤項目§r\n達到門檻時發出警示
+jm_at.adm.ti_btn_remove=§l§c刪除追蹤項目§r
+jm_at.adm.ti_field_id=物品 ID（例如，minecraft:diamond）
+jm_at.adm.ti_field_qty=數量≥時報警
+jm_at.adm.ti_field_qty_desc=1–9999
+jm_at.adm.ti_none=§r未設定追蹤項目。
+jm_at.adm.ti_none_remove=§r沒有要刪除的追蹤項目。
+jm_at.adm.ti_remove_body=選擇要停止追蹤的項目：
+jm_at.adm.ti_remove_row=§l§c%1$s§r ≥ %2$s
+jm_at.adm.ti_remove_title=刪除追蹤項目
+jm_at.adm.ti_removed=§2不再追蹤§s%1$s§2。
+jm_at.adm.ti_row=  §s%1$s§r ≥ §9%2$s§r
+jm_at.adm.ti_title=追蹤的項目 (%1$s)
+jm_at.adm.tickets_body_empty=此清單中沒有回報單。
+jm_at.adm.tickets_body_select=選擇回報單；最舊的回報單會顯示在前面。
+jm_at.adm.tickets_btn_delete_all=§l§c刪除所有已關閉的 (%1$s)§r
+jm_at.adm.tickets_btn_delete_all_sub=§l§c刪除全部 (%1$s)§r\n包括未見過的回報單
+jm_at.adm.tickets_btn_delete_seen=§l刪除可見 (%1$s)§r\n僅提交者可見
+jm_at.adm.tickets_btn_delete_seen_none=§8§l刪除已看到的§r\n§8沒有提交者已看到的回報單
+## [tx] Button toggling ticket lists: %1$s = the list you would switch to ("Open" or "Closed"), %2$s
+## [tx] = the list currently shown.
+jm_at.adm.tickets_btn_switch=§l切換到 %1$s§r\n目前：%2$s
+jm_at.adm.tickets_delete_all_body=永久刪除所有 §c%1$s§r 已關閉的回報單？\n§r包括提交者尚未看到的 %2$s。\n\n§c無法撤消。
+jm_at.adm.tickets_delete_all_title=刪除所有關閉的
+jm_at.adm.tickets_delete_body=§r關閉總數：§r%1$s\n§r提交者已檢視：§r%2$s\n§r尚未檢視：§r%3$s
+jm_at.adm.tickets_delete_title=刪除已關閉的回報單
+jm_at.adm.tickets_for_title=回報單：%1$s
+jm_at.adm.tickets_purged_all=§2%1$s 已關閉的回報單被永久刪除。
+jm_at.adm.tickets_purged_seen=§2%1$s 看到已關閉的回報單已被刪除。
+## [tx] Ticket list button: %1$s = ticket ID, %2$s = optional "(seen)" mark (or empty), %3$s =
+## [tx] submitter name, %4$s = category, %5$s = age like "5m"/"3h".
+jm_at.adm.tickets_row=§l%1$s%2$s§r\n%3$s - %4$s - %5$s
+jm_at.adm.tickets_row_simple=§l%1$s§r\n%2$s - %3$s
+## [tx] Suffix appended right after a ticket ID when the submitter has viewed the closed ticket;
+## [tx] keep the leading space. "seen" = read by the ticket's submitter.
+jm_at.adm.tickets_seen_mark= §2（已見）§r
+jm_at.adm.tickets_select_body=選擇回報單。
+jm_at.adm.tickets_title=回報單：%1$s (%2$s)
+jm_at.adm.time_btn_set=設定時間
+jm_at.adm.time_btn_set_close=設定時間並關閉
+jm_at.adm.time_day=日
+jm_at.adm.time_dd_label=將時間設定為
+jm_at.adm.time_failed=§c該次指令執行失敗。
+jm_at.adm.time_lock_toggle=鎖定時間（停止晝/夜循環）
+jm_at.adm.time_midnight=午夜
+jm_at.adm.time_night=夜晚
+jm_at.adm.time_noon=中午
+jm_at.adm.time_set_done=§2時間設定為§r%1$s§r%2$s。
+jm_at.adm.time_title=一天中的時間
+jm_at.adm.tp_to_title=TP給玩家
+jm_at.adm.tp_warp_title=TP玩家傳送點
+jm_at.adm.ts_btn_delete_closed=刪除已關閉的回報單 (%1$s)
+jm_at.adm.ts_categories_label=§7類別：%1$s
+## [tx] Lowercase filler substituted into "Categories: %1$s" when no ticket categories are
+## [tx] configured.
+jm_at.adm.ts_categories_none=無
+jm_at.adm.ts_closed_bc=§c[管理員]§r 票務系統§c已關閉§r，由 §g%1$s§r 執行。
+jm_at.adm.ts_delete_all_body=永久刪除所有§c%1$s§r已關閉的回報單嗎？\n\n§c此操作無法撤消。§r
+jm_at.adm.ts_delete_all_title=刪除所有已關閉的回報單
+jm_at.adm.ts_field_autodel=自動刪除在（天數，0–365）後關閉
+jm_at.adm.ts_field_autodel_desc=0 = 從不
+jm_at.adm.ts_field_cooldown=提交冷卻時間（秒，0–3600）
+jm_at.adm.ts_field_cooldown_desc=0 = 無冷卻
+jm_at.adm.ts_no_closed=§r沒有要刪除的已關閉回報單。
+jm_at.adm.ts_opened_bc=§c[管理員]§r 票務系統§2已開啟§r，由 §g%1$s§r 提供。
+jm_at.adm.ts_slider_limit=每位玩家的回報單限額
+jm_at.adm.ts_toggle_open=票務系統開放
+jm_at.adm.ts_toggle_visible=在玩家選單中顯示
+jm_at.adm.ts_vis_hidden=§2回報單/警告已在玩家選單中§c隱藏§2。
+jm_at.adm.ts_vis_shown=§2回報單/警告已在玩家選單中§2顯示§2。
+jm_at.adm.unban_done=§2解禁%1$s。
+jm_at.adm.unbanned_offline=§2已解除 %1$s 的封鎖（離線）。該玩家下次登入時即可加入。
+jm_at.adm.unfroze_done=§2解凍%1$s。
+jm_at.adm.warn_cleared_admin=§2%1$s 的警告已清除。
+jm_at.adm.warn_detail_title=警告：%1$s
+jm_at.adm.warn_flag= §c⚠
+## [tx] Warning list button: %1$s = warning reason (truncated), %2$s = optional "(acknowledged)" tag
+## [tx] or empty, %3$s = staff member who issued the warning, %4$s = date.
+jm_at.adm.warn_row=§c§l%1$s%2$s§r\n§8由 %3$s - %4$s
+jm_at.adm.warn_title=警告：%1$s
+jm_at.adm.warned_done=§6警告%1$s。 （發出警告）
+jm_at.adm.warns_body=選擇要檢視或管理的警告。
+jm_at.adm.warns_title=警告：%1$s
+jm_at.adm.warp_add_title=新增傳送點
+jm_at.adm.warp_admin_body=可用傳送點：§9%1$s§r\n§m僅管理團隊：§r%2$s · §c僅管理員：§r%3$s · §e已置頂：§r%4$s\n玩家選單中可見：%5$s
+jm_at.adm.warp_admin_body_empty=§r尚未設定傳送點。\n在玩家選單中可見：%1$s
+jm_at.adm.warp_admin_title=傳送點 (%1$s/%2$s)
+jm_at.adm.warp_btn_add=§l§2新增傳送點§r\n將位置儲存為傳送點
+jm_at.adm.warp_btn_hide_menu=§m§l從玩家選單中隱藏
+jm_at.adm.warp_btn_move_down=§l§9向下移動置頂傳送點
+jm_at.adm.warp_btn_move_up=§l§9將置頂傳送點向上移
+jm_at.adm.warp_btn_pin_unpin=§l§e置頂 / 取消置頂傳送點
+jm_at.adm.warp_btn_remove=§l§c移除傳送點§r\n刪除此傳送點
+jm_at.adm.warp_btn_reorder=§l重新排序傳送點§r\n置頂並調整顯示順序
+jm_at.adm.warp_btn_show_menu=§2§l在玩家選單中顯示
+jm_at.adm.warp_btn_visibility=§l設定可見性§r\n公共、僅管理團隊或僅限管理員
+jm_at.adm.warp_cant_move_down=§c無法向下移動§s%1$s§c。已經到了底部了。
+jm_at.adm.warp_cant_move_up=§c無法向上移動§s%1$s§c。已經到頂了。
+jm_at.adm.warp_dd_visibility=能見度
+jm_at.adm.warp_dd_who=誰可以看到並使用此傳送點？
+jm_at.adm.warp_field_name=傳送點名稱
+jm_at.adm.warp_field_name_desc=例如產卵、市場、競技場
+jm_at.adm.warp_limit=§c已達傳送點數量上限（%1$s）。請先移除一個。
+jm_at.adm.warp_move_body_down=選擇要向下移動的置頂傳送點：
+jm_at.adm.warp_move_body_up=選擇要向上移動的置頂傳送點：
+jm_at.adm.warp_move_row=§e#%1$s §l%2$s
+jm_at.adm.warp_move_title_down=向下移動傳送點
+jm_at.adm.warp_move_title_up=向上移動傳送點
+jm_at.adm.warp_moved_down=§2傳送點 §s%1$s§2 向下移動。
+jm_at.adm.warp_moved_up=§2傳送點 §s%1$s§2 向上移動。
+jm_at.adm.warp_none_configure=§r無需設定傳送點。
+jm_at.adm.warp_none_remove=§r無需去除傳送點。
+jm_at.adm.warp_none_reorder=§r無需重新排序。
+jm_at.adm.warp_now_access=§2傳送點 §s%1$s§2 現在為%2$s§2。
+jm_at.adm.warp_opt_admin=僅限管理員 — 管理員
+jm_at.adm.warp_opt_public=公開——所有玩家
+jm_at.adm.warp_opt_staff=僅管理團隊 - 管理員和管理員
+jm_at.adm.warp_pin_body=選擇一個傳送點來切換其引腳狀態：
+jm_at.adm.warp_pin_row_pinned=§e§l[置頂#%1$s] %2$s§r\n§8點選取消置頂
+jm_at.adm.warp_pin_row_unpinned=§l[已取消置頂] %1$s§r\n§8點選即可置頂
+jm_at.adm.warp_pin_title=置頂/取消置頂傳送點
+jm_at.adm.warp_pin_two=§c請至少置頂 2 個傳送點後再重新排序。
+jm_at.adm.warp_pinned_done=§2傳送點 §s%1$s§2 已§e置頂§2。
+jm_at.adm.warp_remove_body=選擇要刪除的傳送點：
+jm_at.adm.warp_remove_confirm_body=刪除傳送點§s%1$s§r？\n\n傳送點的儲存位置無法恢復。
+## [tx] Remove-warp list row: %1$s = warp name, %2$s = dimension name (localized), %3$s = the
+## [tx] warp_row_tier_* suffix or empty.
+jm_at.adm.warp_remove_row=§l§c%1$s§r\n%2$s%3$s
+jm_at.adm.warp_remove_title=移除傳送點
+jm_at.adm.warp_removed=§2傳送點§s%1$s§2 已刪除。
+jm_at.adm.warp_reorder_intro=§e置頂傳送點§r首先出現在玩家選單中。\n未置頂傳送點按字母順序排序。\n\n§l目前順序：§r\n
+jm_at.adm.warp_reorder_title=重新排序傳送點
+## [tx] Suffix on a remove-warp row when the warp is restricted; keep the leading " - ".
+jm_at.adm.warp_row_tier_admin= - 僅管理員
+jm_at.adm.warp_row_tier_staff= - 僅管理團隊
+jm_at.adm.warp_set_done=§2傳送點§s%1$s§2組。%2$s
+jm_at.adm.warp_setvis_body=選擇傳送點：
+jm_at.adm.warp_setvis_title=設定可見性
+jm_at.adm.warp_suffix_admin= §c（僅限管理員）
+jm_at.adm.warp_suffix_staff= §m（僅管理團隊）
+jm_at.adm.warp_tag_admin=§c[僅限管理員]§r
+jm_at.adm.warp_tag_pinned=§e[置頂 #%1$s]
+jm_at.adm.warp_tag_public=§2[公共]§r
+jm_at.adm.warp_tag_staff=§m[僅管理團隊]§r
+jm_at.adm.warp_tag_unpinned=[取消置頂]
+## [tx] Gray tag appended after a warp's name in the admin warp list; keep the leading space and
+## [tx] brackets, keep it short.
+jm_at.adm.warp_tier_suffix_admin= §8[僅管理員]
+jm_at.adm.warp_tier_suffix_staff= §8[僅管理團隊]
+jm_at.adm.warp_unpinned_done=§2傳送點§s%1$s§2 §7未置頂§2。
+jm_at.adm.warp_vis_hidden=§2傳送點已在玩家選單中§c隱藏§2。
+jm_at.adm.warp_vis_shown=§2傳送點§2顯示§2在玩家選單中。
+jm_at.adm.warp_vis_title=可見度：%1$s
+jm_at.adm.weather_btn_set=設定天氣
+jm_at.adm.weather_btn_set_close=設定天氣並關閉
+## [tx] Weather option: clear/sunny sky (vanilla "Clear" weather) — not the verb "clear/erase".
+jm_at.adm.weather_clear=清除
+jm_at.adm.weather_failed=§c天氣指令執行失敗。
+jm_at.adm.weather_lock_toggle=鎖定天氣（停止天氣循環）
+jm_at.adm.weather_rain=雨
+jm_at.adm.weather_set_done=§2天氣設定為§r%1$s§r%2$s。
+jm_at.adm.weather_thunder=雷霆
+jm_at.adm.weather_title=天氣
+jm_at.adm.wl_add_offline_title=新增離線玩家
+jm_at.adm.wl_add_online_title=新增線上玩家
+jm_at.adm.wl_added=§2將 §s%1$s§2 新增到白名單。
+jm_at.adm.wl_all_online_listed=§r所有線上玩家均已列入白名單。
+jm_at.adm.wl_body=將玩家新增到白名單或刪除現有項目。
+jm_at.adm.wl_btn_add_offline=§l§2新增離線玩家§r
+jm_at.adm.wl_btn_add_online=§l§2新增線上玩家§r
+jm_at.adm.wl_btn_remove=§l§c從白名單中刪除§r
+jm_at.adm.wl_empty=§r白名單為空。
+jm_at.adm.wl_remove_body=選擇要刪除的玩家：
+jm_at.adm.wl_remove_title=從白名單中刪除
+jm_at.adm.wl_removed=§2從白名單中刪除了§s%1$s§2。
+jm_at.adm.wl_title=白名單（%1$s）
+jm_at.adm.ws_body=§r管理世界共用的重生點。\n\n
+jm_at.adm.ws_btn_go=§l§2前往世界重生點§r\n將自己傳送到那裡
+jm_at.adm.ws_btn_set=§l§2在此處設定世界重生點§r\n使用您目前的位置
+jm_at.adm.ws_btn_set_confirm=§l§2設定重生點
+jm_at.adm.ws_load_failed=§c無法載入世界重生點區域。 §8%1$s
+jm_at.adm.ws_no_surface=§c無法找到世界重生點表面。
+jm_at.adm.ws_set_body=§r將世界重生點設定為您目前的位置？\n\n§7• 位置：§r%1$s§r\n§7• 這是玩家在沒有床或錨的情況下重生的位置，它會取代目前的世界重生點。§r\n\n繼續嗎？
+jm_at.adm.ws_set_done=§2世界重生點設定為§r%1$s§r。
+jm_at.adm.ws_set_failed=§c無法設定世界重生點。
+jm_at.adm.ws_set_title=設定世界重生點
+jm_at.adm.ws_ta_full=§c無法載入世界重生點區域 - 滴答區域限制 (10) 已滿。使用 /tickingarea 刪除一些，然後重試。
+jm_at.adm.ws_title=世界重生點
+jm_at.adm.ws_tp_done=§2傳送到世界重生點。
+jm_at.adm.ws_tp_failed=§c無法傳送到世界重生點。 §8%1$s
+jm_at.adm.xuid_not_found=§c在回報單資料中找不到玩家 XUID。
+
+## ----- jm_at.afk.* -----
+## [tx] AFK (idle) detection: a big on-screen 'AFK' title with a randomly rotating humorous subtitle
+## [tx] (sub_01..sub_55, one shown at a time, changing every ~45s) plus chat warnings before an
+## [tx] optional idle auto-kick. The jokes reference Minecraft trivia and real life — adapt the
+## [tx] humor freely, but keep lines short (they render as a screen subtitle) and use official
+## [tx] Minecraft names for mobs/items.
+
+jm_at.afk.title=§9§lAFK
+jm_at.afk.warn=§e[AFK] 您現在被標記為 AFK。
+jm_at.afk.warn_kick=§e[AFK] 如果您仍然閑置，您將在 %1$s 分鐘後被踢出。
+jm_at.afk.sub_01=您掉入虛空了嗎？
+jm_at.afk.sub_02=您好？有人在家嗎？
+jm_at.afk.sub_03=去現實世界挖礦了嗎？
+jm_at.afk.sub_04=現實生活中，爬行者有沒有讓您陷入困境？
+jm_at.afk.sub_05=不碰草嗎？
+jm_at.afk.sub_06=您的椅子是空的。我們想您。
+jm_at.afk.sub_07=顯然您有地方可去。
+jm_at.afk.sub_08=消失得無影無蹤……
+jm_at.afk.sub_09=應該是在電話裡吧...
+jm_at.afk.sub_10=製作三明治？
+jm_at.afk.sub_11=在某個地方，過著生活。
+jm_at.afk.sub_12=出去吃點零食。大概。
+jm_at.afk.sub_13=探索冰箱生物群落？
+jm_at.afk.sub_14=最後一次看到正朝門口走去。
+jm_at.afk.sub_15=有人偷了您的控制權嗎？
+jm_at.afk.sub_16=大概是在外面做某事。
+jm_at.afk.sub_17=沒有停下來就走開了……經典。
+jm_at.afk.sub_18=可能忘記了他們正在玩耍。
+jm_at.afk.sub_19=您的座位很暖和。回來再說吧。
+jm_at.afk.sub_20=我們會讓燈一直亮著。
+jm_at.afk.sub_21=狀態：未知。
+jm_at.afk.sub_22=您離開了遊戲，卻沒有離開我們的心。
+jm_at.afk.sub_23=也許是在現實世界裡閒逛？
+jm_at.afk.sub_24=掉進山溝裡了？
+jm_at.afk.sub_25=您的鎬正等著您。
+jm_at.afk.sub_26=未偵測到運動。好奇的。
+jm_at.afk.sub_27=您有障礙需要打破！
+jm_at.afk.sub_28=您就錯過了所有的樂趣！
+jm_at.afk.sub_29=不要忘記休息，但也許不會這麼久！
+jm_at.afk.sub_30=世界在等您。
+jm_at.afk.sub_31=您不辭而別就走了...
+jm_at.afk.sub_32=在礦井裡迷路了？
+jm_at.afk.sub_33=沒有地圖的地方。
+jm_at.afk.sub_34=最後一次看到他正走向峽谷。
+jm_at.afk.sub_35=可能只是在 AFK 農場掛機吧？
+jm_at.afk.sub_36=忙於不和諧？
+jm_at.afk.sub_37=您最終會出現的。
+jm_at.afk.sub_38=等著您呢。
+jm_at.afk.sub_39=時鐘正在滴答作響。
+jm_at.afk.sub_40=您已經離開有一段時間了。
+jm_at.afk.sub_41=我們保留了您的位置。
+jm_at.afk.sub_42=準備好後就回來吧。但要早點。
+jm_at.afk.sub_43=沿著風景優美的路線返回。
+jm_at.afk.sub_44=您知道嗎？\n爬行者是一個犯了嚴重錯誤的豬模型。\n謝謝，Notch。
+jm_at.afk.sub_45=您知道嗎？\n終界龍的名字叫吉恩。
+jm_at.afk.sub_46=您知道嗎？\n貓會嚇跑爬行者和幽靈。
+jm_at.afk.sub_47=您知道嗎？\n您可以用釣魚竿釣魚。
+jm_at.afk.sub_48=您知道嗎？\n鸚鵡隨著音樂跳舞。
+jm_at.afk.sub_49=您知道嗎？\n狐貍偷了您的物品。橙色小強盜。
+jm_at.afk.sub_50=您知道嗎？\n閃電會將豬變成殭屍豬靈。
+jm_at.afk.sub_51=您知道嗎？\n鐵砧砸在頭部會造成傷害。\n物理有時會起作用。
+jm_at.afk.sub_52=您知道嗎？\n海豚可以提高您的游泳速度。
+jm_at.afk.sub_53=您知道嗎？\nTNT 過去在您打它時就會爆炸。\n大膽的設計選擇。
+jm_at.afk.sub_54=您知道嗎？\n《我的世界》一天只有 20 分鐘。\n您錯過了整個月。
+jm_at.afk.sub_55=方塊遊戲等待您的歸來。
+
+## ----- jm_at.common.* -----
+## [tx] Shared strings reused across every menu in the addon: navigation buttons
+## [tx] (Back/Cancel/Close/Save/Submit), pagination labels and title suffixes, dimension names, the
+## [tx] unsaved-changes dialog, generic error/warning pop-ups, and fallback names for unknown
+## [tx] players. Translations here appear everywhere, so keep them short and generic.
+
+jm_at.common.btn_back=返回
+jm_at.common.btn_back_bold=§l返回
+jm_at.common.btn_cancel=§l取消
+jm_at.common.btn_close=§l關閉
+jm_at.common.btn_delete=§l刪除
+jm_at.common.btn_discard=§c丟棄
+jm_at.common.btn_keep_editing=§l繼續編輯
+jm_at.common.btn_ok=§l確定
+jm_at.common.dim_end=終界
+jm_at.common.dim_nether=地獄
+jm_at.common.discard_body=§7您有未儲存的變更。丟棄它們？
+jm_at.common.discard_title=放棄變更？
+jm_at.common.error_generic=§c出了點問題：\n%1$s
+## [tx] Pagination button; %1$s = the page number this button JUMPS TO (current+1), not the current
+## [tx] page. Prev and the _plain variants work the same way.
+jm_at.common.btn_next_page=§l> 下一頁（第 %1$s 頁）
+jm_at.common.btn_next_page_plain=§l下一頁（第 %1$s 頁）
+jm_at.common.btn_prev_page=§l< 上一頁（第 %1$s 頁）
+jm_at.common.btn_prev_page_plain=§l上一頁（第 %1$s 頁）
+jm_at.common.btn_save=儲存
+jm_at.common.btn_submit=提交
+## [tx] Suffix appended directly to a menu title — keep the leading space. %1$s = current page, %2$s
+## [tx] = total pages (page_suffix_dash is the same with a dash).
+jm_at.common.page_suffix= （第 %1$s/%2$s 頁）
+jm_at.common.page_suffix_dash= — 第 %1$s/%2$s 頁
+jm_at.common.player_not_found=§c找不到玩家。
+## [tx] Fallback shown in place of a player's name when it is unknown (e.g. a gravestone owner:
+## [tx] "someone"); used mid-sentence, keep lowercase.
+jm_at.common.someone=某人
+## [tx] Short status tag appended after a warp/dimension button name when an admin has locked that
+## [tx] dimension; keep it bracketed and short.
+jm_at.common.tag_locked=§c[鎖定]§r
+## [tx] Fallback player name; the code appends a shortened player ID right after it, e.g. "Unknown
+## [tx] (1a2b3c4d…)".
+jm_at.common.unknown=未知
+## [tx] Title of a generic caution pop-up dialog ("attention!"), NOT a moderation warning issued to
+## [tx] a player — use the alert word, not the reprimand word.
+jm_at.common.warn_title=§c⚠ 警告
+
+## ----- jm_at.cl.* (claims player UI) -----
+## [tx] Player-facing land-claims UI: the menus where players protect land from griefing by marking
+## [tx] two corners with the Claim Tool, then confirm/expand/extend claims, create nested
+## [tx] sub-claims, and manage members, trusted ranks, protections, height, and welcome messages.
+## [tx] Includes list-row button labels, in-form help pages, destructive-action warnings
+## [tx] (abandon/overwrite), and chat confirmations prefixed "[Claims]".
+
+jm_at.cl.abandon_nested=§c這也會刪除其中巢狀的 %1$s 個子領地。
+jm_at.cl.abandon_no_undo=此操作無法撤消。
+jm_at.cl.abandon_no_undo_unprotected=此操作無法撤消。土地將不受保護。
+jm_at.cl.abandon_q=放棄§c%1$s§r？
+jm_at.cl.abandon_sub_q=刪除子領地§c%1$s§r？
+jm_at.cl.admin_count=%1$s 管理員領地
+jm_at.cl.admin_none=尚未有管理員領地。
+## [tx] Status word (paired with jm_at.cl.disabled) filling "Nether: %1$s • End: %2$s" in the help —
+## [tx] says whether creating claims in that dimension is permitted; keep it a short standalone
+## [tx] state label.
+jm_at.cl.allowed=§2允許
+jm_at.cl.body_admin_managed=§v領地在此伺服器上由管理員管理。
+jm_at.cl.body_howto=• 蹲下 + 擊中方塊以設定角 1，然後蹲下 + 互動以設定角 2。\n• 使用領地檢視器檢視現有領地的邊界。
+jm_at.cl.body_stats=§l您的領地：§r %1$s/%2$s\n§l使用區域：§r %3$s/%4$s區塊
+jm_at.cl.btn_abandon=§c§l放棄領地
+jm_at.cl.btn_abandon_confirm=§l§c放棄
+jm_at.cl.btn_abandon_sub=§c§l放棄從屬領地
+jm_at.cl.btn_add_member=§l新增會員
+jm_at.cl.btn_add_rank=§l新增身分組
+jm_at.cl.btn_adjust_height=§l調整高度
+jm_at.cl.btn_admin_claims=§l管理領地 (%1$s)
+jm_at.cl.btn_all_claims=§l§c所有領地/設定
+jm_at.cl.btn_cancel=取消
+jm_at.cl.btn_cancel_selection=§l§c取消選擇
+## [tx] Two-line list button: %1$s = claim name, %2$s = area in chunks ("ch" is the chunks
+## [tx] abbreviation, no space before it), %3$s = dimension short name (OW/Nether/End).
+jm_at.cl.btn_claim_row=§l%1$s§r\n%2$s區 - %3$s
+## [tx] Admin-claim list button: %1$s = claim name, %2$s = owner's player name, %3$s = area in
+## [tx] chunks ("ch"), %4$s = dimension short name.
+jm_at.cl.btn_claim_row_admin=§l%1$s§r\n%2$s - %3$s區塊 - %4$s
+jm_at.cl.btn_claim_row_co=§l%1$s§r\n共同擁有者 - %2$s區 - %3$s
+jm_at.cl.btn_confirm_pending=§2§l確認待處理領地
+jm_at.cl.btn_confirm_subclaim=§2§l確認子領地
+jm_at.cl.btn_create_claim=建立領地
+jm_at.cl.btn_create_new=§2§l建立新領地
+jm_at.cl.btn_create_sub=§l§2建立子領地
+## [tx] Button shown when the player is physically standing inside a claim: opens that claim; %1$s =
+## [tx] its name. "Current" = at your present location, not "most recent" or "up to date".
+jm_at.cl.btn_current=§l目前領地§r\n%1$s
+jm_at.cl.btn_current_sub=§l目前子領地§r\n%1$s
+jm_at.cl.btn_do_add_member=新增會員
+jm_at.cl.btn_do_add_member_close=新增會員並關閉
+jm_at.cl.btn_do_add_rank=新增身分組
+jm_at.cl.btn_do_add_rank_close=新增身分組並關閉
+jm_at.cl.btn_do_create_sub=建立子領地
+jm_at.cl.btn_do_expand=展開
+jm_at.cl.btn_do_expand_close=展開和關閉
+jm_at.cl.btn_edit_protections=§l編輯保護
+jm_at.cl.btn_edit_role=§l編輯角色/持續時間
+jm_at.cl.btn_expand=§2§l擴大「%1$s」
+jm_at.cl.btn_extend=§2§l延伸「%1$s」
+jm_at.cl.btn_extend_confirm=§2§l確認延伸
+jm_at.cl.btn_force_delete=§l§c強制刪除
+jm_at.cl.btn_help=§l如何索取土地
+jm_at.cl.btn_members=§l成員 (%1$s)
+jm_at.cl.btn_my_claims=§l我的領地 (%1$s)
+jm_at.cl.btn_my_claims_co=§l我的領地（%1$s + %2$s 共同擁有）
+jm_at.cl.btn_overwrite=§l§c覆蓋
+jm_at.cl.btn_overwrite_create=§c§l覆蓋並建立 (%1$s)
+jm_at.cl.btn_remove=§l§c刪除
+jm_at.cl.btn_remove_member=§l§c刪除成員
+jm_at.cl.btn_remove_rank=§l§c刪除身分組
+jm_at.cl.btn_rename=§l重命名
+jm_at.cl.btn_save_close=儲存並關閉
+jm_at.cl.btn_settings=§l設定
+jm_at.cl.btn_sub_row=§l%1$s§r\n%2$s區
+jm_at.cl.btn_subclaims=§l子領地 (%1$s)
+jm_at.cl.btn_transfer=§l轉讓所有權
+jm_at.cl.btn_trusted_ranks=§l可信身分組 (%1$s)
+jm_at.cl.btn_view_boundary=§l視圖邊界
+jm_at.cl.btn_welcome_msg=§l歡迎辭
+jm_at.cl.budget_frac=%1$s/%2$s 區塊§r
+jm_at.cl.budget_used=使用的額度：%1$s/%2$s 區塊§r
+jm_at.cl.confirm_details_head=§l§2領地詳細資訊§r\n§7區域：%1$s區塊§r
+jm_at.cl.coords_xyz=§7最小：%1$s、%2$s、%3$s 最大：%4$s、%5$s、%6$s
+jm_at.cl.coords_xz=§7最小：%1$s，%2$s 最大：%3$s，%4$s
+jm_at.cl.ctx_expand=§2選擇包含「%1$s」的區域——準備擴大。
+jm_at.cl.ctx_extend=§2選擇與「%1$s」相鄰的區域——準備延伸。
+jm_at.cl.ctx_extend_or_new=§2選擇與「%1$s」相鄰的區域——延伸領地或建立新領地。
+jm_at.cl.ctx_overwrite=§e選擇與 %1$s 現有領地重疊 — 確認覆蓋它們。
+jm_at.cl.ctx_ready=§2待選擇已準備好確認。
+jm_at.cl.ctx_subclaim=§2選擇位於「%1$s」內 - 準備建立子領地。
+jm_at.cl.detail_expired=§c存取權限已過期
+jm_at.cl.detail_expires=到期時間：%1$s
+jm_at.cl.detail_line1=%1$s 塊 · %2$s
+jm_at.cl.detail_line2=成員：%1$s · 受信任身分組：%2$s
+jm_at.cl.detail_permanent=持續時間：永久
+## [tx] Fragment appended to the claim detail line when the claim has extensions; %1$s = how many
+## [tx] rectangles the claim consists of (main area + extensions, always 2 or more); keep the
+## [tx] leading separator.
+jm_at.cl.detail_rects=  · %1$s 個矩形
+jm_at.cl.detail_role=角色：%1$s
+jm_at.cl.dim_end_short=終界
+jm_at.cl.dim_nether_short=地獄
+## [tx] Abbreviation of the Overworld dimension used in tight list-row buttons; keep it to 2-3
+## [tx] characters.
+jm_at.cl.dim_ow=主世界
+jm_at.cl.disabled=§c停用
+jm_at.cl.drop_duration=持續時間
+jm_at.cl.drop_pick_known=從已紀錄玩家中挑選
+jm_at.cl.drop_rank=身分組
+jm_at.cl.drop_role=角色
+jm_at.cl.dur_12h=12小時
+jm_at.cl.dur_15m=15分鐘
+jm_at.cl.dur_1d=1天
+jm_at.cl.dur_1h=1小時
+jm_at.cl.dur_2h=2小時
+jm_at.cl.dur_30m=30分鐘
+jm_at.cl.dur_3d=3天
+jm_at.cl.dur_6h=6小時
+jm_at.cl.dur_7d=7天
+jm_at.cl.dur_permanent=永久
+jm_at.cl.expand_area=§7原面積：%1$s 區塊\n新面積：%2$s 區塊（+%3$s）
+## [tx] Lowercase word substituted where a compact remaining-time value like "2h 30m" would
+## [tx] otherwise appear once the time has run out; keep lowercase and short.
+jm_at.cl.expired_word=過期了
+jm_at.cl.expires_in_short=%1$s 後到期
+jm_at.cl.extend_body=延伸：§l%1$s§r\n\n延伸面積：%2$s 區塊\n完成後總面積：%3$s 區塊\n完成後額度：%4$s\n\n這將是第 %5$s 個延伸區域，最多 2 個。\n整個領地共用保護和成員設定。
+jm_at.cl.field_claim_name=領地名稱
+jm_at.cl.field_claim_name_req=領地名稱（最多 %1$s 個字元，必填）
+jm_at.cl.field_message=訊息（最多 %1$s 個字元）
+jm_at.cl.field_name=名稱（最多 %1$s 個字元）
+jm_at.cl.field_name_desc=例如我的基地
+jm_at.cl.field_player_name=玩家姓名
+jm_at.cl.field_player_name_desc=留空以使用該清單
+jm_at.cl.field_sub_name=子領地名稱（最多 %1$s 個字元，必填）
+jm_at.cl.field_sub_name_desc=例如公共區域
+jm_at.cl.header_access=存取
+jm_at.cl.header_choose_player=選擇玩家
+jm_at.cl.header_preview=預覽
+jm_at.cl.header_protections=保護措施
+jm_at.cl.help_admin_managed=§c§l領地在此伺服器上由管理員管理。§r
+jm_at.cl.help_budget=§9§l您的額度§r\n• 領地：%1$s/%2$s\n• 使用區域：%3$s/%4$s 區塊\n• 每 §2%6$s§r 分鐘的遊玩時間，您可取得 §2%5$s§r 區塊\n• 起始額度：%7$s 區塊 • 最大額度：%8$s 區塊
+jm_at.cl.help_dims=§9§l維度§r\n• 地獄：%1$s§r • 終界：%2$s§r
+jm_at.cl.help_expand=§9§l擴大與延伸§r\n• §6擴大§r — 選擇一個完全包住現有領地的更大區域，以原地擴大領地。擴大帶有延伸區域的領地時，會將整體合併為一個矩形並重設延伸區域。\n• §6延伸§r — 選擇緊貼領地邊界的區域來新增延伸區域（每個領地最多 2 個）。延伸區域與主領地共用保護和成員設定。
+jm_at.cl.help_members=§9§l成員§r\n為玩家新增以下領地角色之一：\n• §l訪客§r — 可以進入，但不能互動\n• §l成員§r — 可以使用門、按鈕和拉桿\n• §l建造者§r — 可以完整建造和互動\n• §l共同擁有者§r — 可以管理成員、設定和子領地\n\n存取權限可以是暫時的（15 分鐘至 7 天）或永久的。
+jm_at.cl.help_overlap=§9§l土地已有領地時§r\n選單會在確認前顯示此次選擇將執行的操作。如果區域§c無法§r建立為領地（與其他領地重疊、超過額度或達到領地數量上限），原因會以§c紅色§r顯示，並且不會出現確認按鈕。若要使用現有領地附近的土地，可選擇§6擴大§r（完全包住自己的領地）、§6子領地§r（在您管理的領地內部選擇），或改選空地。
+jm_at.cl.help_overlap_staff= §7作為管理人員，在已有領地上建立管理員領地會§c覆蓋§r（刪除）這些領地。系統會先發出警告；但其他玩家標記為「僅服主」的領地無法被覆蓋。§r
+jm_at.cl.help_overlap_staff_owner= §7作為管理人員，在已有領地上建立管理員領地/僅服主領地會§c覆蓋§r（刪除）這些領地。系統會先發出警告；但其他玩家標記為「僅服主」的領地無法被覆蓋。§r
+jm_at.cl.help_owner_only=§9§l僅服主領地§r\n作為服主，您可以在確認新領地時將其標記為§4僅服主§r，使其完全私密：其他管理員或協管員無法進入、建造、開啟容器、檢視或變更設定、擴大、延伸或刪除；它也不會出現在管理員領地清單中。
+jm_at.cl.help_prot_head=§9§l保護§r\n新領地使用伺服器的預設保護。您可以切換：
+jm_at.cl.help_prot_line=  §2✓§r %1$s
+jm_at.cl.help_prot_line_admin=  §6✓§r %1$s §8（管理）§r
+jm_at.cl.help_prot_line_admin_only=  §8✗ %1$s（僅限管理員）§r
+jm_at.cl.help_ranks=§9§l受信任身分組§r\n信任一個伺服器身分組後，所有擁有該身分組的玩家都能存取您的領地。每個受信任身分組都有一個角色（訪客、成員、建造者或共同擁有者），也可設定有效期。這樣無需逐一新增玩家即可授予整組存取權限。
+jm_at.cl.help_subclaims=§9§l子領地§r\n在現有領地內部選擇區域，可建立擁有獨立保護和成員設定的子領地。每個領地最多 %1$s 個子領地。子領地最多巢狀兩層（例如：城市 → 街區 → 房屋）。
+jm_at.cl.help_tool=§9§l領地工具§r\n§l1.§r 對方塊使用§2蹲下 + 攻擊§r，設定§l角落 1§r。\n§l2.§r 對方塊使用§2蹲下 + 使用§r，設定§l角落 2§r。\n§l3.§r 開啟此選單並點選§l確認待建立領地§r。\n每個已選角落都會出現標記，方便您在確認前檢視範圍；點選§l取消選擇§r可清除標記。\n領地會自動採用伺服器為目前維度設定的高度範圍。系統會根據選擇區域是在現有領地內部、完全包住領地，還是緊貼領地邊界，自動提供子領地、擴大或延伸選項。
+jm_at.cl.help_viewer=§9§l領地檢視器§r\n放在副手時，會在動作列顯示領地資訊。手持檢視器並蹲下，可用粒子顯示 20 格範圍內的領地邊界。
+## [tx] First option in the duration dropdown when editing a member: keeps their existing expiry
+## [tx] instead of resetting it; %1$s = "expires in 2h 30m" or "Permanent".
+jm_at.cl.keep_current=保持最新（%1$s）
+jm_at.cl.label_access_for=§7存取§f%1$s§7。
+jm_at.cl.label_protections=§l§2保護
+jm_at.cl.label_type_or_pick=§7輸入名稱，或從下方的清單中選擇。
+jm_at.cl.members_count=%1$s 個成員
+jm_at.cl.members_none=還沒有會員。
+jm_at.cl.mod_rank_plain=協管員（管理團隊角色）
+jm_at.cl.mod_rank_tag=§s§l協管員§r §8（管理角色）
+jm_at.cl.moderator=協管員
+jm_at.cl.msg_abandoned=§2[領地] 領地被放棄。
+jm_at.cl.msg_boundary_shown=§2[領地] 所示邊界。
+jm_at.cl.msg_created=§2[領地] 已建立領地「%1$s」。
+jm_at.cl.msg_expanded=§2[領地] 領地「%1$s」已擴大。
+jm_at.cl.msg_extended=§2[領地] 領地「%1$s」已延伸。
+jm_at.cl.msg_height_updated=§2[領地] 高度已更新：Y %1$s → %2$s。
+## [tx] Chat confirmation, permanent access: %1$s = player name, %2$s = role (visitor/member/
+## [tx] builder/co-owner, lowercase). The _timed variant is used instead when access expires.
+jm_at.cl.msg_member_added_perm=§2[領地] 已將 %1$s 新增為%2$s。
+## [tx] Chat confirmation, temporary access: %1$s = player name, %2$s = role, %3$s = duration like
+## [tx] "1 hour" (a dropdown label).
+jm_at.cl.msg_member_added_timed=§2[領地] 已將 %1$s 新增為%2$s，有效期 %3$s。
+jm_at.cl.msg_member_removed=§2[領地] %1$s 已刪除。
+jm_at.cl.msg_member_updated=§2[領地] %1$s 的存取權限已更新為 %2$s。
+jm_at.cl.msg_no_access=§c[領地] 您無權管理此領地。
+jm_at.cl.msg_no_changes=§7[領地] 沒有要儲存的變更。
+jm_at.cl.msg_no_ranks=§v[領地] 找不到可新增的伺服器身分組。
+jm_at.cl.msg_not_owner=§c[領地] 您不擁有該領地。
+## [tx] Permanent/timed pair like msg_member_added_*: %1$s = rank name, %2$s = role, %3$s (timed
+## [tx] only) = duration like "1 hour".
+jm_at.cl.msg_rank_added_perm=§2[領地] 已新增身分組：%1$s，角色為%2$s。
+jm_at.cl.msg_rank_added_timed=§2[領地] 已新增身分組：%1$s，角色為%2$s，有效期 %3$s。
+jm_at.cl.msg_rank_removed=§2[領地] 身分組「%1$s」已刪除。
+jm_at.cl.msg_rank_updated=§2[領地] 身分組「%1$s」已更新為%2$s。
+jm_at.cl.msg_renamed=§2[領地] 領地已重命名為「%1$s」。
+jm_at.cl.msg_selection_canceled=§e[領地] 選擇已取消。
+jm_at.cl.msg_settings_saved=§2[領地] 設定已儲存。
+jm_at.cl.msg_sub_created=§2[領地] 已建立子領地「%1$s」。
+jm_at.cl.msg_sub_removed=§2[領地] 刪除了子領地。
+jm_at.cl.msg_welcome_cleared=§2[領地]自訂歡迎訊息已清除（使用預設值）。
+jm_at.cl.msg_welcome_saved=§2[領地] 歡迎訊息已儲存。
+## [tx] Fragment appended directly after "%1$s owned" (jm_at.cl.my_owned) on the My Claims screen;
+## [tx] %1$s = number of claims where the player is co-owner; keep the leading " · " separator.
+jm_at.cl.my_co_owned= · %1$s 共同擁有
+jm_at.cl.my_none=您還沒有領地。\n\n蹲下 + 擊中方塊來設定角 1，然後蹲下 + 互動以設定角 2 以建立您的第一個領地。
+jm_at.cl.my_owned=%1$s 擁有
+jm_at.cl.my_select=選擇領地以檢視/編輯詳細資訊。
+jm_at.cl.opt_none=（無）
+jm_at.cl.opt_offline=%1$s [離線]
+jm_at.cl.opt_online=%1$s [線上]
+jm_at.cl.ow_body_admin=此管理員領地與§c%1$s§r現有領地重疊：\n\n%2$s\n\n覆蓋將§c刪除§r這些領地。繼續？
+jm_at.cl.ow_body_owner_only=此僅服主領地與§c%1$s§r現有領地重疊：\n\n%2$s\n\n覆蓋將§c刪除§r這些領地。繼續？
+jm_at.cl.ow_line=§e%1$s§r 歸 §9%2$s§r 所有
+jm_at.cl.ow_line_admin=§e%1$s§r 由 §9%2$s§r（管理員）擁有
+jm_at.cl.ranks_body=具有可信身分組的玩家可以根據其角色取得存取權限。
+jm_at.cl.ranks_none=沒有值得信賴的身分組。
+jm_at.cl.remove_member_body=從此領地中刪除§c%1$s§r (%2$s) 嗎？
+jm_at.cl.remove_member_temp=暫時存取：剩餘 %1$s
+jm_at.cl.remove_rank_body=從此領地中刪除身分組 §c%1$s§r 嗎？
+jm_at.cl.remove_rank_note=具有此身分組的玩家將失去存取權限。
+jm_at.cl.role_builder=建造者
+jm_at.cl.role_co_owner=共同擁有者
+jm_at.cl.role_member=成員
+jm_at.cl.role_opt_builder=建造者（完整權限）
+jm_at.cl.role_opt_co_owner=共同擁有者（管理領地）
+jm_at.cl.role_opt_member=成員（僅互動）
+jm_at.cl.role_opt_visitor=訪客（僅進入）
+jm_at.cl.role_visitor=訪客
+jm_at.cl.slider_max_y=最大 Y（限制：%1$s）
+jm_at.cl.slider_min_y=最小 Y（限制：%1$s）
+jm_at.cl.sub_body=%1$s/%2$s 子領地\n子領地有自己的成員和保護。
+jm_at.cl.sub_details=§l§2子領地詳細資訊§r\n§7區域：%1$s塊\n內部：%2$s\n最小：%3$s、%4$s、%5$s 最大：%6$s、%7$s、%8$s
+## [tx] Suffix appended after a member's/rank's role when their temporary access has run out; keep
+## [tx] the leading " - "; lowercase mid-line word.
+jm_at.cl.sub_expired= - §c已過期
+## [tx] Suffix appended after a member's/rank's role on list rows; %1$s = compact remaining time
+## [tx] like "2h 30m"; "left" = time remaining, not a direction or departed.
+jm_at.cl.sub_left= - 還剩 %1$s
+jm_at.cl.sub_sel_inside=§2待定選擇在此領地內。
+jm_at.cl.sub_sel_none=§9使用領地工具選擇此領地內的區域。
+jm_at.cl.sub_sel_outside=§c待定選擇不在此領地範圍內。
+jm_at.cl.title_abandon=放棄領地
+jm_at.cl.title_abandon_sub=放棄子領地
+jm_at.cl.title_add_member=新增會員
+jm_at.cl.title_add_rank=新增可信身分組
+jm_at.cl.title_adjust_height=調整高度
+jm_at.cl.title_admin_claims=行政領地
+jm_at.cl.title_claim=領地
+jm_at.cl.title_claims=領地
+jm_at.cl.title_confirm=確認領地
+jm_at.cl.title_create_sub=建立子領地
+jm_at.cl.title_edit_member=編輯會員
+jm_at.cl.title_edit_rank=編輯可信身分組
+jm_at.cl.title_expand=擴大領地
+jm_at.cl.title_extend=延伸領地
+jm_at.cl.title_help=如何索取土地
+jm_at.cl.title_member=會員
+jm_at.cl.title_members=會員
+jm_at.cl.title_my_claims=我的領地
+jm_at.cl.title_overlap_warn=重疊警告
+jm_at.cl.title_remove_member=刪除會員
+jm_at.cl.title_remove_rank=刪除可信身分組
+jm_at.cl.title_rename=重命名領地
+jm_at.cl.title_settings=領地設定
+jm_at.cl.title_sub=§9從屬領地
+jm_at.cl.title_subclaims=子領地
+jm_at.cl.title_subsub=§v子子領地
+jm_at.cl.title_trusted_rank=可信身分組
+jm_at.cl.title_trusted_ranks=值得信賴的身分組
+jm_at.cl.title_welcome=歡迎辭
+jm_at.cl.toggle_admin_claim=建立為管理員領地
+jm_at.cl.toggle_owner_only=建立為僅服主領地
+jm_at.cl.w_add_rank_failed=§c無法新增身分組：它可能已被信任，或者領地的信任資料已滿。
+jm_at.cl.w_gone=§c該領地已不存在。
+jm_at.cl.w_members_full=§c此領地已擁有允許的最多成員 (%1$s)。在新增另一個之前先刪除一個。
+jm_at.cl.w_no_selection=§c您尚未選擇區域。首先用領地工具標記兩個角。
+jm_at.cl.w_owner_only_blocked=§c這些領地僅供服主使用，不能被覆蓋：\n%1$s
+jm_at.cl.w_prot_admin_managed=§c保護設定由伺服器管理員管理，無法在此處變更。
+jm_at.cl.w_ranks_full=§c此領地已具有允許的最受信任身分組 (%1$s)。在新增另一個之前先刪除一個。
+jm_at.cl.w_wrong_dim=§c這個選擇是在不同的維度進行的。在這一角中重新選擇您的角。
+jm_at.cl.welcome_intro=當有人輸入此領地時，將顯示自訂訊息。\n\n留空以使用伺服器的預設值。
+## [tx] %1$s is the literal two characters \n that the player must type in the text field — it is a
+## [tx] token, not a placeholder to translate or remove.
+jm_at.cl.welcome_newline_tip=§7換行：在要換行的位置鍵入 §2%1$s§7。
+## [tx] The {curly-brace} tokens are functional and MUST stay in English; {name} inserts the claim
+## [tx] name wrapped in gray parentheses (that is what "the name in (brackets)" means); the
+## [tx] substituted texts (e.g. "Steve's claim") are produced in code and stay English by design.
+jm_at.cl.welcome_tags=§7以下標籤會自動替換：§r\n• §2{ownerName}§r：領地主人的名稱\n• §2{claimName}§r：領地名稱\n• §2{owner}§r：例如「Steve的領地」\n• §2{name}§r：（括號）中的名稱\n• §c{restricted}§r：「禁止建造」警告\n\n顏色：輸入 & 後接顏色程式碼，例如 &c 為 §c紅色§r，&7 為 §7灰色§r。
+
+## ----- jm_at.cla.* (claims admin UI) -----
+## [tx] Admin-side land-claims management: browse/inspect every claim on the server, manage a
+## [tx] claim's members, trusted ranks, protections, height, welcome message,
+## [tx] rename/transfer/force-delete, and view a filterable claim event log. Also contains
+## [tx] server-wide claim settings: limits and playtime-based area earning, per-player bonus chunks,
+## [tx] default protections and heights, mob black/whitelist, entry/exit notification wording, and
+## [tx] stray selection-marker cleanup.
+
+jm_at.cla.abilities_adjust_height=調整領地高度
+## [tx] Toggle label repeated once per protection. %1$s = a protection name (e.g. 'Blocks', 'PvP').
+## [tx] Means: allow claim OWNERS to toggle this protection on their own claims.
+jm_at.cla.abilities_allow=允許編輯：%1$s
+jm_at.cla.abilities_title=玩家能力
+jm_at.cla.add_member_title=新增會員
+jm_at.cla.add_rank_title=新增可信身分組
+jm_at.cla.adjust_height_title=調整高度
+jm_at.cla.ago_d=%1$s天前
+jm_at.cla.ago_h=%1$s小時前
+## [tx] Compact relative timestamp in log rows: %1$s = number of minutes ('5m ago'). Siblings
+## [tx] ago_s/ago_h/ago_d use s=seconds, h=hours, d=days — translate the unit letters consistently
+## [tx] with fmtdur_*.
+jm_at.cla.ago_m=%1$s分鐘前
+jm_at.cla.ago_s=%1$s秒前
+jm_at.cla.body_expired=§c存取權限已過期
+jm_at.cla.body_expires_in=到期時間：%1$s
+jm_at.cla.body_permanent=持續時間：永久
+jm_at.cla.body_role=角色：%1$s
+jm_at.cla.body_temp_remaining=暫時存取：剩餘 %1$s
+jm_at.cla.browse_title=所有領地 (%1$s)
+jm_at.cla.btn_abilities=§l玩家能力§r\n玩家可以切換哪些保護
+jm_at.cla.btn_add=新增
+jm_at.cla.btn_add_blacklist=§l新增到黑名單
+jm_at.cla.btn_add_close=新增並關閉
+jm_at.cla.btn_add_member=§l新增會員
+jm_at.cla.btn_add_member_close=新增會員並關閉
+jm_at.cla.btn_add_member_go=新增會員
+jm_at.cla.btn_add_rank=§l新增身分組
+jm_at.cla.btn_add_rank_close=新增身分組並關閉
+jm_at.cla.btn_add_rank_go=新增身分組
+jm_at.cla.btn_add_whitelist=§l新增到白名單
+jm_at.cla.btn_adjust_height=§l調整高度
+jm_at.cla.btn_apply=申請
+jm_at.cla.btn_apply_close=申請並關閉
+jm_at.cla.btn_browse=§l瀏覽所有領地§r\n所有管理員和玩家領地
+jm_at.cla.btn_chunks=§l新增/刪除區塊§r\n授予或撤銷土地面積
+## [tx] Claim list row (2 lines). %1$s = claim name, %2$s = owner's player name, %3$s = area in
+## [tx] chunks ('ch' = chunks abbreviation, translate it), %4$s = short dimension name
+## [tx] (OW/Nether/End).
+jm_at.cla.btn_claim_row=§l%1$s§r\n%2$s - %3$s區塊 - %4$s
+## [tx] Button: removes the active player filter from the claims list ('clear' = remove, not
+## [tx] transparent). %1$s = the player name currently filtered on, shown as line 2.
+jm_at.cla.btn_clear_filter=§c§l清除過濾器§r\n%1$s
+jm_at.cla.btn_clear_filters=§l清除過濾器
+jm_at.cla.btn_clear_log=§l§c清除日誌
+## [tx] Red confirm button that erases ALL entries of the claim event log ('empty it out', not
+## [tx] 'transparent' or 'obvious').
+jm_at.cla.btn_clear_red=§l§c清除
+jm_at.cla.btn_clear_stray=§l清除雜散標記§r\n刪除剩餘的領地選擇立方體
+jm_at.cla.btn_config=§l領地設定§r\n限制、額度和排程
+jm_at.cla.btn_current_claim=§l目前領地§r\n%1$s
+jm_at.cla.btn_current_sub=§l目前子領地§r\n%1$s
+jm_at.cla.btn_default_height=§l預設領地高度§r\n每個尺寸的 Y 範圍
+jm_at.cla.btn_defaults=§l領地預設§r\n新領地的預設保護
+jm_at.cla.btn_delete_red=§l§c刪除
+jm_at.cla.btn_edit_prots=§l編輯保護
+jm_at.cla.btn_edit_role=§l編輯角色/持續時間
+jm_at.cla.btn_event_log=§l領地事件日誌§r\n檢視領地活動
+jm_at.cla.btn_filter=過濾器
+jm_at.cla.btn_filters=§l§9過濾器
+jm_at.cla.btn_filters_active=§6§l過濾器（已啟用）
+jm_at.cla.btn_force_delete=§l§c強制刪除
+jm_at.cla.btn_members=§l成員 (%1$s)
+jm_at.cla.btn_mob_list=§l生物黑名單與白名單§r\n一律移除或一律允許的生物
+jm_at.cla.btn_next=§l下一頁
+jm_at.cla.btn_notifications=§l領地通知§r\n進入/退出訊息、措辭和顯示
+jm_at.cla.btn_prev=§l上一頁
+jm_at.cla.btn_remove=§l刪除
+jm_at.cla.btn_remove_member=§l§c刪除成員
+jm_at.cla.btn_remove_rank=§l§c刪除身分組
+jm_at.cla.btn_remove_red=§l§c刪除
+jm_at.cla.btn_rename=§l重命名
+jm_at.cla.btn_save_close=儲存並關閉
+jm_at.cla.btn_search_player=§l按玩家搜尋
+jm_at.cla.btn_settings=§l領地設定§r\n預設、能力、白名單等。
+## [tx] Sub-claim list row. %1$s = sub-claim name, %2$s = its area in chunks ('ch' = chunks
+## [tx] abbreviation).
+jm_at.cla.btn_sub_row=§l%1$s§r\n%2$s區
+jm_at.cla.btn_subclaims=§l子領地 (%1$s)
+jm_at.cla.btn_transfer=§l轉讓所有權
+jm_at.cla.btn_transfer_confirm=§l§2轉讓
+jm_at.cla.btn_transfer_go=轉乘
+jm_at.cla.btn_trusted_ranks=§l可信身分組 (%1$s)
+jm_at.cla.btn_view_boundary=§l視圖邊界
+jm_at.cla.btn_welcome=§l歡迎辭
+jm_at.cla.chunks_body=選擇一個玩家來調整他們的獎金領取區塊。
+## [tx] Appended after 'Online'/'Offline' on a player row in the bonus-chunks screen. %1$s = the
+## [tx] player's bonus chunk count (can be negative). Keep the leading ' · ' separator.
+jm_at.cla.chunks_bonus_suffix= · 獎金：§9%1$s
+jm_at.cla.chunks_current_bonus=§7目前獎金：§f%1$s
+jm_at.cla.chunks_form_title=區塊：%1$s
+jm_at.cla.chunks_slider=調整獎金（− 刪除/+ 新增）
+jm_at.cla.chunks_title=新增/刪除區塊
+jm_at.cla.chunks_total=§7總區塊數：§f%1$s
+jm_at.cla.clear_log_body=刪除所有§c%1$s§r 領地日誌項目嗎？\n\n此操作無法撤消。
+jm_at.cla.clear_log_title=清除領地日誌
+jm_at.cla.config_chunk_note=§71 區塊 = 16x16 方塊
+jm_at.cla.config_earning_info=玩家的領地面積上限 = 初始數量 +（每個週期取得的區塊數 * 已遊玩週期數）。\n最多不超過總面積上限。\n\n§9將「每週期取得的區塊數」設為 0，即可使用固定數量並關閉按時間增加。
+jm_at.cla.config_field_interval_min=每個間隔的比賽時間分鐘數
+jm_at.cla.config_field_max_area=塊的最大總面積（上限）
+jm_at.cla.config_field_max_claims=每名玩家最多可擁有的獨立領地數（0 = 僅管理員可建立）
+jm_at.cla.config_field_per_interval=每個週期取得的區塊數（0 = 不增加）
+jm_at.cla.config_field_start_area=初始領地面積（區塊）（0 = 取得前為零）
+jm_at.cla.config_h_dims=允許尺寸
+jm_at.cla.config_h_earning=地區收益
+jm_at.cla.config_h_limits=領地限額
+jm_at.cla.config_h_wand=魔杖預覽
+jm_at.cla.config_title=領地設定
+jm_at.cla.config_toggle_end=允許在終界建立領地
+jm_at.cla.config_toggle_live_preview=即時領地邊界預覽
+jm_at.cla.config_toggle_nether=允許在地獄建立領地
+jm_at.cla.config_wand_info=§7在使用領地工具進行或擴展領地時顯示即時邊框。\n如果啟用此功能，使用領地檢視器也將顯示即時邊框。
+jm_at.cla.confirm_transfer_body=將 §9%1$s§r\n從 §c%2$s§r 轉移到 §2%3$s§r？\n\n兩個玩家都會收到通知。
+jm_at.cla.confirm_transfer_title=確認轉賬
+jm_at.cla.cooldown_0_5s=0.5秒
+jm_at.cla.cooldown_1_5s=1.5秒
+jm_at.cla.cooldown_1s=1秒
+jm_at.cla.cooldown_2s=2秒
+jm_at.cla.cooldown_3s=3秒
+jm_at.cla.cooldown_5s=5秒
+jm_at.cla.cooldown_off=關閉（每次顯示）
+jm_at.cla.default_height_title=預設領地高度
+jm_at.cla.defaults_h_welcome=領取歡迎資訊
+jm_at.cla.defaults_title=領地違約
+jm_at.cla.defaults_toggle_welcome=讓領地擁有者設定自訂輸入訊息
+jm_at.cla.dim_end_short=終界
+jm_at.cla.dim_nether=地獄
+jm_at.cla.dim_overworld=主世界
+## [tx] Two-letter abbreviation of 'Overworld' used in compact claim rows — abbreviate the target
+## [tx] language's official Overworld name instead.
+jm_at.cla.dim_ow=主世界
+jm_at.cla.display_actionbar=動作列（底部）
+jm_at.cla.display_chat=聊天
+jm_at.cla.display_title=標題（中心彈出窗口）
+jm_at.cla.duropt_12h=12小時
+jm_at.cla.duropt_15m=15分鐘
+jm_at.cla.duropt_1d=1天
+jm_at.cla.duropt_1h=1小時
+jm_at.cla.duropt_2h=2小時
+jm_at.cla.duropt_30m=30分鐘
+jm_at.cla.duropt_3d=3天
+jm_at.cla.duropt_6h=6小時
+jm_at.cla.duropt_7d=7天
+jm_at.cla.duropt_permanent=永久
+jm_at.cla.edit_prots_title=編輯保護
+jm_at.cla.edit_rank_title=編輯可信身分組
+jm_at.cla.field_duration=持續時間
+jm_at.cla.field_leave_blank=留空以使用該清單
+jm_at.cla.field_player_name=玩家姓名
+jm_at.cla.field_rank=身分組
+jm_at.cla.field_role=角色
+jm_at.cla.filter_pick_known=或者從已紀錄玩家中挑選
+jm_at.cla.filter_title=按玩家篩選
+jm_at.cla.filter_type_name=輸入玩家姓名（覆蓋下拉選單）
+jm_at.cla.filtered=§8已過濾：%1$s
+jm_at.cla.fmtdur_d=%1$s天
+jm_at.cla.fmtdur_d_h=%1$s天 %2$s小時
+jm_at.cla.fmtdur_expired=過期了
+jm_at.cla.fmtdur_h_m=%1$s小時 %2$s分鐘
+jm_at.cla.fmtdur_m=%1$s分鐘
+jm_at.cla.fmtdur_s=%1$s秒
+jm_at.cla.force_delete_nested=§c這還將刪除 %1$s 巢狀子領地。\n\n
+## [tx] %1$s = claim name, %2$s = owner's player name. Concatenated with an optional
+## [tx] nested-sub-claims warning and then force_delete_tail — keep the trailing \n\n and keep it a
+## [tx] standalone question.
+jm_at.cla.force_delete_q=刪除 §c%2$s§r 擁有的 §c%1$s§r 嗎？\n\n
+jm_at.cla.force_delete_tail=領地主人會收到通知。此操作無法復原。
+jm_at.cla.force_delete_title=強制刪除領地
+jm_at.cla.force_delete_title_sub=強制刪除子領地
+jm_at.cla.h_access=存取
+jm_at.cla.h_choose_player=選擇玩家
+## [tx] Claims hub summary. %1$s = number of claims, %2$s = total area in chunks, %3$s = max claims
+## [tx] per player, %4$s = starting area, %5$s = maximum earnable area (a min–max allowance range,
+## [tx] not money).
+jm_at.cla.hub_body=總領地數：§9%1$s§r\n總區域：§9%2$s§r 塊\n領地限額：每位玩家 %3$s\n區域額度：%4$s–%5$s 塊
+jm_at.cla.inspect_counts=• 成員：%1$s · 受信任身分組：%2$s
+jm_at.cla.inspect_created=• 已建立：%1$s
+jm_at.cla.inspect_dim_area=%1$s · %2$s 塊
+jm_at.cla.inspect_max=最大值：%1$s、%2$s、%3$s
+jm_at.cla.inspect_min=分鐘：%1$s、%2$s、%3$s
+jm_at.cla.inspect_owner=擁有者：§9%1$s§r
+jm_at.cla.inspect_prots=• 保護：%1$s
+jm_at.cla.inspect_title=檢查領地
+jm_at.cla.inspect_title_sub=檢查子領地
+jm_at.cla.log_filter_action=操作：§b%1$s§r
+jm_at.cla.log_filter_action_label=按操作類型過濾：
+jm_at.cla.log_filter_pick=或者從已紀錄玩家中挑選：
+jm_at.cla.log_filter_player=玩家：§e%1$s§r
+jm_at.cla.log_filter_title=過濾領地日誌
+jm_at.cla.log_filter_type_name=輸入玩家姓名（覆蓋下拉清單）：
+jm_at.cla.log_filters_prefix=§r過濾器：%1$s
+jm_at.cla.log_none=§8尚無活動。
+jm_at.cla.log_page=頁 %1$s/%2$s
+jm_at.cla.log_title=領地日誌（%1$s）
+jm_at.cla.logtype_adjust_height=高度調整
+jm_at.cla.logtype_create=已建立
+jm_at.cla.logtype_delete_admin=已被管理員刪除
+jm_at.cla.logtype_delete_owner=已刪除
+jm_at.cla.logtype_expand=擴展
+jm_at.cla.logtype_extend=擴展
+jm_at.cla.logtype_member_add=已新增會員
+jm_at.cla.logtype_member_expire=會員已過期
+jm_at.cla.logtype_member_remove=會員已刪除
+jm_at.cla.logtype_member_update=會員已編輯
+jm_at.cla.logtype_subclaim_create=新增了子領地
+jm_at.cla.logtype_subclaim_delete=子領地已刪除
+jm_at.cla.logtype_transfer=已轉入
+jm_at.cla.logtype_trust_add=受信任身分組
+jm_at.cla.logtype_trust_expire=受信任身分組已過期
+jm_at.cla.logtype_trust_remove=受信任身分組已移除
+jm_at.cla.logtype_trust_update=受信任身分組已編輯
+jm_at.cla.member_title=會員
+jm_at.cla.members_count=%1$s 個成員
+jm_at.cla.members_none=還沒有會員。
+jm_at.cla.members_title=會員
+jm_at.cla.mob_add_bl_title=將生物新增到黑名單
+jm_at.cla.mob_add_wl_title=將生物新增到白名單
+jm_at.cla.mob_body_blacklist=§9黑名單§r — %1$s 種。一律從領地中移除。
+jm_at.cla.mob_body_help=新增完整 ID（minecraft:zombie），或新增像 §5mypack:§r 這樣的命名空間，以符合附加內容中的所有生物。\n特定項目會覆蓋命名空間項目，因此可將 §5mypack:friendly§r 加入白名單，使其不受 §5mypack:§r 黑名單影響。
+jm_at.cla.mob_body_whitelist=§2白名單§r — %1$s 類型。允許留在領地中。
+jm_at.cla.mob_field_id_bl=實體類型 ID（例如，minecraft:zombie、mypack:boss）
+jm_at.cla.mob_field_id_bl_desc=minecraft:zombie，或只輸入 mypack: 以符合整個附加內容
+jm_at.cla.mob_field_id_wl=實體類型 ID（例如 minecraft:happy_ghast、mypack:friendly_mob）
+jm_at.cla.mob_field_id_wl_desc=minecraft:happy_ghast，或只輸入 mypack: 以符合整個附加內容
+jm_at.cla.mob_remove_bl_body=從黑名單中刪除§9%1$s§r？
+jm_at.cla.mob_remove_bl_title=從黑名單中刪除
+jm_at.cla.mob_remove_wl_body=從生物白名單中刪除 §9%1$s§r 嗎？
+jm_at.cla.mob_remove_wl_title=從白名單中刪除
+jm_at.cla.mob_title=黑名單與白名單
+jm_at.cla.mob_whole_addon=%1$s§r §8（整個附加元件）
+jm_at.cla.msg_abilities_saved=§2[領地] 玩家能力已儲存。
+jm_at.cla.msg_boundary_shown=§2[領地] 所示邊界。
+jm_at.cla.msg_chunks_added=§2[領地] 為 %2$s 新增了 %1$s 區塊。
+jm_at.cla.msg_chunks_removed=§2[領地] 已刪除 %2$s 的 %1$s 區塊。
+jm_at.cla.msg_claim_deleted=§2[領地] 領地已刪除，並已通知領地主人。
+jm_at.cla.msg_config_saved=§2[領地] 設定已儲存。
+jm_at.cla.msg_defaults_saved=§2[領地] 預設值已儲存。
+## [tx] %1$s = new MINIMUM Y, %2$s = new MAXIMUM Y — the arrow shows a bottom-to-top range, NOT an
+## [tx] old-to-new change.
+jm_at.cla.msg_height_updated=§2[領地] 高度已更新：Y %1$s → %2$s。
+jm_at.cla.msg_heights_saved=§2[領地] 已儲存預設領地高度。
+jm_at.cla.msg_log_cleared=§2[領地] 事件日誌已清除。
+## [tx] Chat confirmation, permanent access: %1$s = player name, %2$s = role (member/builder/...).
+## [tx] The _timed variant is used instead when access expires; there %3$s = duration like "1 day".
+jm_at.cla.msg_member_added_perm=§2[領地] 已將 %1$s 新增為%2$s。
+jm_at.cla.msg_member_added_timed=§2[領地] 已將 %1$s 新增為%2$s，有效期 %3$s。
+jm_at.cla.msg_member_removed=§2[領地] %1$s 已刪除。
+jm_at.cla.msg_mob_bl_added=§2[領地] 將 %1$s 新增到生物黑名單中。
+jm_at.cla.msg_mob_bl_removed=§2[領地] 已將 %1$s 從黑名單中刪除。
+jm_at.cla.msg_mob_wl_added=§2[領地] 將 %1$s 新增到生物白名單中。
+jm_at.cla.msg_mob_wl_removed=§2[領地] 已將 %1$s 從白名單中刪除。
+jm_at.cla.msg_no_changes=§7[領地] 沒有要儲存的變更。
+jm_at.cla.msg_notifs_disabled=§2領地通知§c停用§2。
+jm_at.cla.msg_notifs_enabled=§2領地通知§2已啟用§2。
+jm_at.cla.msg_prots_updated=§2[領地] 保護措施已更新。
+## [tx] Permanent/timed pair like msg_member_added_*: %1$s = rank name, %2$s = role, %3$s (timed
+## [tx] only) = duration like "1 day".
+jm_at.cla.msg_rank_added_perm=§2[領地] 已新增身分組：%1$s，角色為%2$s。
+jm_at.cla.msg_rank_added_timed=§2[領地] 已新增身分組：%1$s，角色為%2$s，有效期 %3$s。
+jm_at.cla.msg_rank_removed=§2[領地] 身分組「%1$s」已刪除。
+jm_at.cla.msg_rank_updated=§2[領地] 身分組「%1$s」已更新為%2$s。
+jm_at.cla.msg_renamed=§2[領地] 領地已重命名為「%1$s」。
+jm_at.cla.msg_stray_cleared=§2[領地] 已清除載入區域中的 %1$s 雜散選擇標記。
+jm_at.cla.msg_stray_cleared_one=§2[領地] 已清除載入區域中的 %1$s 雜散選擇標記。
+jm_at.cla.msg_sub_deleted=§2[領地] 子領地已刪除，並已通知領地主人。
+jm_at.cla.msg_transferred=§2[領地] 領地已轉移至 %1$s。
+jm_at.cla.notif_dd_cooldown=等待後再顯示另一條訊息
+jm_at.cla.notif_dd_display=在哪裡顯示訊息
+jm_at.cla.notif_default_info=每個領地中顯示的預設訊息。\n§c領地擁有者自己的歡迎訊息（在領地中設定）將替換其領地。
+jm_at.cla.notif_field_enter=參賽留言
+jm_at.cla.notif_field_exit=退出訊息
+jm_at.cla.notif_h_default=預設領地訊息
+jm_at.cla.notif_h_preview=預覽
+jm_at.cla.notif_h_text=留言內容
+jm_at.cla.notif_h_timing=計時與顯示
+jm_at.cla.notif_sample_note=§8範例資料：史蒂夫的領地名為「基地」。
+## [tx] Help text. The {curly} tags are literal tokens users type — do NOT translate them. %1$s =
+## [tx] the literal 2-character token '\n'. '&c'/'&7' are literal color codes to keep as-is.
+jm_at.cla.notif_tags_info=§7以下標籤會自動替換：§r\n• §2{claimName}§r：領地名稱\n• §2{ownerName}§r：領地主人的名稱\n• §2{owner}§r：例如「Steve的領地」\n• §2{name}§r：（括號）中的名稱\n• §c{restricted}§r：「禁止建造」警告\n§g顏色：§r 輸入 & 後接顏色程式碼，例如 &c 為 §c紅色§r，&7 為 §7灰色§r。\n也可以使用 § 字元。\n\n§7換行：需要換行的位置輸入 §2%1$s §7（僅適用於標題彈窗和聊天訊息）。
+jm_at.cla.notif_title=領地通知
+jm_at.cla.notif_toggle_show=顯示進入/退出訊息
+jm_at.cla.opt_none=（無）
+jm_at.cla.opt_offline=%1$s [離線]
+jm_at.cla.opt_online=%1$s [線上]
+jm_at.cla.opt_show_all=（顯示全部）
+jm_at.cla.page_of=第 %1$s 頁（共 %2$s）
+jm_at.cla.pick_hint=輸入名稱，或從下方的清單中選擇。
+jm_at.cla.pick_known=從已紀錄玩家中挑選
+jm_at.cla.prot_blocks=積木
+jm_at.cla.prot_containers=集裝箱
+jm_at.cla.prot_crop_trampling=農作物踐踏
+jm_at.cla.prot_eject_players=驅逐不受信任的玩家
+jm_at.cla.prot_ender_pearls=終界珍珠
+jm_at.cla.prot_entities=實體（生物）
+jm_at.cla.prot_explosions=爆炸
+jm_at.cla.prot_fire_spread=火勢蔓延
+jm_at.cla.prot_group_blocks=塊和容器保護
+jm_at.cla.prot_group_env=環保
+jm_at.cla.prot_group_players=玩家與實體
+jm_at.cla.prot_hostile_mobs=敵對生物
+jm_at.cla.prot_interactions=互動
+jm_at.cla.prot_item_use=物品用途
+jm_at.cla.prot_none=無
+jm_at.cla.prot_pvp=玩家對戰
+jm_at.cla.prot_vehicles=允許車輛使用
+jm_at.cla.rank_moderator=協管員
+jm_at.cla.rank_moderator_full=§s§l協管員§r §8（管理角色）
+jm_at.cla.rank_moderator_plain=協管員（管理團隊角色）
+jm_at.cla.rank_title=可信身分組
+jm_at.cla.ranks_body=具有可信身分組的玩家可以根據其角色取得存取權限。
+jm_at.cla.ranks_none=沒有值得信賴的身分組。
+jm_at.cla.ranks_title=值得信賴的身分組
+jm_at.cla.remove_member_body=從此領地中刪除§c%1$s§r (%2$s) 嗎？
+jm_at.cla.remove_member_title=刪除會員
+jm_at.cla.remove_rank_body=從此領地中刪除身分組 §c%1$s§r 嗎？
+jm_at.cla.remove_rank_title=刪除可信身分組
+jm_at.cla.remove_rank_warn=具有此身分組的玩家將失去存取權限。
+jm_at.cla.rename_field=名稱（最多 %1$s 個字元）
+jm_at.cla.rename_field_desc=例如我的基地
+jm_at.cla.rename_title=重命名領地
+jm_at.cla.role_builder=建造者
+jm_at.cla.role_co_owner=共同擁有者
+jm_at.cla.role_item_builder=建造者（完整權限）
+jm_at.cla.role_item_coowner=共同擁有者（管理領地）
+jm_at.cla.role_item_member=成員（僅互動）
+jm_at.cla.role_item_visitor=訪客（僅進入）
+jm_at.cla.role_member=成員
+jm_at.cla.role_visitor=訪客
+jm_at.cla.settings_body=§9領地設定§r — 限制、區域額度和時間\n§9領地預設值§r — 新領地的預設保護\n§9玩家能力§r — 玩家可以切換哪些保護\n§9預設領地高度§r — 每個維度的 Y 範圍\n§9生物黑名單與白名單§r — 領地中一律移除或一律允許的生物
+jm_at.cla.settings_title=領地設定
+jm_at.cla.slider_max_ceiling=最大 Y（上限：%1$s）
+jm_at.cla.slider_max_y=最大 Y（維度上限：%1$s）
+jm_at.cla.slider_min_floor=Y 分鐘（下限：%1$s）
+jm_at.cla.slider_min_y=最小 Y（維度下限：%1$s）
+jm_at.cla.status_offline=§8離線
+jm_at.cla.status_online=§2線上
+jm_at.cla.subclaims_count=%1$s 子領地
+jm_at.cla.subclaims_title=子領地
+## [tx] Suffix appended after a role name on a member/rank row when temporary access has run out.
+## [tx] Keep the leading ' - '.
+jm_at.cla.suffix_expired= - §c已過期
+## [tx] Suffix appended after a role name on a member/rank list row. %1$s = remaining time like '2d
+## [tx] 4h'; 'left' = remaining, not departed. Keep the leading ' - '.
+jm_at.cla.suffix_time_left= - 還剩 %1$s
+jm_at.cla.title=領地
+jm_at.cla.transfer_info=轉讓：§7  %1$s§r\n目前擁有者：§7  %2$s§r
+jm_at.cla.transfer_title=轉讓所有權
+jm_at.cla.warn_claim_gone=§c該領地已不存在。
+jm_at.cla.warn_members_max=§c此領地已擁有允許的最多成員 (%1$s)。在新增另一個之前先刪除一個。
+jm_at.cla.warn_no_player=§c找不到名為「%1$s」的玩家。
+jm_at.cla.warn_no_ranks=§c尚無可新增的伺服器身分組。首先在身分組資料庫中建立一個。
+jm_at.cla.warn_owner_only=§c這是僅服主領地。只有服主可以管理它。
+jm_at.cla.warn_rank_add_failed=§c無法新增身分組：它可能已被信任，或者領地的信任資料已滿。
+jm_at.cla.warn_ranks_max=§c此領地已具有允許的最受信任身分組 (%1$s)。在新增另一個之前先刪除一個。
+
+## ----- jm_at.claims.* -----
+## [tx] Land-claim (grief-protection) engine: chat/action-bar messages for the Claim Tool two-corner
+## [tx] selection flow, the claim viewer overlay shown when inspecting claimed land, live verdict
+## [tx] hints while selecting, and rejection reasons/warnings when creating, expanding, extending or
+## [tx] overwriting claims and sub-claims. Land is measured in Minecraft chunks against a
+## [tx] playtime-earned area budget.
+
+jm_at.claims.viewer_admin=§c§l管理員領地
+## [tx] %1$s = the admin claim's custom name, shown after the fixed "Admin Claim" type label.
+jm_at.claims.viewer_admin_named=§c§l管理員領地§r §l§7%1$s
+## [tx] Action-bar overlay while looking at claimed land. %1$s = the claim's corner coordinates
+## [tx] (e.g. "12,60,3 → 44,80,19"), %2$s = an owner/admin label (viewer_admin, viewer_admin_named
+## [tx] or viewer_owner_named).
+jm_at.claims.viewer_bar=§c§l[領地]§r（%1$s）%2$s
+jm_at.claims.viewer_none=§2此處沒有領地。
+## [tx] Two field labels shown side by side in the action bar. %1$s = name of the player who owns
+## [tx] the claim, %2$s = the claim's custom name.
+jm_at.claims.viewer_owner_named=§q§l擁有者：%1$s§r §l§7領地名稱：%2$s
+jm_at.claims.wand_admin_only=§c[領地] 領地僅限於該伺服器上的管理員。
+jm_at.claims.wand_corner1=§2[領地] 角球 1 組：§r%1$s
+jm_at.claims.wand_corner2=§2[領地] 角球 2 組：§r%1$s
+## [tx] Instruction using Minecraft controls: hold sneak/crouch and press the use/interact button on
+## [tx] a block; use the game's official control terms.
+jm_at.claims.wand_corner2_hint=§9[領地] 蹲下 + 在一個方塊上互動以設定角 2。
+## [tx] Chat line while marking land with the Claim Tool. %1$s = number of chunks in the selection
+## [tx] (can be 1), %2$s = a complete hint sentence (one of the jm_at.claims.hint_* strings).
+jm_at.claims.wand_selection=§9[領地] 選擇：§r%1$s 塊 · %2$s
+## [tx] Playtime reward notice. %1$s = number of chunks just added to the player's claimable-area
+## [tx] allowance ("budget" = land quota, not money).
+jm_at.claims.budget_gained=取得 §9§l[領地]§r %1$s 區塊領地區域。
+jm_at.claims.b_no_access=您無權管理此領地。
+## [tx] "Owner-Only" = claim type reserved for the server Owner RANK (top staff role), not the
+## [tx] claim's owning player; overwriting would delete the claims.
+jm_at.claims.b_owner_only=這些領地僅供服主使用，不能被覆蓋。
+jm_at.claims.hint_cant_claim=您無法在這裡建立領地。
+## [tx] Selection verdict hint. "Expand" = redraw claim %1$s (a claim name) as a bigger area fully
+## [tx] covering it — a DIFFERENT operation from "extend"; keep the two verbs distinct.
+jm_at.claims.hint_expand=準備擴大「%1$s」。
+## [tx] Selection verdict hint. "Extend" = attach a bordering annex to claim %1$s (a claim name, max
+## [tx] 2 extensions) — keep distinct from "expand".
+jm_at.claims.hint_extend=準備延伸「%1$s」。
+## [tx] "Borders" is a VERB — your selection is adjacent to the claim named %1$s; you may extend
+## [tx] that claim or create a separate one.
+jm_at.claims.hint_extend_or_new=與「%1$s」相鄰——延伸領地或建立新領地。
+jm_at.claims.hint_overwrite=準備建立——這將覆蓋重疊的領地。
+jm_at.claims.hint_ready=等待選擇準備確認。
+jm_at.claims.hint_subclaim=準備在「%1$s」內建立子領地。
+## [tx] Rejection reason: 'area budget' = the player's quota of claimable chunks (earned via
+## [tx] playtime, not money). %1$s = chunks still available.
+jm_at.claims.r_budget=面積額度不夠。您還剩下 %1$s 個區塊。
+jm_at.claims.r_claim_limit=您已達到領地限額 (%1$s)。
+jm_at.claims.r_expand_cover=新區域必須完全包住現有領地。
+jm_at.claims.r_expand_overlap=擴大後的區域與現有領地重疊。
+jm_at.claims.r_expand_subclaim_outside=擴大後會有子領地位於新邊界之外。
+jm_at.claims.r_ext_border=延伸區域必須緊貼現有領地邊界。
+jm_at.claims.r_ext_max=此領地已達到延伸區域上限（2 個）。
+jm_at.claims.r_ext_overlap=延伸區域與現有領地重疊。
+jm_at.claims.r_nest_depth=子領地的巢狀深度不能超過兩層。
+jm_at.claims.r_no_end=終界不允許建立領地。
+jm_at.claims.r_no_nether=地獄不允許建立領地。
+jm_at.claims.r_not_found=找不到領地。
+jm_at.claims.r_not_owner=您不是此領地的擁有者。
+jm_at.claims.r_overlap=該區域與現有領地重疊。
+jm_at.claims.r_parent_not_found=找不到父領地。
+jm_at.claims.r_save_too_large=無法儲存領地 - 儲存項目太大。
+jm_at.claims.r_storage_full=領地儲存已滿。
+jm_at.claims.r_sub_max=已達到最大子領地數 (%1$s)。
+jm_at.claims.r_sub_overlap=該區域與現有的從屬領地重疊。
+jm_at.claims.r_sub_save_too_large=無法儲存子領地 - 儲存項目太大。
+jm_at.claims.r_sub_within_parent=子領地必須完全在父領地內。
+jm_at.claims.timeout_both=§e[領地] 待處理領地超時 - 選擇已清除。
+jm_at.claims.timeout_c1=§e[領地] 選擇超時 — 角 1 已清除。
+jm_at.claims.w_overwrite_admin=此管理員領地與 %1$s 個現有領地重疊。覆蓋將刪除它們。
+jm_at.claims.w_overwrite_owner_only=此僅服主領地與 %1$s 個現有領地重疊。覆蓋將刪除它們。
+
+## ----- jm_at.deathback.* -----
+## [tx] "Deathback" dialog that offers to teleport the player back to where they last died,
+## [tx] including a hazard warning variant when fire, lava or the void was detected at the death
+## [tx] spot. Buttons and body text feed a two-button confirmation form; the destination fragment is
+## [tx] reused by the shared teleport countdown (jm_at.tp.*).
+
+jm_at.deathback.body=傳送回上次死亡的位置？\n\n%1$s
+## [tx] Confirmation dialog body. %1$s = a hazard name (one of hazard_fire / hazard_lava /
+## [tx] hazard_void), %2$s = a coordinates + dimension line.
+jm_at.deathback.body_unsafe=§c警告：§r您的死亡位置可能不安全：在那裡偵測到§c%1$s§r。\n\n%2$s\n\n§8傳送可能會導致立即死亡。
+jm_at.deathback.btn_tp=§l傳送
+jm_at.deathback.btn_tp_anyway=§l§c無論如何傳送
+## [tx] Fragment inserted as %1$s into "Teleporting to %1$s...", "Teleported to %1$s." and "Arrived
+## [tx] at %1$s" (jm_at.tp.* keys); keep it a short lowercase noun phrase that reads naturally in
+## [tx] those frames.
+jm_at.deathback.dest=死亡地點
+jm_at.deathback.disabled=§c死亡返回功能目前已停用。
+jm_at.deathback.hazard_fire=火
+jm_at.deathback.hazard_lava=岩漿
+## [tx] The Minecraft Void — the deadly emptiness below the world (official Mojang term), not
+## [tx] generic 'emptiness'; slots into body_unsafe as %1$s, so include any needed article.
+jm_at.deathback.hazard_void=虛空
+jm_at.deathback.none=尚未紀錄死亡位置。\n\n§8當您下次死亡時，將自動儲存您最後的死亡位置。
+jm_at.deathback.title=死亡返回
+
+## ----- jm_at.dimlock.* -----
+## [tx] Dimension lock: admins can lock the Nether or The End; this message is shown to a player
+## [tx] being ejected from a locked dimension back to the overworld spawn. %1$s is the localized
+## [tx] dimension name.
+
+## [tx] Shown when a player is teleported out of a dimension admins have locked. %1$s is always a
+## [tx] dimension name: "The Nether" or "The End" (jm_at.common.dim_*) — choose wording that fits
+## [tx] both.
+jm_at.dimlock.ejected=§c[伺服器] %1$s 目前已鎖定。
+
+## ----- jm_at.elevator.* -----
+## [tx] Errors for the Elevator feature: special elevator blocks are placed in a vertical stack, and
+## [tx] jumping or sneaking on one teleports the player to the elevator block directly above or
+## [tx] below. These action-bar messages appear when no destination elevator exists in that
+## [tx] direction or its landing space is obstructed by blocks.
+
+## [tx] %1$s = count of elevators in that direction whose landing space is obstructed by blocks
+## [tx] (not "out of service").
+jm_at.elevator.blocked_many_above=§c[電梯] 上方有 %1$s 部電梯被阻擋。
+jm_at.elevator.blocked_many_below=§c[電梯] 下方有 %1$s 部電梯被阻擋。
+## [tx] %1$s = the Y coordinate of the obstructed destination elevator.
+jm_at.elevator.blocked_one_above=§c[電梯] 上方 Y=%1$s 處的電梯被阻擋。
+jm_at.elevator.blocked_one_below=§c[電梯] 下方 Y=%1$s 處的電梯被阻擋。
+## [tx] %1$s = search distance as a number of Minecraft blocks.
+jm_at.elevator.none_above=§c[電梯] 上方 %1$s 格內沒有電梯。
+jm_at.elevator.none_below=§c[電梯] 下方 %1$s 格內沒有電梯。
+
+## ----- jm_at.holo.* -----
+## [tx] Admin hologram tool: forms and chat feedback for creating, editing, restoring, and removing
+## [tx] floating-text holograms and live scoreboard/stat-leaderboard holograms placed in the world.
+## [tx] Field labels belong to the create/edit forms; restore_* strings belong to a recovery flow
+## [tx] for holograms that despawned.
+
+jm_at.holo.btn_add_line=新增行
+jm_at.holo.btn_cancel_plain=取消
+jm_at.holo.btn_place=放置全息圖
+jm_at.holo.btn_remove=刪除全息圖
+jm_at.holo.btn_remove_confirm=刪除
+## [tx] Button: re-spawn every missing hologram. %1$s = the number of holograms detected as
+## [tx] despawned.
+jm_at.holo.btn_restore_all=§2§l全部恢復 (%1$s)
+jm_at.holo.btn_save_changes=儲存變更
+jm_at.holo.btn_type_scoreboard=§l記分板全息圖§r\n即時身分組分數
+jm_at.holo.btn_type_stat=§l統計排行榜§r\n根據追蹤的統計資料對玩家進行身分組
+jm_at.holo.btn_type_text=§l文字全息圖§r\n自訂文字行
+jm_at.holo.create_body=您想放置什麼樣的全息圖？
+jm_at.holo.create_title=建立全息圖
+jm_at.holo.edit_title=編輯全息圖
+jm_at.holo.err_read_data=§c無法讀取全息圖資料。
+jm_at.holo.field_custom_format=自訂行格式
+## [tx] Form help text: {rank}, {name}, {score} are literal tokens replaced by code — keep them
+## [tx] exactly as-is, untranslated; "&" is the color-code character.
+jm_at.holo.field_custom_format_desc=使用 {rank} {name} {score}。支援 & 顏色程式碼。
+jm_at.holo.field_line1=1號線（必填）
+jm_at.holo.field_line_n=第 %1$s 行（可選）
+jm_at.holo.field_new_obj_id=新目標 ID（無空格）
+jm_at.holo.field_new_obj_id_desc=例如殺死
+jm_at.holo.field_new_obj_name=新目標顯示名稱
+jm_at.holo.field_new_obj_name_desc=可選； & 顏色程式碼確定
+## [tx] Form field label: a Minecraft scoreboard objective (a named score column), not a goal or
+## [tx] aim.
+jm_at.holo.field_objective=目的
+jm_at.holo.field_row_format=行格式
+jm_at.holo.field_rows_shown=顯示的行數
+jm_at.holo.field_time_format=分數顯示為時間
+jm_at.holo.field_title=標題
+jm_at.holo.field_title_desc=留空 = 計分項目名稱。支援 & 顏色程式碼。
+jm_at.holo.field_x=X
+jm_at.holo.field_y=是
+jm_at.holo.field_z=Z
+jm_at.holo.header_live_preview=即時預覽
+jm_at.holo.header_preview=預覽
+jm_at.holo.label_position=§7職位
+jm_at.holo.label_refresh_note=§8每~10秒重新整理一次。
+jm_at.holo.option_custom=自訂…
+jm_at.holo.placed=§a放置全息圖。
+jm_at.holo.remove_body=您確定嗎？此操作無法撤消。
+jm_at.holo.remove_title=刪除全息圖
+jm_at.holo.removed=§a全息圖已刪除。
+jm_at.holo.restore_all_present=§2[全息圖] 所有注冊的全息圖都存在。
+jm_at.holo.restore_body=發現 §c%1$s§r 全息圖可能已消失。\n選擇一個進行恢復，或全部恢復。
+## [tx] Chat result: %1$s = how many holograms were successfully re-spawned, %2$s = how many were
+## [tx] missing in total.
+jm_at.holo.restore_done=§2[全息圖] 已恢復 %1$s/%2$s 全息圖。
+jm_at.holo.restore_empty_preview=（空）
+jm_at.holo.restore_failed=§c無法恢復該全息圖。
+jm_at.holo.restore_one=§2[全息圖] 還原全息圖。
+jm_at.holo.restore_title=還原全息圖
+jm_at.holo.sb_create_title=記分牌全息圖
+jm_at.holo.sb_edit_title=編輯記分牌
+jm_at.holo.sb_placed=§a放置記分板全息圖。
+jm_at.holo.sb_updated=§a記分板全息圖已更新。
+jm_at.holo.stat_picker_body=選擇一個統計資料來對玩家進行身分組。將為它建立一個即時記分牌全息圖。
+jm_at.holo.stat_picker_title=統計排行榜
+jm_at.holo.time_fmt_plain=普通數字
+jm_at.holo.tip_color_codes=§7提示：使用「&」程式碼新增顏色 - 例如&c 紅色，&6 金色。 § 也有效。
+## [tx] Toggle: format leaderboard scores with thousands separators (1250 -> 1,250); name the
+## [tx] digit-grouping separator your locale uses.
+jm_at.holo.toggle_comma_scores=分數中的逗號
+jm_at.holo.toggle_create_new=而是建立一個新目標
+jm_at.holo.toggle_hide_offline=隱藏離線玩家
+jm_at.holo.toggle_sort_desc=從高位排序 → 低位排序
+jm_at.holo.updated=§a全息圖已更新。
+
+## ----- jm_at.homes.* -----
+## [tx] The Homes feature: players save personal named teleport locations ('homes', each with an
+## [tx] icon) and teleport back to them, or to their bed/respawn anchor. Covers the menu forms (set,
+## [tx] teleport, remove, overwrite, move to current position, change icon) plus chat confirmations.
+
+jm_at.homes.bed_none=§c您尚未設定床或重生錨。\n§r請先在床上睡覺或激活重生錨。
+jm_at.homes.bed_title=傳送到床上
+jm_at.homes.body=選擇一個家或管理您儲存的位置。
+jm_at.homes.body_empty=您還沒有儲存的家。
+jm_at.homes.btn_delete_red=§l§c刪除
+jm_at.homes.btn_edit_icon=§0§l編輯家圖示§r\n變更家圖示
+jm_at.homes.btn_overwrite=§l§c覆蓋
+jm_at.homes.btn_remove=§0§l刪除家§r\n刪除已儲存的地點
+jm_at.homes.btn_set=§0§l設定家§r\n儲存目前位置
+jm_at.homes.btn_tp_bed=§5§l傳送到床上§r\n前往您最後設定的床
+jm_at.homes.btn_tp_home=§5§l傳送到家§r\n選擇目的地
+jm_at.homes.btn_update=§0§l更新位置§r\n搬到您家
+jm_at.homes.btn_update_green=§l§a更新
+jm_at.homes.delete_body=刪除家§s%1$s§r？\n\n此操作無法復原。
+jm_at.homes.delete_title=刪除家
+## [tx] Destination label injected into 'Teleporting to %1$s...', 'Teleported to %1$s.' and 'Arrived
+## [tx] at %1$s' — the vanilla bed block; pick a form that fits those sentences.
+jm_at.homes.dest_bed=床
+jm_at.homes.disabled=§c家功能目前已停用。
+jm_at.homes.edit_icon_body=選擇一個家來變更其圖示：
+jm_at.homes.edit_icon_title=編輯家圖示
+jm_at.homes.icon_blue=藍色
+jm_at.homes.icon_body=為 §l%1$s§r 選擇一個圖示：
+jm_at.homes.icon_body_new=為§l%1$s§r選擇一個新圖示：
+jm_at.homes.icon_cyan=青色
+jm_at.homes.icon_dark_green=深綠色
+jm_at.homes.icon_default=預設
+jm_at.homes.icon_light_blue=淺藍色
+jm_at.homes.icon_light_green=淺綠色
+jm_at.homes.icon_orange=橙色
+jm_at.homes.icon_pink=粉色
+jm_at.homes.icon_purple=紫色
+jm_at.homes.icon_red=紅色
+jm_at.homes.icon_title=選擇家圖示
+jm_at.homes.icon_updated=§2§s%1$s§2 的圖示已更新！
+jm_at.homes.icon_yellow=黃色
+jm_at.homes.limit_reached=§c您已達到家數量上限（%1$s）。請先移除一個。
+jm_at.homes.none_saved=§c您還沒有儲存任何家。
+jm_at.homes.none_to_edit=§c您沒有任何可編輯的家。
+jm_at.homes.none_to_remove=§c您沒有任何家需要拆除。
+jm_at.homes.none_to_update=§c您沒有任何家需要更新。
+## [tx] %1$s = home name; %2$s = the existing home's location, e.g. 'overworld (100, 64, 200)'.
+jm_at.homes.overwrite_body=§c名為 §l%1$s§r§c 的家已存在。\n\n%2$s\n\n用您目前的位置覆蓋它嗎？
+jm_at.homes.overwrite_title=覆蓋家？
+jm_at.homes.remove_body=選擇要刪除的家：
+jm_at.homes.remove_title=刪除家
+jm_at.homes.removed=§2家 §s%1$s§2 已刪除。
+jm_at.homes.saved=§2家 §s%1$s§2 已儲存！
+## [tx] Text-field placeholder: three example home names. 'Mine' = a mining site (noun), not the
+## [tx] possessive pronoun; substitute any natural example place names.
+jm_at.homes.set_name_desc=例如基地、農場、礦山
+jm_at.homes.set_name_label=家名稱：
+jm_at.homes.set_title=設定家
+jm_at.homes.title=家（%1$s/%2$s）
+jm_at.homes.tp_body=選擇家：
+jm_at.homes.tp_title=傳送回家
+jm_at.homes.update_body=選擇要搬到您目前位置的家：
+## [tx] %1$s = home name; %2$s = its old saved location; %3$s = your current location (both look
+## [tx] like 'overworld (100, 64, 200)').
+jm_at.homes.update_confirm_body=將§l%1$s§r移動到目前位置？\n\n§c舊：§r %2$s\n§a新：§r %3$s
+jm_at.homes.update_confirm_title=更新位置？
+jm_at.homes.update_title=更新家庭位置
+jm_at.homes.updated=§2家 §s%1$s§2 位置已更新！
+
+## ----- jm_at.dimid.* (fmtDimRaw — lowercase ids, translatable) -----
+## [tx] Lowercase dimension names inserted mid-sentence by the location formatter, e.g. 'overworld
+## [tx] (100, 64, 200)' in a home's saved-position line. Use the official Minecraft dimension names
+## [tx] in whatever form reads naturally mid-sentence before coordinates.
+
+jm_at.dimid.nether=地獄
+jm_at.dimid.overworld=主世界
+jm_at.dimid.the_end=終界
+
+## ----- jm_at.time.* (fmt*Raw display variants) -----
+## [tx] Tiny relative-time wrappers used wherever the addon shows timestamps or durations (last
+## [tx] seen, ban expiry, etc.). The %1$s duration is machine-built like '5d 3h 2m' — the d/h/m unit
+## [tx] letters are code-side and intentionally not translatable.
+
+## [tx] Elapsed-time phrase; %1$s = a duration like '5d 3h 2m' (unit letters stay English). Reorder
+## [tx] freely, e.g. 'il y a %1$s'.
+jm_at.time.ago=%1$s前
+## [tx] Future time phrase, as in 'in 5 minutes' (NOT location). %1$s = a duration like '5d 3h 2m';
+## [tx] the unit letters d/h/m stay English by design.
+jm_at.time.in=%1$s後
+jm_at.time.just_now=剛才
+jm_at.time.never=從不
+jm_at.time.permanent=永久的
+jm_at.time.unknown=未知
+
+## ----- jm_at.kits.* -----
+## [tx] The item Kits feature: staff use a craftable Kit Editor (Kit Tool) to build item bundles
+## [tx] from their own inventory and configure type (Starter = auto-given on first join, Claimable =
+## [tx] redeemed from a menu), name color, icon, cooldown, claim limits, rank/playtime gating,
+## [tx] visibility, and pinning; regular players claim kits from the Kits section of their Player
+## [tx] Tool. Strings cover form titles/fields/buttons, kit status labels, chat success/failure
+## [tx] messages, two long in-game help pages, and command-automation instructions.
+
+## [tx] Hint under an item-quantity field. %1$s = how many of this item the staff member currently
+## [tx] holds in their inventory; %2$s = maximum total item count allowed across the whole kit.
+jm_at.kits.amount_desc=目前持有 %1$s，禮包總數上限 %2$s
+## [tx] Text-field label asking for a quantity: %1$s = an item's display name (e.g. "Bread");
+## [tx] "(whole number)" = must be an integer.
+jm_at.kits.amount_label=%1$s（整數）
+## [tx] Help page: %1$s = the kit's name (colors stripped), %2$s = its "#id" reference. All command
+## [tx] text (/scriptevent, /execute, jm_at:givekit, jm_at:claimkit, @p, @a, @initiator) must stay
+## [tx] in English exactly as written — only translate the prose.
+jm_at.kits.automation_body=§9§l透過指令發放此禮包§r\n\n§l引用名稱：§r §f%1$s§r  §8（或 ID §f%2$s§8）§r\n\n§9§l兩種指令§r\n§2§lgivekit§r——直接發放，忽略冷卻時間和次數限制\n§5§lclaimkit§r——按照禮包的冷卻時間、次數、身分組和遊玩時間規則領取\n\n§9§l聊天中使用 §8（操作員）§r\n發給自己：§r\n§7/scriptevent jm_at:§2givekit§r %1$s§r\n發給其他玩家：§r\n§7/execute as <player> run scriptevent jm_at:§2givekit§r %1$s§r\n§8例如 §f@p§8、§f@a§8（所有人）或玩家名。§r\n\n§9§l指令方塊/NPC 中使用§r\n§v指令方塊：§r §f/execute as @p run scriptevent jm_at:§2givekit§r %1$s§r\n§vNPC 按鈕：§r §f/execute as @initiator run scriptevent jm_at:§2givekit§r %1$s§r\n\n如需按規則領取，可將上述任意指令中的 §2givekit§r 替換為 §5claimkit§r。只有操作員（以及由其放置的指令方塊/NPC）可以執行這些指令；生存模式玩家只需按下按鈕或與 NPC 對話。
+jm_at.kits.body_claim_below=在下方領取禮包。
+jm_at.kits.body_manage=建立一個新禮包或選擇一個進行檢視/編輯。
+jm_at.kits.body_none_available=目前沒有可供您使用的禮包。
+jm_at.kits.btn_cancel=取消
+jm_at.kits.btn_change_icon=§l變更圖示§r\n§8選擇不同的選單圖示
+## [tx] Button: redeem/collect this kit's items now ("redeem", NOT an insurance claim and NOT the
+## [tx] land-claim feature).
+jm_at.kits.btn_claim=§2領取
+jm_at.kits.btn_claim_kit=§l§2領取禮包§r
+jm_at.kits.btn_create=§l§2建立禮包§r\n§8已使用 %1$s/%2$s
+jm_at.kits.btn_create_kit=建立禮包
+jm_at.kits.btn_delete_kit=§l§c刪除禮包§r
+jm_at.kits.btn_delete_red=§c刪除
+jm_at.kits.btn_edit_items=§l編輯物品§r\n§8重新選擇禮包的內容
+jm_at.kits.btn_edit_settings=§l編輯設定§r\n§8類型、冷卻時間、限制、適用對象與可見性
+jm_at.kits.btn_give_command=§l透過指令給予§r\n§8聊天、NPC或指令塊
+jm_at.kits.btn_give_player=§l給予玩家§r\n§8立即將此禮包交給某人
+## [tx] Button in the "Reset claim history?" dialog: declines the reset — players' existing
+## [tx] claim/cooldown records are kept unchanged.
+jm_at.kits.btn_keep_history=保留歷史
+jm_at.kits.btn_kit_info=§l禮包說明§r\n了解禮包的使用方式
+jm_at.kits.btn_pin=§l置頂§r\n§8將此禮包顯示在清單頂部
+## [tx] Button on the "Reset — <kit name>" form: clears the selected player's claim/cooldown record
+## [tx] for this kit (not a reset of the form fields).
+jm_at.kits.btn_reset=重設
+jm_at.kits.btn_reset_claims=§l重設領取紀錄§r\n§8清除一名或所有玩家的領取/冷卻紀錄
+jm_at.kits.btn_reset_everyone=§l§c重設所有人§r\n§8清除所有玩家的領取歷史紀錄
+## [tx] Confirm button paired with "Keep history": wipes ALL players' claim/cooldown history for
+## [tx] this kit (does not affect the players themselves).
+jm_at.kits.btn_reset_everyone_lower=§c重設所有人
+jm_at.kits.btn_reset_everyone_red=§c重設所有人
+jm_at.kits.btn_reset_player=§l重設玩家§r\n§8清除一名玩家的領取/冷卻紀錄
+jm_at.kits.btn_save_anyway=§2無論如何儲存
+jm_at.kits.btn_save_changes=儲存變更
+jm_at.kits.btn_staff_kit_info=§l禮包資訊§r\n製作禮包的管理團隊指南
+jm_at.kits.btn_test_claim=§l§2測試領取§r\n§8立即取得物品（忽略冷卻時間）
+jm_at.kits.btn_unpin=§l取消置頂§r\n§8不再將此禮包顯示在頂部
+jm_at.kits.cant_claim_now=§c您現在無法領取該禮包。
+jm_at.kits.change_icon_body=為 §f%1$s§r 選擇一個新圖示。
+jm_at.kits.choose_icon_body=為您的新禮包選擇一個圖示，或使用預設圖示。
+jm_at.kits.claim_failed=§c現在無法領取該禮包。
+jm_at.kits.claim_once_body=§e%1$s§r 只能領取§l一次§r。現在領取嗎？\n\n請確保物品欄有足夠空間。
+jm_at.kits.claim_status_blocked=§c您無法領取此禮包
+jm_at.kits.claim_status_cooldown=§e冷卻中 — %1$s 後可用
+jm_at.kits.claim_status_limit=§7已達到此禮包的領取上限（%1$s）
+jm_at.kits.claim_status_once=§7您已領取過此禮包
+## [tx] Kit status line: %1$s = required playtime (e.g. "10h") or a playtime-rank name; %2$s = the
+## [tx] viewing player's current total playtime.
+jm_at.kits.claim_status_playtime=§e在%1$s解鎖§7—您有%2$s
+## [tx] Variant used when the exact playtime requirement is unavailable; %1$s = the player's
+## [tx] current playtime.
+jm_at.kits.claim_status_playtime_more=§e需要更多遊玩時間才能解鎖 §7— 您目前有 %1$s
+jm_at.kits.claim_status_ready=§a可以領取
+jm_at.kits.claimed=§a已領取禮包 §f%1$s§a！
+jm_at.kits.claimed_dropped_suffix= §e（%1$s 件物品掉落 — 物品欄已滿）
+## [tx] Start of the color_* block: options in the "Name color" dropdown — Minecraft chat text
+## [tx] colors applied to the kit's name. Use the official vanilla Minecraft color names for your
+## [tx] locale.
+jm_at.kits.color_aqua=水藍色
+jm_at.kits.color_black=黑色
+jm_at.kits.color_blue=藍色
+jm_at.kits.color_dark_aqua=深青色
+jm_at.kits.color_dark_blue=深藍色
+jm_at.kits.color_dark_gray=深灰色
+jm_at.kits.color_dark_green=深綠色
+jm_at.kits.color_dark_purple=深紫色
+jm_at.kits.color_dark_red=深紅色
+jm_at.kits.color_gold=金色
+jm_at.kits.color_gray=灰色
+jm_at.kits.color_green=綠色
+jm_at.kits.color_light_purple=淺紫色
+jm_at.kits.color_material_amethyst=材質 紫水晶
+jm_at.kits.color_material_copper=材質 銅
+jm_at.kits.color_material_diamond=材質 鉆石
+jm_at.kits.color_material_emerald=材質 綠寶石
+jm_at.kits.color_material_gold=材質 金色
+jm_at.kits.color_material_iron=材質 鐵
+jm_at.kits.color_material_lapis=材質 青金石
+jm_at.kits.color_material_netherite=材質 地獄合金
+jm_at.kits.color_material_quartz=材質 石英
+jm_at.kits.color_material_redstone=材質紅石
+jm_at.kits.color_material_resin=材質 樹脂
+jm_at.kits.color_minecoin_gold=Minecoin 金色
+jm_at.kits.color_none=無顏色
+jm_at.kits.color_red=紅色
+jm_at.kits.color_white=白色
+jm_at.kits.color_yellow=黃色
+jm_at.kits.contents_empty=§7（空）
+jm_at.kits.contents_header=§l內容：§r
+jm_at.kits.create_save_failed=§c無法儲存「%1$s」。該名稱可能已被佔用，達到禮包限制，或者太大而無法儲存/儲存已滿。檢查聊天是否有儲存警告。
+jm_at.kits.created=§a已建立禮包「%1$s」。
+jm_at.kits.delete_confirm_body=刪除禮包「%1$s」嗎？此操作無法撤消。
+jm_at.kits.deleted=§e已刪除禮包「%1$s」。
+jm_at.kits.detail_created_by=§l建立者：§r %1$s\n\n
+jm_at.kits.detail_featured=§l精選：§r §e置頂到頂部§r\n
+jm_at.kits.detail_min_playtime=§l最短遊玩時間：§r %1$s\n
+jm_at.kits.detail_type=§l類型：§r %1$s\n
+jm_at.kits.detail_visibility=§l可見性：§r %1$s\n
+jm_at.kits.detail_who=§l誰：§r %1$s\n
+jm_at.kits.disabled=§e禮包功能目前已停用。
+jm_at.kits.editor_staff_only=§e禮包編輯器僅供管理團隊建立和編輯禮包。玩家應從玩家工具的§f禮包§e頁面領取。
+jm_at.kits.fail_cooldown=§e[%1$s] 正在冷卻 - %2$s 後準備就緒。
+jm_at.kits.fail_empty=§c[%1$s] 該禮包是空的或其中的物品不可用 - 請詢問管理團隊。
+jm_at.kits.fail_full=§c[%1$s] 物品欄空間不足 - 騰出空間並重試。
+jm_at.kits.fail_generic=§c[%1$s] 您現在無法領取此禮包。
+jm_at.kits.fail_limit=§e[%1$s] 您已達到該禮包的領取限額。
+jm_at.kits.fail_once=§e[%1$s] 您已經領取了該禮包。
+jm_at.kits.fail_playtime=§e[%1$s] 您需要更多的遊玩時間才能領取該禮包。
+jm_at.kits.fail_rank=§c[%1$s] 您不符合身分組要求。
+jm_at.kits.field_cooldown=冷卻時間（例如 30m、6h、1d）
+jm_at.kits.field_cooldown_desc=兩次領取之間的等待時間
+jm_at.kits.field_kit_name=禮包名稱
+jm_at.kits.field_kit_name_desc=例如新手、工具、PvP
+jm_at.kits.field_kit_type=禮包類型
+jm_at.kits.field_max_claims=最多領取總次數（留空/0 = 不限）
+jm_at.kits.field_name_color=名稱顏色
+jm_at.kits.field_pick_player=玩家（最近的在前）
+jm_at.kits.field_pt_custom=領取所需的最低遊玩時間（例如 10h；留空 = 無要求）
+jm_at.kits.field_pt_custom_with_rank=…或自訂最低遊玩時間（例如 10h；留空 = 使用身分組要求）
+jm_at.kits.field_pt_rank=最短遊玩時間身分組（此身分組及以上）
+jm_at.kits.field_regive=也送給那些從未取得過的現有玩家
+jm_at.kits.field_repeatable=可重複領取（關閉 = 僅發放一次）
+jm_at.kits.field_type_player=輸入玩家姓名（或在下方選擇）
+jm_at.kits.field_visibility=解鎖前的可見性（身分組/遊玩時間禮包）
+jm_at.kits.field_who_can_claim=允許領取的玩家
+jm_at.kits.gave=§a將「%1$s」交給§f%2$s§a。
+jm_at.kits.gave_dropped_suffix= §e（%1$s 掉落 — 他們的物品欄已滿）
+jm_at.kits.give_body=選擇一名玩家來贈送該禮包。它會立即移交，並且不會觸及他們的冷卻時間或領取限制。
+## [tx] Start of the icon_* block: options in the kit icon picker. Color entries name colored
+## [tx] (dye-color) variants of the kit icon; item entries (swords, pickaxes, chestplates, Bread,
+## [tx] Leather Tunic) are vanilla items — use official Minecraft item/color translations.
+jm_at.kits.icon_black=黑色
+jm_at.kits.icon_blue=藍色
+jm_at.kits.icon_bread=面包
+jm_at.kits.icon_brown=棕色
+jm_at.kits.icon_current=§a%1$s（目前）
+jm_at.kits.icon_cyan=青色
+jm_at.kits.icon_default=預設
+jm_at.kits.icon_diamond_chestplate=鉆石胸甲
+jm_at.kits.icon_diamond_pickaxe=鉆石鎬
+jm_at.kits.icon_diamond_sword=鉆石劍
+jm_at.kits.icon_gray=灰色
+jm_at.kits.icon_green=綠色
+jm_at.kits.icon_iron_chestplate=鐵胸甲
+jm_at.kits.icon_iron_pickaxe=鐵鎬
+jm_at.kits.icon_iron_sword=鐵劍
+jm_at.kits.icon_leather_tunic=皮革外套
+jm_at.kits.icon_light_blue=淺藍色
+jm_at.kits.icon_light_gray=淺灰色
+jm_at.kits.icon_lime=黃綠色
+jm_at.kits.icon_magenta=洋紅色
+jm_at.kits.icon_orange=橙色
+jm_at.kits.icon_pink=粉色
+jm_at.kits.icon_purple=紫色
+jm_at.kits.icon_red=紅色
+jm_at.kits.icon_updated=§a更新了「%1$s」的圖示。
+jm_at.kits.icon_white=白色
+jm_at.kits.icon_wood_pickaxe=木鎬
+jm_at.kits.icon_wood_sword=木劍
+jm_at.kits.icon_yellow=黃色
+jm_at.kits.info_player_body=§9§l禮包是什麼？§r\n禮包是一組可以領取的物品。在玩家工具的「禮包」頁面開啟此選單，即可檢視您目前可以領取的禮包。\n\n§9§l領取禮包§r\n選擇禮包檢視內容，然後點選§l領取禮包§r。物品欄必須有足夠的空位。如果空間不足，不會扣除領取機會；清出空間後再試即可。\n\n§9§l類型§r\n• §l新手禮包§r——首次加入時自動發放。\n• §l可領取禮包§r——從此選單領取。有些只能領取§l一次§r，另一些會在冷卻結束後§l重複領取§r。\n\n§9§l狀態標籤§r\n每個禮包名稱旁都會顯示狀態：\n• §a可領取§r——現在即可領取。\n• §e冷卻中§r——計時結束後可再次領取。\n• §7已領取§r——已經領取過的一次性禮包。\n• §7將在……解鎖§r——需要更多遊玩時間（或指定身分組）才能解鎖。\n\n§9§l誰可以領取§r\n部分禮包僅限管理團隊或特定身分組，也可能要求達到最低遊玩時間。繼續遊玩後，可能會解鎖更多禮包。\n\n§9§l在哪裡管理§r\n§8（管理團隊）§r使用§2禮包編輯器§r（可合成的禮包工具）建立和編輯禮包。該工具內另有完整的§l禮包說明§r。
+jm_at.kits.info_staff_body=§9§l建立禮包§r\n開啟§2禮包編輯器§r（可合成的禮包工具）→ §l建立禮包§r。最多可建立 §f%1$s§r 個禮包。\n\n§9§l1. 名稱§r\n選擇名稱和可選顏色。忽略顏色後，禮包名稱必須唯一。\n\n§9§l2. 選擇物品§r\n禮包內容取自§l您自己的物品欄§r——請先將需要的物品放入物品欄，再勾選要加入的項目（最多 §f%2$s§r 項）。帶有 §e⚠§r 標記的物品含有無法完整儲存的資料（藥水、成書、旗幟、潛影盒內容等），發放時會變為基礎形式。\n\n§9§l3. 數量§r\n為每件物品設定整數數量。禮包內所有物品的總數不得超過 §f%3$s§r（一個完整物品欄）。\n\n§9§l4. 選項§r\n• §l類型§r——§l可領取§r（從玩家工具領取）或§l新手禮包§r（首次加入時自動發放）。\n• §l可重複領取§r——關閉 = 僅發放一次；開啟 = 在§l冷卻時間§r後可以再次領取（例如 30m、6h、1d）。\n• §l最多領取總次數§r——對可重複禮包限制每名玩家一生最多可領取次數（留空/0 = 不限）。\n• §l誰可以領取§r——所有人、僅管理團隊或指定身分組。\n• §l最低遊玩時間§r——要求自訂時長（例如 10h），或在啟用「遊玩時間身分組」時指定一個身分組（達到該身分組或更高即可領取）。僅適用於可領取禮包；新手禮包不能設定遊玩時間要求。\n• §l可見性§r——對於受身分組/遊玩時間限制的禮包，可選§l解鎖前隱藏§r（預設；不滿足條件時玩家看不到）或§l顯示為鎖定§r（灰色顯示並注明解鎖要求）。冷卻中的禮包不會隱藏。\n• §l補發新手禮包§r——也向從未收到該新手禮包的現有玩家發放。\n\n§9§l管理禮包§r\n在禮包頁面可執行§l測試領取§r（立即取得物品）、§l發給玩家§r（發給線上玩家）、§l編輯設定§r、§l編輯物品§r（重新選擇內容）、§l變更圖示§r、§l置頂§r（重點顯示）、§l重設領取紀錄§r（清除一名玩家或所有人的紀錄）或§l刪除§r。\n§8提示：§r變更禮包的領取類型或限制時，系統會詢問是否重設領取紀錄，以便新規則正確生效。\n\n§9§l玩家如何領取§r\n玩家從§l禮包§r頁面透過§2玩家工具§r領取。禮包工具（禮包編輯器）僅供管理團隊使用，玩家不會用它領取禮包。\n\n§9§l透過指令發放§r\n禮包頁面中有一個§l透過指令發放§r按鈕，提供可直接使用的 §l/scriptevent§r 指令，可從聊天、NPC 或指令方塊發放或領取禮包。
+jm_at.kits.inv_empty=§c您的物品欄是空的。首先將您想要的物品新增到禮包中。
+## [tx] Text-field label: %1$s = an item's display name; "amount" = the quantity of that item to
+## [tx] include in the kit (e.g. "Bread amount").
+jm_at.kits.item_amount_label=%1$s 金額
+jm_at.kits.items_save_failed=§c無法儲存「%1$s」的新項目。它們可能太大而無法儲存，或者儲存已滿（檢查聊天中是否有儲存警告）。
+jm_at.kits.items_section_label=§7 項目 — 切換要包含的項目，然後設定數量：
+jm_at.kits.items_updated=§a更新了「%1$s」中的項目。
+jm_at.kits.kit_claimed_title=§a§l禮包已領取！
+jm_at.kits.kit_empty=§c此禮包為空或其中的物品不可用。請告知管理團隊。
+jm_at.kits.kit_limit_reached=§c您已達到禮包限制 (%1$s)。請先移除一個。
+jm_at.kits.lossy_create_body=這些項目的資料無法完全重建，因此將以基本形式給出：\n\n%1$s\n\n仍然儲存禮包嗎？
+jm_at.kits.lossy_edit_body=這些項目的資料無法完全重建，因此將以基本形式給出：\n\n%1$s\n\n是否仍儲存新內容？
+jm_at.kits.make_room=§c首先騰出空間。您需要 §f%1$s§c 個空閒欄位並擁有 §f%2$s§c。
+## [tx] Second line of a kit button in the staff list: %1$s = kit type label
+## [tx] ("Starter"/"Claimable"), %2$s = number of items in the kit. Keep the leading \n.
+jm_at.kits.manage_kit_sub=§r\n§8%1$s • %2$s 項
+jm_at.kits.no_permission=§c您無權管理禮包。
+jm_at.kits.no_players_online=§e沒有玩家線上可以給予。
+jm_at.kits.no_players_to_reset=§e沒有已知的玩家可以重設。
+jm_at.kits.no_room=§c物品欄空間不足。您需要 §f%1$s§c 個空閒欄位並擁有 §f%2$s§c。
+jm_at.kits.no_room_try_again=§c物品欄空間不足。您需要 §f%1$s§c 個空閒欄位並擁有 §f%2$s§c。騰出空間並重試。
+jm_at.kits.none=無
+jm_at.kits.not_found=§c[禮包] 找不到「%1$s」的禮包。
+jm_at.kits.pick_one_item=§c為禮包至少選擇一件物品。
+jm_at.kits.pinned_msg=§a將「%1$s」置頂到頂部。
+jm_at.kits.player_offline=§c該玩家不再線上。
+jm_at.kits.rank_admins_only=僅限管理員
+jm_at.kits.rank_everyone=大家
+jm_at.kits.rank_mods_only=僅限協管員
+jm_at.kits.rank_staff_only=僅管理團隊
+jm_at.kits.received=§a您收到了§f%1$s§a禮包！
+jm_at.kits.received_dropped=§a您收到了§f%1$s§a禮包！ §e（%2$s 件物品掉落 — 物品欄已滿）
+jm_at.kits.received_dropped_suffix= §e（一些物品掉落，您的物品欄已滿）
+jm_at.kits.received_from_staff=§a您從管理團隊處收到了§f%1$s§a禮包！
+jm_at.kits.received_title=§a§l禮包已收到！
+jm_at.kits.reset_all_body=清除每個玩家「%1$s」的領取/冷卻歷史紀錄嗎？\n\n一次性禮包再次可供所有人領取，並且所有冷卻時間和領取計數都會重設。此操作無法撤消。
+jm_at.kits.reset_all_done=§a重設「%1$s」的所有領取歷史紀錄。
+jm_at.kits.reset_history_body=您變更了「%1$s」的領取方式。重設每個人的領取/冷卻歷史紀錄，以便新規則完全適用？\n\n§8推薦，因為舊的領取紀錄可能與新的領取類型不匹配（例如，玩家可能會永久顯示「已領取」）。
+jm_at.kits.reset_menu_body=清除領取歷史紀錄，以便可以再次領取該禮包。
+jm_at.kits.reset_player_done=§a重設§f%1$s§a對「%2$s」的領取。
+## [tx] Fragment appended after "Starter (auto on first join)": the kit is also given retroactively
+## [tx] to existing players who never received it. Keep the leading space.
+jm_at.kits.sched_backfill_suffix= + 回填現有
+## [tx] Fragment appended directly to sched_every ("Claimable — every 6h, up to 3× total"): %1$s =
+## [tx] max claims per player; "×" means "times". Keep leading punctuation that joins it to the
+## [tx] sentence.
+jm_at.kits.sched_cap_suffix=，最多 %1$s× 總計
+## [tx] Kit schedule summary: %1$s = cooldown duration (e.g. "6h"); %2$s = either empty or the
+## [tx] sched_cap_suffix fragment, appended with NO space between the params.
+jm_at.kits.sched_every=可領取 — 每%1$s%2$s
+jm_at.kits.sched_once=可領取——僅限一次
+jm_at.kits.status_already_claimed=§7已領取
+jm_at.kits.status_available=§a可用
+jm_at.kits.status_limit_reached=§7已達到領取上限
+jm_at.kits.status_locked=§7鎖定
+jm_at.kits.status_on_cooldown=§e冷卻時間（%1$s）
+## [tx] %1$s = who may claim this kit: a tier label (rank_everyone/rank_staff_only/…) or an
+## [tx] admin-typed custom rank tag — the colon form keeps it grammatical for both.
+jm_at.kits.status_requires=§7需要 %1$s
+jm_at.kits.status_unlocks_at=§7於 %1$s 解鎖（您：%2$s）
+## [tx] Variant used when the exact playtime requirement is unavailable; %1$s = the player's
+## [tx] current playtime.
+jm_at.kits.status_unlocks_more=§7需要更多遊玩時間才能解鎖（您：%1$s）
+## [tx] Suffix appended to a kit's button label: this gated kit is invisible to players until they
+## [tx] unlock it. Keep the leading space and bullet.
+jm_at.kits.tag_hidden= • §8隱藏
+jm_at.kits.test_claim_done=§a已測試領取§f%1$s§a——物品已發放，且不會消耗領取次數或觸發冷卻時間。
+jm_at.kits.test_claim_dropped_suffix= §e（%1$s 已刪除）
+jm_at.kits.title_amounts=金額 — %1$s
+jm_at.kits.title_change_icon=變更圖示
+jm_at.kits.title_choose_icon=選擇一個圖示
+jm_at.kits.title_claim_once=領取一次？
+jm_at.kits.title_create_kit=建立禮包
+jm_at.kits.title_delete_kit=刪除禮包
+jm_at.kits.title_edit=編輯 — %1$s
+jm_at.kits.title_give=給予 — %1$s
+jm_at.kits.title_give_command=透過指令給予
+jm_at.kits.title_how_kits_work=禮包如何工作
+jm_at.kits.title_kit_editor=禮包編輯器
+jm_at.kits.title_kits=禮包
+jm_at.kits.title_lossy=有些項目可能會丟失資料
+jm_at.kits.title_making_kits=製作禮包
+jm_at.kits.title_pick_items=選擇物品 — %1$s
+jm_at.kits.title_reset=重設 — %1$s
+jm_at.kits.title_reset_claims=重設領取 — %1$s
+jm_at.kits.title_reset_everyone=重設所有人
+jm_at.kits.title_reset_history=重設領取歷史紀錄？
+jm_at.kits.type_claimable=可領取
+jm_at.kits.type_claimable_menu=可領取（選單）
+jm_at.kits.type_starter=新手禮包
+jm_at.kits.type_starter_auto=新手禮包（首次加入時自動發放）
+jm_at.kits.unknown_creator=未知
+jm_at.kits.unpinned_msg=§e取消置頂「%1$s」。
+jm_at.kits.updated=§a更新了「%1$s」。
+jm_at.kits.vis_hidden=隱藏直至解鎖
+jm_at.kits.vis_show_locked=顯示鎖定
+jm_at.kits.vis_show_locked_grayed=顯示鎖定（灰顯）
+
+## ----- jm_at.main.* -----
+## [tx] Chat messages sent by the core server script: land-claim protection denials ([Claims]
+## [tx] prefix), ban/freeze/whitelist notices, dimension-lock countdown broadcasts, spy-camera
+## [tx] session messages, staff-tag security alerts, and owner-only data-reset confirmations.
+## [tx] Bracketed prefixes like [Claims], [Admin Tools], [Spy] are message categories — keep them
+## [tx] short and consistent.
+
+jm_at.main.all_claims_reset=§e[Admin Tools] 所有領地已重設。已刪除 §c%1$s§r 個領地。
+## [tx] Login notice for a permanent ban; %1$s = the ban reason text.
+jm_at.main.banned_perm=§c您已被永久封鎖。\n§r原因：§r%1$s
+## [tx] Login notice for a temporary ban; %1$s = remaining duration like "2d 4h" (unit letters are
+## [tx] code-side and stay English), %2$s = the ban reason text.
+jm_at.main.banned_timed=§c您已被封鎖，剩餘時間：%1$s。\n§r原因：§r%2$s
+jm_at.main.broadcast_prefix=§s[公告]§r %1$s
+jm_at.main.cannot_reset_owner=§c[管理員工具] 無法重設服主的資料。
+jm_at.main.claims_deleted_for=§e[管理員工具] 刪除了 §g%2$s§r 擁有的 §c%1$s§r 領地。
+jm_at.main.claims_dim_change_cleared=§e[領地] 變更維度清除了您的待處理領地選擇。
+jm_at.main.claims_no_break=§c[領地] 您不能打破這裡的方塊。
+jm_at.main.claims_no_break_container=§c[領地] 您不能打破這裡的容器。
+jm_at.main.claims_no_containers=§c[領地] 您無法存取此處的容器。
+jm_at.main.claims_no_entity_interact=§c[領地] 您不能與此處的實體互動。
+jm_at.main.claims_no_harm_entities=§c[領地] 您不能傷害這裡的實體。
+jm_at.main.claims_no_interact=§c[領地] 您不能在這裡與之互動。
+jm_at.main.claims_no_item_use=§c[領地] 您不能在此處使用該物品。
+## [tx] "ender pearl" is the Minecraft item used as a verb: teleporting in by throwing an Ender
+## [tx] Pearl. Rephrase as "teleport into this area with an Ender Pearl" if your language can't verb
+## [tx] it.
+jm_at.main.claims_no_pearl=§c[領地] 您不能使用終界珍珠傳送進入此區域。
+jm_at.main.claims_no_place=§c[領地] 您不能在這裡放置方塊。
+jm_at.main.claims_no_portal_entry=§c[領地] 您無法透過傳送門進入此領地。
+jm_at.main.claims_no_pvp=§c[領地] PvP 在此區域被停用。
+jm_at.main.claims_no_trample=§c[領地] 您不能踐踏這裡的莊稼。
+jm_at.main.claims_not_allowed=§c[領地] 您不得進入該區域。
+jm_at.main.cmd_err_feed=§c[提要] %1$s
+jm_at.main.cmd_err_freeze=§c[凍結] %1$s
+jm_at.main.cmd_err_heal=§c[恢復生命值] %1$s
+jm_at.main.cmd_err_spy=§c[監視] %1$s
+jm_at.main.cmd_err_summon=§c[召喚] %1$s
+jm_at.main.cmd_err_unfreeze=§c[解凍] %1$s
+jm_at.main.cmd_err_warn=§c[警告] %1$s
+jm_at.main.cmd_failed=§c[指令] 指令「%1$s」失敗。
+## [tx] Lowercase mid-sentence dimension name inserted as %1$s into the dimlock_*/dimunlock_*
+## [tx] announcements (e.g. "the End will be locked in 5 minutes"); dim_nether_lc works the same.
+## [tx] Use the official Minecraft dimension name.
+jm_at.main.dim_end_lc=終界
+jm_at.main.dim_nether_lc=地獄
+jm_at.main.dimlock_1m=§6[伺服器] §g%1$s§r 將在 §61 分鐘§r 後被鎖定。
+jm_at.main.dimlock_30s=§c[伺服器] §g%1$s§r 在 §c30 秒內鎖定§r！現在就返回主世界吧。
+jm_at.main.dimlock_5m=§6[伺服器] §g%1$s§r 將在 §65 分鐘內被鎖定§r。
+jm_at.main.dimlock_locked=§c[伺服器] %1$s 已被鎖定。
+jm_at.main.dimunlock_1m=§2[伺服器] §g%1$s§r 將在 §21 分鐘§r 後重新開啟。
+jm_at.main.dimunlock_30s=§2[伺服器] §g%1$s§r 在 §230 秒§r 後重新開啟。
+jm_at.main.dimunlock_reopened=§2[伺服器] %1$s 已重新開啟。
+jm_at.main.freeze_expired=§2[解凍] 您的凍結已過期。
+jm_at.main.frozen_no_place=§c[凍結]凍結時無法放置方塊。
+jm_at.main.holo_admin_only=§c[管理員工具] 您必須是管理員才能使用全息圖工具。
+jm_at.main.holo_autorestore_dim=§2[全息圖] 自動恢復 %2$s 中的 %1$s 全息圖。
+jm_at.main.holo_autorestore_startup=§2[全息圖] 啟動時自動恢復 %1$s 全息圖。
+jm_at.main.holo_no_linked=§c無法找到連結的全息圖。
+jm_at.main.holo_orphan_cleared=§2[全息圖] 在啟動時清除了 %1$s 個孤立的碰撞箱。
+jm_at.main.missed_notification=§r[錯過通知] §r%1$s
+jm_at.main.mobwl_added=§2[領地] 已將 %1$s 新增到生物白名單。
+jm_at.main.mobwl_already=§c[領地] %1$s 已在白名單中。
+jm_at.main.mobwl_list=§e[領地] 生物白名單（%1$s）：\n%2$s
+jm_at.main.mobwl_none=§e[領地] 沒有自訂生物白名單項目。
+jm_at.main.mobwl_not_in=§c[領地] %1$s 不在自訂白名單中。
+jm_at.main.mobwl_removed=§2[領地] 已從生物白名單移除 %1$s。
+jm_at.main.mod_removed_bc=§e[管理員工具] %1$s 已不再是協管員。
+jm_at.main.mod_removed_tell=§c[管理員工具] 您的協管員角色已被移除。
+jm_at.main.name_change_bc=§e[管理員工具] %1$s 現在稱為 %2$s。
+jm_at.main.no_known_player=§c[管理員工具] 沒有名為「%1$s」的已知玩家。
+jm_at.main.not_whitelisted_join=§c您不在白名單中。
+jm_at.main.owner_reset_bc=§e[管理員工具] 服主已重設。下一位開啟面板的管理員將成為服主。
+jm_at.main.owner_transferred=§e[管理員工具] 所有權已轉移至 %1$s。
+jm_at.main.owner_you_are_now=§2[管理員工具] 您現在是服主。
+jm_at.main.pdata_reset_done=§e[管理員工具] §a§f%1$s§a 的所有資料均已重設。
+jm_at.main.player_not_in_registry=§c[管理員工具] 在註冊表中找不到玩家「%1$s」。
+jm_at.main.reset_all_claims_confirm=§e[管理員工具] §c⚠ 這將刪除伺服器上的所有領地。\n§e[管理員工具] §c在 10 秒內再次執行 jm_at:resetAllClaims 進行確認。
+jm_at.main.reset_claims_owner_only=§c[管理員工具] 只有服主才能重設領地。
+jm_at.main.reset_complete=§e[管理員工具] §a資料重設完成。所有設定恢復預設值。
+jm_at.main.reset_confirm=§e[管理員工具] §c⚠ 請求完全資料重設。\n§e[管理員工具] §c在 10 秒內再次執行指令進行確認。
+jm_at.main.reset_defaults_confirm=§e[管理員工具] §c⚠ 這會將所有設定恢復為預設值（玩家和領地資料會保留）。\n§e[管理員工具] §c請在 10 秒內再次執行 jm_at:resetToDefaults 以確認。
+jm_at.main.reset_defaults_done=§e[管理員工具] §a已恢復預設設定。玩家和領地資料已保留。
+jm_at.main.reset_defaults_failed=§c[管理員工具]設定重設失敗。檢視內容日誌。
+jm_at.main.reset_initiated=§e[管理員工具] §c已啟動完整資料重設...
+jm_at.main.reset_owner_only=§c[管理員工具] 只有服主才能重設所有資料。
+jm_at.main.reset_pdata_admin_only=§c[管理員工具] 只有管理員可以重設玩家資料。
+jm_at.main.reset_pdata_usage=§c[管理員工具] 用法：/scriptevent jm_at:resetPlayerData <playerName>
+jm_at.main.reset_player_claims_usage=§c[管理員工具] 用法：/scriptevent jm_at:resetPlayerClaims <playerName>
+jm_at.main.reset_settings_owner_only=§c[管理員工具] 只有服主才能重設設定。
+jm_at.main.server_locked_join=§c伺服器目前已鎖定。
+jm_at.main.server_state=§e[管理員工具] 伺服器現在為 %1$s§e。
+jm_at.main.snapshot_paused=§e[快照] 儲存寫入錯誤。玩家快照暫停約 30 秒。
+jm_at.main.spy_ended=§2[監視] §r工作階段已結束。
+jm_at.main.spy_none=§c[監視] 目前沒有進行中的監視工作階段。
+## [tx] Spy = admin camera feature (invisible spectator camera follows a player), not chat
+## [tx] surveillance. %1$s = the watched player's name.
+jm_at.main.spy_watching=§2[監視] §r正在監視§e%1$s§r。
+jm_at.main.staff_tag_admin_detected=§e[管理員工具] §f%1$s§e 現在具有 §cadmin§e 標籤。如果您沒有授予此權限，請透過「玩家」→「他們的個人資料」→「刪除管理員」將其刪除。
+jm_at.main.staff_tag_mod_detected=§e[管理員工具] §f%1$s§e 現在具有 §9moderator§e 標籤。如果您不授予此權限，請將其刪除。
+jm_at.main.staff_tag_stripped=§e[管理員工具] 未透過管理員工具授予的管理標籤已被刪除。
+jm_at.main.staff_tag_stripped_bc=§e[管理員工具] 從 §f%1$s§e 中刪除了未紀錄的管理標籤。
+jm_at.main.state_locked=§c已鎖定
+jm_at.main.state_off=§2關閉
+## [tx] State word inserted as %1$s into "Whitelist is now %1$s"; red because enabling the whitelist
+## [tx] RESTRICTS joins (state_off is green). Keep short and shouty; must read naturally in that
+## [tx] sentence.
+jm_at.main.state_on=§c開啟
+jm_at.main.state_unlocked=§2解鎖
+jm_at.main.unfrozen_force=§2您已被解凍。
+jm_at.main.whitelist_force_reset=§e[管理員工具] %1$s 已將白名單模式強制重設為§2關閉§e。已保留的白名單項目：§9%2$s§e。
+jm_at.main.whitelist_state=§e[管理員工具] 白名單現為 %1$s§e。
+
+## ----- jm_at.menu.* (admin menu shortcut labels) -----
+## [tx] Short row labels in the owner's admin-menu customization editor, naming admin panel
+## [tx] shortcuts. The '→' arrow shows a navigation path (parent section → sub-action, e.g. 'Warps →
+## [tx] Add Warp'); keep the arrow and translate each segment consistently with the actual screen
+## [tx] titles it points to.
+
+jm_at.menu.admin_log=管理日誌
+jm_at.menu.bc_add_sched=公告 → 新增預定
+jm_at.menu.bc_immediate=公告 → 立即發送
+jm_at.menu.bc_manage_sched=公告 → 管理預定
+jm_at.menu.broadcasts=公告
+jm_at.menu.commands=指令
+jm_at.menu.control_config=控制面板 → 設定編輯器
+jm_at.menu.control_dimlocks=控制面板 → 維度鎖定
+jm_at.menu.control_holograms=控制面板 → 還原全息圖
+jm_at.menu.control_itemwatch=控制面板 → 物品監控
+jm_at.menu.control_panel=控制面板
+jm_at.menu.control_serverctl=控制面板 → 伺服器控制
+jm_at.menu.control_ticketset=控制面板 → 回報單設定
+jm_at.menu.info=資訊
+jm_at.menu.players=玩家
+jm_at.menu.players_offline=玩家 → 離線玩家
+jm_at.menu.players_online=玩家 → 線上玩家
+jm_at.menu.players_rankmgr=玩家 → 身分組管理器
+jm_at.menu.players_search=玩家 → 按名稱搜尋
+jm_at.menu.search=搜尋
+jm_at.menu.teleport=傳送
+## [tx] Summon = teleport another player TO you ("bring player here"), NOT spawning a mob (unlike
+## [tx] vanilla /summon) and not mystical conjuring. Keep the → arrow; it shows the menu path.
+jm_at.menu.teleport_summon=傳送 → 召喚玩家
+jm_at.menu.teleport_tp=傳送 → 傳送至玩家
+jm_at.menu.teleport_warp=傳送 → 將玩家傳送至傳送點
+jm_at.menu.tickets=回報單
+jm_at.menu.warps=傳送點
+jm_at.menu.warps_add=傳送點 → 新增 傳送點
+jm_at.menu.warps_remove=傳送點 → 移除 傳送點
+jm_at.menu.warps_reorder=傳送點 → 調整 傳送點 順序
+jm_at.menu.warps_staffonly=傳送點 → 設定可見性（公眾/管理成員/管理員）
+jm_at.menu.warps_visibility=傳送點 → 在玩家選單中隱藏/顯示
+
+## ----- jm_at.mod.* -----
+## [tx] Moderation chat messages: notices shown to a player who was sanctioned or acted upon
+## [tx] (banned, kicked, frozen, warned, fed, healed, summoned, teleported to a warp) and
+## [tx] confirmations shown to the staff member performing the action. Mostly full chat sentences
+## [tx] with [Tag] prefixes.
+
+jm_at.mod.banned_perm=§c您已被永久封鎖。\n§r原因：§r%1$s
+jm_at.mod.banned_temp=§c您已被封鎖%1$s。\n§r原因：§r%2$s
+jm_at.mod.fed=§2[補充飽食度] §9%1$s§2 已為您補充飽食度。
+jm_at.mod.frozen_by_admin=§s[凍結] §r您已被管理員凍結。
+jm_at.mod.frozen_by_moderator=§s[凍結] §r您已被管理員凍結。
+jm_at.mod.gamemode_set=§9[遊戲模式] §r已設定為 §9%1$s§r，操作人：§g%2$s§r。
+jm_at.mod.healed=§2[恢復生命值] §9%1$s§2 已為您恢復生命值。
+jm_at.mod.kicked=§c您已被踢出。\n§r原因：§r%1$s
+jm_at.mod.summon_done=§2召喚§9%1$s§2。
+jm_at.mod.summoned=§2您已被§9%1$s§2召喚。
+## [tx] Confirmation to the admin after teleporting to COORDINATES; %1$s = a dimension + coordinates
+## [tx] string like "Overworld (120, 64, -35)" (use the 'to a place' preposition).
+jm_at.mod.tp_loc=§2傳送至§9%1$s§2。
+## [tx] Confirmation to the admin after teleporting to a PLAYER; %1$s = that player's name (use the
+## [tx] 'to a person' preposition).
+jm_at.mod.tp_to=§2傳送至§9%1$s§2。
+jm_at.mod.unbanned=§2[解除封鎖] 您的封鎖已解除。
+jm_at.mod.unfrozen=§2[解凍] §r您可以再次自由移動。
+jm_at.mod.warn_alert=§c[警告警示] §g%1$s§r 現在有 §c%2$s§r 個有效警告（門檻為 %3$s）。
+## [tx] Chat line shown to the punished player. %1$s = name of the staff member who issued the
+## [tx] warning, %2$s = the reason text.
+jm_at.mod.warned=§6[警告] §r%1$s：%2$s
+jm_at.mod.warped_admin=§2將§9%1$s§2傳送到傳送點§9%2$s§2。
+jm_at.mod.warped_target=§2您被§9%2$s§2傳送到傳送點§9%1$s§2。
+
+## ----- jm_at.mount.* -----
+## [tx] Dialogs shown during a teleport (home/warp/TPA) while the player is riding an animal: choose
+## [tx] to bring the mount along, teleport without it, or cancel. The lowercase single-word keys
+## [tx] (horse, camel, strider...) are species nouns substituted as %1$s into these sentences — use
+## [tx] official vanilla mob names.
+
+## [tx] Dialog body: %1$s = mount species noun; "/tickingarea" is a literal in-game command and must
+## [tx] stay in English; "ticking-area" is the chunk-loading technical term.
+jm_at.mount.blocked_capfull_body=§e伺服器已達到常載入區域上限（10），因此在釋放部分區域前，無法將您的§f%1$s§7帶到這麼遠的位置（請聯絡管理人員處理 §f/tickingarea§7）。§r\n\n§7是否仍要個別傳送？它會安全地留在原地。
+jm_at.mount.blocked_capfull_title=現在無法攜帶您的坐騎
+jm_at.mount.blocked_crossdim_body=§e坐騎無法跨維度傳送（MCBE 限制）。§r\n\n§7是否不帶 §f%1$s§7 繼續傳送？它會安全地留在原地。
+jm_at.mount.blocked_crossdim_title=坐騎無法跨越維度
+jm_at.mount.bring_body=§7您正在騎著§f%1$s§7。\n§7您想做什麼？
+jm_at.mount.bring_title=帶上您的坐騎？
+## [tx] Button: take the ridden animal along on the teleport. %1$s = a lowercase species noun from
+## [tx] the jm_at.mount.* keys ("horse", "camel", ...).
+jm_at.mount.btn_bring=§2§l帶上我的%1$s
+jm_at.mount.btn_cancel=§c§l取消傳送
+jm_at.mount.btn_leave=§9§l將它留在原地
+jm_at.mount.btn_tp_without=§2§l不帶我的%1$s傳送
+jm_at.mount.came_with=§a您的%1$s已一起傳送。
+jm_at.mount.came_with_hop_on=§a您的%1$s已一起傳送——請重新騎乘。
+jm_at.mount.camel=駱駝
+jm_at.mount.camel_husk=屍殼駱駝
+jm_at.mount.donkey=驢子
+## [tx] Fallback species noun: a rideable animal/steed — not a mountain; substituted into the same
+## [tx] sentences as "horse", "camel", etc.
+jm_at.mount.generic=坐騎
+jm_at.mount.happy_ghast=快樂惡魂
+jm_at.mount.horse=馬
+jm_at.mount.left_behind_crossdim=§e您的%1$s無法在維度之間移動，所以它安全地留在後面。 §7坐騎僅在同一維度內跟隨您。
+jm_at.mount.llama=羊駝
+jm_at.mount.lost=§7您的 %1$s 無法攜帶並被留在了後面。
+jm_at.mount.mule=騾子
+jm_at.mount.no_room=§7您的%1$s在目的地沒有足夠空間，因此留在了原地。
+jm_at.mount.pig=豬
+jm_at.mount.skeleton_horse=骷髏馬
+jm_at.mount.strider=熾足獸
+jm_at.mount.trader_llama=行商羊駝
+jm_at.mount.zombie_horse=殭屍馬
+
+## ----- jm_at.ranks.* -----
+## [tx] Chat-rank feature: notification sent when a player is automatically promoted to a higher
+## [tx] chat rank (a colored title prefix shown before their name in chat).
+
+## [tx] Chat notice on gaining a higher chat rank (a colored title shown before the name). %1$s =
+## [tx] the admin-configured rank text, which may contain its own color codes.
+jm_at.ranks.promoted=§9§l[身分組]§r 您已晉升為 %1$s§r！
+
+## ----- jm_at.infoa.* (admin info pages + search) -----
+## [tx] In-game manual pages for the ADMIN panel's Info hub: long scrollable help texts explaining
+## [tx] every admin feature (access tiers and roles, moderation actions, land claims, holograms,
+## [tx] kits, ranks, broadcasts/logging, server controls, crafting recipes), a keyword search over
+## [tx] those pages, plus read-only 'Current Settings' summary screens (set_* labels, st_* status
+## [tx] words, path_* menu paths inserted at runtime). Bodies mix § color codes, literal \n line
+## [tx] breaks, '───' divider rules and ⬛ crafting grids — translate prose only; keep § codes,
+## [tx] item/entity ids (jm_at:...), slash commands and placeholders untouched, and use Mojang's
+## [tx] official translations for Minecraft item, dimension and control names.
+
+jm_at.infoa.access_body=§9§l存取權限與角色§r\nAdmin Tools 分為四個權限層級：§a玩家§r、§g協管員§r、§c管理員§r與§e服主§r。每個層級都保有下一層可使用的所有功能。\n\n───────────────────\n§a§l所有人（玩家）§r\n每位玩家都會取得§2玩家工具§r（§8jm_at:ticket_menu§r），可使用回報單、警告與申訴、家、傳送點、傳送請求（TPA）、返回死亡地點、統計資料及領取禮包。管理團隊可在§l控制面板 → 選單可見性§r中隱藏或停用其中任何功能。\n§2領地工具§r（§8jm_at:claim_wand§r）可讓玩家建立與管理領地。管理員可以限制或關閉玩家建立領地的功能。\n\n───────────────────\n§g§l協管員§r\n可從玩家資料設定（玩家 → 開啟玩家 → §l設為協管員§r），也可使用 §lmoderator§r 或 §lmod§r 標籤（/tag），或指派名稱/標籤為 Moderator 的身分組。協管員會看到依照自身權限組成的精簡§n協管員面板§r。\n\n§7預設開啟：§r回報單、警告、踢出、暫時封鎖（最長 24h）、凍結、恢復生命值、補充飽食度、傳送至玩家、監視攝影機、檢視物品欄、處分紀錄、傳送至家。\n\n§7預設關閉（管理員可開啟）：§r召喚、變更遊戲模式、清空物品欄、略過領地保護、略過管理員領地保護、管理員備註、身分組面板、指令、傳送點、廣播、管理禮包、管理日誌，以及控制面板工具（伺服器控制、回報單設定、維度鎖定、物品監控、設定編輯器、身分組管理器）。\n§8每項權限都能一次套用到所有協管員，也能針對單一協管員覆寫。§r\n\n───────────────────\n§c§l管理員§r\n符合下列任一條件即可取得管理員權限：操作員等級 > 0、玩家權限高於「成員」、擁有 §9"admin"§r 標籤（資料 → §l設為管理員§r），或擁有名稱/標籤為 Admin 的身分組。\n\n§7操作員會自動取得管理員權限，讓世界能在不開啟作弊的情況下運作。若要保留某位玩家的 OP，卻移除其 Admin Tools 管理權限（例如其他附加元件要求該玩家具有 OP），請開啟其資料並使用§l移除管理員§r。該玩家仍保有操作員狀態，但在你再次使用§l設為管理員§r前，無法使用本附加元件的管理功能。服主無法用此方式被移除。§r\n\n管理員一開始§l所有權限皆為開啟§r，但有兩項由服主控制：§l管理禮包§r與§l變更遊戲模式§r（管理員預設關閉；服主可在「管理員權限」中授予）。除了協管員功能外，管理員還有以下專屬能力：\n• 永久封鎖與解除封鎖\n• 離線管理（對離線玩家執行操作）\n• 管理所有領地並建立管理員領地\n• 管理角色（新增/移除管理團隊成員）\n• 編輯協管員權限\n• 刪除已關閉的回報單、檢查儲存空間狀況，以及建立/還原全息圖\n\n───────────────────\n§e§l服主§r\n第一位開啟管理員工具的管理員會成為服主；整個伺服器只能有一位。服主§l永遠§r不受權限限制，其他管理人員也無法將其踢出、封鎖、凍結、警告或降級。\n\n僅限服主：\n• 編輯管理員權限，以及每位管理員的個別權限覆寫（包括誰能變更遊戲模式）\n• 隱藏管理員面板的最上層按鈕（選單可見性）\n• 將領地標記為「僅服主」並清除管理日誌\n\n§8復原指令：§r§8/jm_at:transferowner <player>§8 可轉移服主身分；§r§8/jm_at:resetowner§8 可清除服主身分，讓下一位管理員重新認領。§r\n\n───────────────────\n§b§l設定存取權限§r\n• §l控制面板 → 管理團隊與權限§r——設定協管員權限；服主另可設定管理員權限。\n• §l成員個別覆寫§r——開啟管理人員的資料 → §l管理權限§r，只變更該成員。無論該成員§l在線上或離線§r都能設定；離線變更會在下次登入時生效。\n• 管理員可管理協管員（需要「編輯協管員權限」）；只有服主能管理其他管理員，而且服主本人永遠不可被編輯。\n\n───────────────────\n§d§l授予管理角色的身分組§r\n在§l玩家 → 身分組管理器§r中，將名稱或標籤為 §lAdmin§r 或 §lModerator§r 的身分組指派給玩家，即會授予對應角色。批次指派前會先顯示警告；離線玩家會在下次加入時取得角色。
+jm_at.infoa.access_title=存取權限和角色
+## [tx] %1$s = number of active warnings that triggers a staff alert; %2$s = how many mod privileges
+## [tx] are currently enabled; %3$s = the total number of mod privileges (reads "3 / 12 privileges
+## [tx] enabled").
+jm_at.infoa.actions_body=§9§l操作面板§r\n檢視玩家資料時可執行以下操作：\n\n• §c§l踢出§r——將玩家移出目前連線；區域網路/本機世界中，伺服器內必須無人後才能重新加入\n• §c§l暫時封鎖§r——在指定時間內禁止加入；協管員最長只能設定 <=24h\n• §c§l永久封鎖§r——永久禁止加入 §8（僅管理員）§r\n• §2§l解除封鎖§r——移除目前的封鎖 §8（僅管理員）§r\n• §6§l警告§r——正式警告；玩家可以提出申訴\n• §s§l凍結§r——將玩家固定在原地並免疫傷害\n• §a§l恢復生命值/補充飽食度§r——立即恢復生命值或飽食度\n• §b§l傳送至玩家§r——將自己傳送到該玩家身旁\n• §d§l召喚§r——將該玩家傳送到你的位置\n• §e§l監視攝影機§r——不顯示提示的環繞攝影機；轉動視角控制環繞、移動調整距離，蹲下或跳躍可離開\n• §f§l物品欄§r——即時檢視快捷列、盔甲與終界箱；可拿取或移除物品\n• §l清空物品欄§r——清除玩家的所有物品\n• §l遊戲模式§r——變更玩家的遊戲模式 §8（需要開啟作弊）§r\n• §6§l設為/移除協管員§r §8（僅管理員）§r\n• §c§l設為/移除管理員§r——授予或撤銷管理員權限 §8（僅管理員）§r\n• §l管理權限§r——針對單一協管員覆寫權限 §8（僅管理員）§r\n\n• 警告門檻：玩家累積 §c%1$s§r 次有效警告時通知管理團隊\n\n───────────────────\n§9§l協管員權限§r\n• 全域預設：協管員已啟用 §2%2$s§r / §9%3$s§r 項權限\n• 每項權限都能一次設定給所有協管員，也能從玩家資料的「管理權限」針對單一協管員覆寫（在線上或離線皆可）\n• 包含：玩家操作（警告、踢出、封鎖、凍結、恢復生命值、補充飽食度、監視等）、面板存取（回報單、指令、傳送點、廣播、管理禮包）、身分組（身分組管理器、身分組面板）、控制面板區段（伺服器控制、設定編輯器、物品監控等），以及略過領地保護\n§8路徑：控制面板 -> 管理團隊與權限 -> 協管員權限§r\n\n───────────────────\n§9§l管理員權限§r §8（僅服主）§r\n運作方式與協管員權限相同，但套用於管理員：服主透過全域設定及每位管理員資料中的個別覆寫，控制管理員可以執行的操作。\n• 管理員預設開啟所有權限（「管理禮包」與「變更遊戲模式」除外）；服主永遠不受限制\n• 管理員專屬權限：永久封鎖、解除封鎖與離線管理\n• 另包含領地管理（管理其他人的領地）、管理角色（新增/移除管理團隊成員）、編輯協管員權限，以及略過管理員領地保護（覆寫其他管理員的領地）\n§8路徑：控制面板 -> 管理團隊與權限 -> 管理員權限§r\n\n───────────────────\n§9§l旁觀者模式安全措施§r\n進入旁觀者模式（尤其在未開啟作弊時）可能讓你無法再次開啟選單。切換前會先顯示提醒；進入旁觀者模式後，同時按下§l蹲下 + 跳躍§r，或直接重生，即可重新開啟遊戲模式選單並切換回來。
+jm_at.infoa.actions_title=行動與節制
+jm_at.infoa.broadcasts_body=§9§l公告§r\n發送一次性多行公告，或按自訂時間間隔安排循環公告。兩者都會開啟一個預覽畫面，準確顯示訊息的外觀，並接受§l&§r顏色程式碼（例如§l&6§r金色）。\n• 預定公告：§2%1$s 個執行中§r / §9%2$s 總計§r\n\n───────────────────\n§9§l管理日誌§r\n所有重要的管理操作都紀錄有時間戳和操作人員姓名。\n• §6操作日誌§r — 按操作類型過濾以查找特定事件\n• §6點名§r — 所有玩家的會話加入/離開日誌\n• §6管理團隊活動§r — 按管理成員分組的操作\n• §6儲存狀態§r — 回報單、領地、日誌和註冊表的容量§8（僅限管理員）§r\n• §6日誌設定§r — 選擇要記錄哪些選用事件以及保留多少項目；稽核操作一律會記錄§8（僅限管理員）§r\n• 服主可以從日誌中心清除日誌
+jm_at.infoa.broadcasts_title=公告和紀錄
+jm_at.infoa.btn_search=搜尋
+jm_at.infoa.btn_search_again=§l再次搜尋
+## [tx] Button on the no-results screen: runs a new search for the suggested keyword %1$s (a "did
+## [tx] you mean" suggestion echoed from no_results_suggest).
+jm_at.infoa.btn_search_suggestion=§l搜尋「%1$s」
+jm_at.infoa.btn_set_claims=§l領地
+jm_at.infoa.btn_set_monitoring=§l監控
+jm_at.infoa.btn_set_player=§l玩家工具
+jm_at.infoa.btn_set_ranks=§l身分組和進步
+jm_at.infoa.btn_set_server=§l伺服器與存取
+jm_at.infoa.btn_set_tickets=§l回報單
+## [tx] Search-results button: reveals %1$s (a count) additional weaker "loosely related" matches
+## [tx] that were hidden below the strong results.
+jm_at.infoa.btn_show_loose=§l顯示 %1$s 松散相關
+jm_at.infoa.claims_body=§9§l領地保護——管理員§r\n\n§2§l領地工具§r（§8jm_at:claim_wand§r）\n選擇兩個角落來定義領地範圍。蹲下並攻擊方塊可設定角落 1，接著蹲下並與方塊互動可設定角落 2。每個已選角落都會出現標記，讓你看見尚未確認的範圍。使用領地工具開啟領地選單並確認建立。\n\n───────────────────\n§2§l領地檢視器§r（§8jm_at:claim_viewer§r）\n使用粒子標示領地邊界。附近的任何領地都能檢視。\n\n───────────────────\n§9§l管理員領地§r\n管理員可以建立§9管理員領地§r——由伺服器擁有，且不會佔用任何玩家額度的受保護區域。適合重生點、商店、競技場或其他共用建築。\n\n───────────────────\n§9§l僅服主領地§r\n只有§9服主§r可以建立（確認領地時會顯示切換選項）。這類領地完全私密：其他管理員或協管員無法進入、建造、開啟容器、檢視或變更設定、擴大，甚至無法刪除；也不會出現在管理員領地清單中。只應用於僅能由服主接觸的敏感建築。\n\n───────────────────\n§9§l管理團隊存取與略過保護§r\n兩項權限會控制管理人員如何與不屬於自己的領地互動：\n• §6略過領地保護§r——忽略一般玩家領地的保護。\n• §6略過管理員領地保護§r——忽略其他管理員的領地保護。管理員永遠可以進入共用的管理員領地；關閉此權限後，管理員在其他管理員的私人領地內會被視為一般玩家（除非已受信任或加入該領地）。僅服主領地不受這兩項權限影響。\n\n───────────────────\n§9§l瀏覽所有領地§r\n檢視伺服器上的所有領地。可依玩家名稱篩選特定領地，並在此查看詳細資料、編輯保護、重新命名、轉移所有權、調整高度、管理子領地或強制刪除。\n\n───────────────────\n§9§l領地設定§r\n• §6領地設定§r——每位玩家的領地數上限、起始面積、增加速度、維度限制\n• §6領地預設值§r——新領地自動套用的保護設定\n• §6玩家能力§r——控制玩家可以自行切換哪些保護\n• §6預設領地高度§r——設定每個維度的預設 Y 軸範圍\n• §6生物黑名單與白名單§r——指定在領地內一律移除或一律允許的生物類型\n\n───────────────────\n§2§l領地面積與額度§r\n玩家額度以區塊計算。§81 個區塊 = 16×16 = 256 個方塊的 XZ 平面面積。§r\n雖然額度以區塊顯示，領地仍可為任何形狀與大小，消耗量會依方塊總面積計算。例如，16×16 的領地消耗 1 個區塊，20×20 的領地約消耗 1.56 個區塊。\n%1$s\n• 起始額度：%2$s 個區塊\n• 增加額度：每累積遊玩 %4$s 分鐘增加 %3$s 個區塊\n• 額度公式：min（起始 + 已獲得 + 獎勵區塊，上限 + 獎勵區塊）\n• 基礎額度上限：獎勵區塊以外最多 %5$s 個區塊\n• 擴大與延伸使用相同額度；子領地不會額外消耗額度\n• 管理員領地不會使用玩家額度，但會顯示建立該領地的管理員名稱\n\n───────────────────\n§9§l增加/移除區塊§r\n為個別玩家增加或移除獎勵領地區塊。可用於獎勵、補償或管理員調整。\n\n───────────────────\n§9§l領地事件日誌§r\n所有領地事件（建立、刪除、轉移、保護變更、新增成員/身分組、移除與到期）都會記錄時間與玩家名稱。\n\n───────────────────\n§9§l保護設定§r\n每個領地最多可切換 13 項保護：\n• §6方塊§r——防止破壞與放置方塊\n• §6容器§r——鎖定箱子、木桶、漏斗等\n• §6實體（生物）§r——保護生物與盔甲座\n• §6PvP§r——阻止玩家之間的戰鬥\n• §6互動§r——限制門、按鈕、拉桿、地板門與柵欄門\n• §6使用物品§r——阻止水桶、打火石、骨粉等\n• §6爆炸§r——防止 TNT 與苦力怕造成破壞\n• §6敵對生物§r——阻止敵對生物在領地內生成（同時套用全域生物黑名單與白名單）\n• §6踩踏農作物§r——防止耕地遭踩壞\n• §6火焰蔓延§r——防止火焰在領地內蔓延\n• §6終界珍珠§r——阻止使用終界珍珠進入領地\n• §6驅離未受信任玩家§r——自動將非成員傳送出領地\n• §6允許使用載具§r——讓礦車、船與其他載具不受實體保護限制\n\n───────────────────\n§9§l子領地§r\n子領地是父領地內具有獨立保護與成員的區域。玩家（或管理員）可在現有領地中使用領地工具建立。子領地最多可巢狀兩層（例如：城市 → 區域 → 房屋）。刪除包含巢狀子領地的子領地時，其中的子領地也會一併刪除。\n\n───────────────────\n§9§l成員與受信任身分組§r\n領地主人可以新增個別成員，也能信任伺服器中的整個身分組。兩者皆支援四種角色：\n• §6訪客：§r只能進入領地\n• §6成員：§r可以互動（門、按鈕、拉桿）\n• §6建造者：§r完整使用權限\n• §6共同擁有者：§r完整權限，且可編輯領地設定\n成員與受信任身分組都能取得會自動到期的暫時存取權限。
+jm_at.infoa.claims_limit_disabled=• 玩家領取被停用；只能建立管理員領地
+jm_at.infoa.claims_limit_max=• 每個玩家的最大頂層領地數：%1$s
+jm_at.infoa.claims_title=土地領地資訊
+jm_at.infoa.flag_adjust_height=調整高度
+jm_at.infoa.flag_allow_vehicles=允許車輛使用
+jm_at.infoa.flag_blocks=積木
+jm_at.infoa.flag_containers=集裝箱
+jm_at.infoa.flag_crop_trampling=農作物踐踏
+jm_at.infoa.flag_eject_players=驅逐不受信任的玩家
+jm_at.infoa.flag_ender_pearls=終界珍珠
+jm_at.infoa.flag_entities=實體（生物）
+jm_at.infoa.flag_explosions=爆炸
+jm_at.infoa.flag_fire_spread=火勢蔓延
+jm_at.infoa.flag_hostile_mobs=敵對生物
+jm_at.infoa.flag_interactions=互動
+jm_at.infoa.flag_item_use=物品用途
+jm_at.infoa.flag_pvp=玩家對戰
+jm_at.infoa.fmt_days_many=§9%1$s 天§r
+jm_at.infoa.fmt_days_one=§9%1$s 天§r
+## [tx] Shown in the playtime-thresholds list; %1$s = the name of a rank that has since been deleted
+## [tx] from the Rank Database.
+jm_at.infoa.fmt_deleted_rank=§c（已刪除：%1$s）§r
+jm_at.infoa.fmt_none_configured=§8未設定。§r
+jm_at.infoa.fmt_none_enabled=§8未啟用。§r
+jm_at.infoa.head_claims=§9§l領地§r
+jm_at.infoa.head_menu_visibility=§9§l玩家選單可見性§r
+jm_at.infoa.head_monitoring=§9§l監控§r
+jm_at.infoa.head_player_tools=§9§l玩家工具§r
+jm_at.infoa.head_ranks=§9§l身分組和進展§r
+jm_at.infoa.head_server_access=§9§l伺服器和存取§r
+jm_at.infoa.head_tickets=§9§l回報單§r
+jm_at.infoa.holograms_body=§9§l全息圖§r §8（僅管理員）§r\n使用§2全息圖工具§r（§8jm_at:hologram_tool§r）在世界中放置懸浮文字。\n\n§7§l建立：§r\n• 對任意方塊使用全息圖工具以開啟建立選單\n• 最多新增 §210§r 行文字，每行最多 §260§r 個字元\n• 放置前可調整位置（X/Y/Z）\n• 放置前可預覽文字\n\n§7§l計分板模式：§r\n• 建立全息圖時可選擇§l文字§r或§l計分板§r\n• 計分板全息圖可在同一個預覽介面中完成：選擇計分項目（或當場新建）、設定標題並選擇顯示行數\n• 可選用預設行格式，也可自行編寫格式（{rank} {name} {score}）；標題和每行都支援 §l&§r 顏色程式碼\n• 選項：按高→低或低→高排序、隱藏離線玩家、為分數新增千位分隔符號\n• 分數變化時會自動重新整理（約每 10 秒一次）\n\n§7§l編輯：§r\n• 手持全息圖工具與現有全息圖互動以開啟編輯選單\n• 可編輯個別行、新增新行、調整位置或移除全息圖\n• 儲存時會自動刪除空白行；如需保留空行，請輸入一個空格\n\n§7§l格式：§r\n• 支援 Minecraft 顏色和樣式程式碼（§ 格式程式碼）\n• 每行會獨立保留顏色設定\n\n§7§l恢復：§r\n• 如果全息圖實體消失（例如區塊卸載問題），請在控制面板中使用§6還原全息圖§r\n§8路徑：管理員工具 -> 管理員面板 -> 控制面板 -> 還原全息圖§r\n\n§c§l移除§r\n• 可開啟編輯選單並選擇移除選項來刪除全息圖。\n• 也可使用 §5/kill @e[type=jm_at:hologram]§r 和 §5/kill @e[type=jm_at:hologram_v2]§r，但請注意，這會在不確認的情況下刪除所有全息圖。\n• 如需更安全地批次移除，可使用 §5/kill @e[type=jm_at:hologram,r=5]§r 或 §5/kill @e[type=jm_at:hologram_v2,r=5]§r，僅刪除半徑 5 個方塊內的全息圖。\n\n\n§c§l注意：每個全息圖會使用 2 個實體。與任何生物或實體一樣，數量過多或管理不當可能影響效能。§r
+jm_at.infoa.holograms_title=全息圖
+jm_at.infoa.hub_body=§w§lAdmin Tools§r — 管理面板\n\n操作員等級 > 0、玩家權限高於「成員」，或擁有 admin 標籤的玩家可取得管理員權限。§8協管員會依照已指派的權限看到精簡面板。§r\n\n選擇下方類別以查看詳細說明。\n\n如需有關此附加元件的協助、提出建議或意見回饋，請加入 Discord：§r\n§whttps://discord.gg/ZsrM5HqHdS§r\n\n或造訪 §whttps://jmaddons.support§r\n\n
+jm_at.infoa.hub_btn_access=§l存取權限與角色§r\n各角色可使用的功能
+jm_at.infoa.hub_btn_actions=§l操作與審核§r\n踢出、禁止、警告、權限
+jm_at.infoa.hub_btn_broadcasts=§l公告和日誌§r\n公告、管理日誌
+jm_at.infoa.hub_btn_claims=§l領地保護§r\n建立、保護與管理
+jm_at.infoa.hub_btn_holograms=§l全息圖§r\n浮動文字顯示
+jm_at.infoa.hub_btn_kits=§l禮包§r\n玩家的物品包
+jm_at.infoa.hub_btn_ranks=§l身分組和進度§r\n身分組資料庫、遊玩時間身分組
+jm_at.infoa.hub_btn_recipes=§l食譜§r\n製作食譜
+jm_at.infoa.hub_btn_search=§l搜尋§r\n透過關鍵字查找資訊
+jm_at.infoa.hub_btn_server=§l伺服器與控制§r\n設定、指令、傳送點
+jm_at.infoa.hub_btn_settings=§l目前設定§r\n只讀設定摘要
+jm_at.infoa.hub_btn_tickets=§l回報單和玩家§r\n管理、設定檔案、選項卡
+jm_at.infoa.hub_title=管理面板資訊
+jm_at.infoa.idx_access=存取權限和角色
+jm_at.infoa.idx_actions=操作與管理
+jm_at.infoa.idx_broadcasts=公告和紀錄
+jm_at.infoa.idx_claims=領地保護
+jm_at.infoa.idx_holograms=全息圖
+jm_at.infoa.idx_kits=禮包
+jm_at.infoa.idx_ranks=身分組與進步
+jm_at.infoa.idx_recipes=食譜
+jm_at.infoa.idx_server=伺服器與控制
+jm_at.infoa.idx_settings=目前設定
+jm_at.infoa.idx_settings_claims=設定：領地
+jm_at.infoa.idx_settings_monitoring=設定：監控
+jm_at.infoa.idx_settings_player=設定：玩家工具
+jm_at.infoa.idx_settings_ranks=設定：身分組和進度
+jm_at.infoa.idx_settings_server=設定：伺服器和存取
+jm_at.infoa.idx_settings_tickets=設定：回報單
+jm_at.infoa.idx_tickets=回報單和玩家
+jm_at.infoa.kits_body=§9§l禮包§r\n禮包是現成的物品包。管理團隊負責建立和編輯它們；玩家領取它們。\n\n§9§l管理禮包§8（管理團隊）§r\n開啟§2禮包編輯器§r（可製作的禮包工具）來建立、編輯和刪除禮包。管理禮包需要§l管理禮包§r權限（協管員和管理員預設關閉；服主可以授予該權限）。編輯器有自己的§l禮包資訊§r指南，其中包含完整的詳細資訊。\n\n§9§l領取禮包§8（玩家）§r\n玩家從§l禮包§r頁面透過§2玩家工具§r領取禮包，而不是禮包編輯器。\n\n§9§l可見性§r\n在§f控制面板 → 選單可見性§r下顯示或隱藏玩家禮包按鈕。每個禮包也可以隱藏，直到玩家滿足其身分組/遊玩時間要求，或顯示為鎖定。
+jm_at.infoa.kits_title=禮包
+jm_at.infoa.no_results_short=§c找不到「§f%1$s§c」的結果。§r
+jm_at.infoa.no_results_suggest=§c找不到「§f%1$s§c」的結果。§r\n\n您的意思是：§9%2$s§r嗎？
+jm_at.infoa.no_results_try=§c找不到「§f%1$s§c」的結果。§r\n\n嘗試其他關鍵字或檢查拼寫。
+jm_at.infoa.path_admin_privileges=管理員工具 -> 管理面板 -> 控制面板 -> 管理團隊與權限 -> 管理員權限
+jm_at.infoa.path_broadcasts_scheduled=管理員工具 -> 管理面板 -> 公告 -> 新增預定公告/管理預定公告
+jm_at.infoa.path_claim_abilities=領地工具 -> 領地 -> 所有領地/設定 -> 領地設定 -> 玩家能力
+jm_at.infoa.path_claim_defaults=領地工具 -> 領地 -> 所有領地/設定 -> 領地設定 -> 領地預設值
+jm_at.infoa.path_claim_height=領地工具 -> 領地 -> 所有領地/設定 -> 領地設定 -> 預設領地高度
+jm_at.infoa.path_claims_config=領地工具 -> 領地 -> 所有領地/設定 -> 領地設定 -> 領地設定
+jm_at.infoa.path_config_editor=管理員工具 -> 管理面板 -> 控制面板 -> 設定編輯器
+jm_at.infoa.path_dimension_locks=管理員工具 -> 管理面板 -> 控制面板 -> 維度鎖定
+jm_at.infoa.path_iw_banned=管理員工具 -> 管理面板 -> 控制面板 -> 物品監控 -> 違禁物品
+jm_at.infoa.path_iw_tracked=管理員工具 -> 管理面板 -> 控制面板 -> 物品監控 -> 新增監控物品 / 移除監控物品
+jm_at.infoa.path_manage_whitelist=管理員工具 -> 管理面板 -> 控制面板 -> 伺服器控制 -> 管理白名單
+jm_at.infoa.path_playtime_override=管理員工具 -> 管理面板 -> 玩家 -> 身分組管理器 -> 遊玩時間身分組 -> 覆蓋手動身分組
+jm_at.infoa.path_playtime_thresholds=管理員工具 -> 管理面板 -> 玩家 -> 身分組管理器 -> 遊玩時間身分組 -> 管理門檻
+jm_at.infoa.path_playtime_toggle=管理員工具 -> 管理面板 -> 玩家 -> 身分組管理器 -> 遊玩時間身分組 -> 啟用/停用遊玩時間身分組
+jm_at.infoa.path_server_lock=管理員工具 -> 管理面板 -> 控制面板 -> 伺服器控制 -> 鎖定伺服器/解鎖伺服器
+jm_at.infoa.path_staff_rank_settings=管理員工具 -> 管理面板 -> 玩家 -> 身分組管理器 -> 管理團隊身分組設定
+jm_at.infoa.path_ticket_autodelete=管理員工具 -> 管理面板 -> 控制面板 -> 回報單設定 -> 自動刪除已關閉回報單
+jm_at.infoa.path_ticket_categories=管理員工具 -> 管理面板 -> 控制面板 -> 回報單設定 -> 管理類別
+jm_at.infoa.path_ticket_cooldown=管理員工具 -> 管理面板 -> 控制面板 -> 回報單設定 -> 設定提交冷卻時間
+jm_at.infoa.path_ticket_limit=管理員工具 -> 管理面板 -> 控制面板 -> 回報單設定 -> 回報單限制
+jm_at.infoa.path_ticket_open_close=管理員工具 -> 管理面板 -> 控制面板 -> 回報單設定 -> 開啟回報單系統/關閉回報單系統
+jm_at.infoa.path_ticket_settings=控制面板 -> 回報單設定
+jm_at.infoa.path_ticket_show_hide=管理員工具 -> 管理面板 -> 控制面板 -> 回報單設定 -> 在玩家選單中顯示/隱藏
+jm_at.infoa.path_warps=管理員工具 -> 傳送點
+jm_at.infoa.path_whitelist_toggle=管理員工具 -> 管理面板 -> 控制面板 -> 伺服器控制 -> 啟用白名單/停用白名單
+## [tx] %1$s = number of ranks defined; %2$s/%3$s = the staff name-tag prefixes (e.g. "[Admin]",
+## [tx] "[Mod]"); %4$s, %5$s, %6$s and %8$s = Enabled/Disabled status words; %7$s = number of
+## [tx] playtime thresholds configured.
+jm_at.infoa.ranks_body=§9§l身分組管理器§r\n• 身分組資料庫：§9%1$s§r 身分組已定義\n\n§7§l功能：§r\n• §6身分組資料庫§r — 新增、編輯和刪除預定義身分組\n• §6批次指派§r — 一次向多個玩家指派身分組（線上和離線）\n• §6批次刪除§r — 從所有或選定玩家中刪除身分組\n• §6管理團隊身分組設定§r — 自訂預設的 [Admin] 和 [Mod] 標籤，並切換每名管理成員的自訂身分組\n• §6遊玩時間身分組§r — 根據遊玩時間門檻自動身分組提升\n• §6獎勵遊玩時間§r — 將未追蹤的遊玩時間記入玩家，以便他們更快地達到身分組門檻\n\n────────────────────\n§9§l管理團隊標籤§r\n• Admin 標籤： %2$s§r\n• Mod 標籤：%3$s§r\n• 隱藏管理團隊標籤：%4$s\n• 每名管理成員自訂身分組：%5$s\n\n──────────────────\n§9§l遊玩時間身分組§r %6$s\n根據總遊玩時間自動身分組提升。只有在世界上度過的時間才算數。\n• 設定的門檻：§9%7$s§r\n• 覆蓋手動身分組：%8$s
+jm_at.infoa.ranks_title=身分組與進步
+jm_at.infoa.recipes_body=§9§l管理員工具§r  (§8jm_at:admin_tool§r)  §8(僅管理團隊)§r\n製作地點：工作台\n\n§8⬛§p⬛§8⬛      §p⬛§r = 木板\n§8⬛§n⬛§8⬛      §n⬛§r = 原木\n§8⬛§8⬛§8⬛§r\n───────────────────\n§9§l玩家工具§r  (§8jm_at:ticket_menu§r)\n製作地點：工作台 (無序合成)\n\n§n⬛§n⬛§n⬛§r      §n⬛§r = 原木（不限種類，可混用） ×3\n§8⬛§8⬛§8⬛§r\n§8⬛§8⬛§8⬛§r\n───────────────────\n§9§l領地工具§r  (§8jm_at:claim_wand§r)\n製作地點：工作台\n\n§8⬛§n⬛§f⬛      §n⬛§r = 木棍\n§8⬛§n⬛§8⬛      §f⬛§r = 羊毛\n§8⬛§8⬛§8⬛§r\n───────────────────\n§9§l領地檢視器§r  (§8jm_at:claim_viewer§r)\n製作地點：工作台\n\n§8⬛§1⬛§8⬛      §1⬛§r = 青金石\n§1⬛§f⬛§1⬛      §f⬛§r = 玻璃\n§8⬛§1⬛§8⬛§r\n───────────────────\n%1$s§9§l全息圖工具§r  (§8jm_at:hologram_tool§r)  §8(僅管理員)§r\n製作地點：工作台 (無序合成)\n\n§n⬛§b⬛§8⬛      §n⬛§r = 告示牌\n§8⬛§8⬛§8⬛      §b⬛§r = 螢光墨囊\n§8⬛§8⬛§8⬛§r\n───────────────────\n§9§l箱子整理器§r  (§8jm_at:chest_sorter§r)\n製作地點：工作台\n\n§8⬛§f⬛§8⬛      §f⬛§r = 鐵錠\n§8⬛§n⬛§8⬛      §n⬛§r = 箱子\n§8⬛§f⬛§8⬛§r\n───────────────────\n§9§l電梯§r  (§8jm_at:elevator§r)\n製作地點：工作台\n\n§8⬛§f⬛§8⬛      §f⬛§r = 鐵錠\n§f⬛§t⬛§f⬛      §t⬛§r = 活塞\n§8⬛§f⬛§8⬛§r
+## [tx] Spliced into recipes_body via %1$s only when kits are enabled: keep the trailing separator
+## [tx] line and final \n, keep the ⬛ grid and its spacing, keep the id jm_at:kit_tool;
+## [tx] "Chest"/"Redstone" must use official Minecraft item translations.
+jm_at.infoa.recipes_kit_block=§9§l禮包編輯器§r  (§8jm_at:kit_tool§r)  §8(管理團隊——管理禮包)§r\n製作地點：工作台\n\n§8⬛§n⬛§8⬛      §n⬛§r = 箱子\n§8⬛§c⬛§8⬛      §c⬛§r = 紅石\n§8⬛§8⬛§8⬛§r\n───────────────────\n
+jm_at.infoa.recipes_title=食譜
+jm_at.infoa.results_found_many=找到 §2%1$s§r 個與「§9%2$s§r」匹配的結果：
+jm_at.infoa.results_found_one=找到 §2%1$s§r 個與「§9%2$s§r」匹配的結果：
+jm_at.infoa.search_field_desc=例如：全息圖、封鎖、領地、TPA……
+jm_at.infoa.search_field_label=您在找什麼？
+jm_at.infoa.search_results_title=搜尋結果
+jm_at.infoa.search_title=搜尋資訊頁面
+## [tx] Fragment closing the parenthetical opened by server_afk_warn; "off" = AFK kicking is
+## [tx] disabled (NOT a sports kick-off). Keep the ")".
+jm_at.infoa.server_afk_kick_off=，踢§2關閉§r)
+## [tx] Fragment closing the parenthetical opened by server_afk_warn; %1$s = idle time before the
+## [tx] player is kicked (disconnected), e.g. "1h". "kick" = removed from the server, not a physical
+## [tx] kick. Keep the ")".
+jm_at.infoa.server_afk_kick_on=，踢§c%1$s§r)
+## [tx] Fragment: opens a parenthetical appended after the AFK status and completed by
+## [tx] server_afk_kick_on/off, e.g. " (warn 2m, kick 1h)". %1$s = idle time before the AFK warning,
+## [tx] pre-formatted like "2m". Keep the leading space and "(".
+jm_at.infoa.server_afk_warn= （警告§2%1$s§r
+jm_at.infoa.server_body_1=§9§l控制面板§r\n• 伺服器：%1$s§r • 白名單：%2$s\n• 地獄：%3$s • 終界：%4$s\n\n§7§l區段：§r\n• §6設定編輯器§r — 家、傳送、警告門檻、死亡返回、AFK\n• §6物品監控§r — 自動移除違禁物品，並在受監控物品達到數量門檻時提醒管理員\n• §6管理團隊與權限§r — 協管員權限，以及僅服主可設定的管理員權限\n• §6選單可見性§r — 顯示/隱藏玩家選單功能，以及（服主）隱藏管理面板按鈕\n• §6回報單設定§r — 開啟/關閉回報單系統、類別、冷卻時間、限制、自動刪除\n• §6維度鎖定§r — 立即鎖定地獄/終界，或設定定時鎖定與解鎖\n• §6伺服器控制§r — 伺服器鎖定和白名單管理\n• §6還原全息圖§r — 恢復消失的全息圖實體§8（僅限管理員）§r\n\n─────────────────\n§9§l玩家工具設定§r\n
+jm_at.infoa.server_body_2=• 家：%1$s（最多§2%2$s§r）\n• TPA：%3$s（冷卻§2%4$s§r）\n• 死亡返回：%5$s\n• AFK 偵測：%6$s
+jm_at.infoa.server_body_3=\n• 遊戲模式存取：%1$s\n\n──────────────────\n§9§l指令§r\n儲存並執行自訂管理指令。支援一次性和重複指令。\n§8注意：某些指令需要在世界上啟用作弊功能。§r\n\n§9§l遊戲指令§r\n指令面板中的無輸入捷徑：您自己的遊戲模式、天氣（晴/雨/雷+鎖定）、時間（日/夜/中午/午夜+鎖定）、難度、世界重生點（設定或前往）、常見遊戲規則和清除掉落物品。\n§8天氣/時間/難度/世界重生點/清除物品需要遊戲指令權限；遊戲規則選擇器需要遊戲規則權限； 遊戲模式使用現有的「遊戲模式」權限。墓碑開啟時，keepInventory 保持鎖定狀態。§r\n\n──────────────────\n§9§l傳送點§r\n建立和刪除伺服器範圍內的傳送點（最多 §250§r）。\n• 設定每個傳送點的可見性：§l公共§r、§l僅限管理團隊§r 或§l僅限管理員§r\n• 將重要傳送點置頂到清單頂部，並重新排序\n• 隱藏或顯示玩家選單中的整個傳送點部分\n\n──────────────────\n§9§l自訂選單§r\n每個管理員都可以獨立自訂自己的面板。\n• 顯示或隱藏管理面板上的可選最上層按鈕\n• 將子選單操作直接提升為首頁捷徑\n§8路徑：管理員工具 -> 管理面板 -> 自訂選單§r\n\n──────────────────\n§9§l選單可見性§r\n一個畫面來控制選單中顯示的內容。切換玩家選單中顯示的玩家功能（回報單/警告、家、傳送、死亡、傳送點、禮包）——每名管理成員都可以看到他們管理的功能的切換。 §9服主§r還取得一個部分來隱藏伺服器範圍內可選的最上層管理面板按鈕。\n§8路徑：管理員工具 -> 管理面板 -> 控制面板 -> 選單可見性§r
+jm_at.infoa.server_title=伺服器與控制
+jm_at.infoa.set_admin_tag=預設管理標籤
+jm_at.infoa.set_afk_detection=AFK偵測
+jm_at.infoa.set_afk_exempt=免除管理成員 AFK 偵測
+jm_at.infoa.set_afk_kick=AFK 踢
+jm_at.infoa.set_afk_kick_after=AFK後踢
+jm_at.infoa.set_afk_warn_after=AFK 警告後
+jm_at.infoa.set_auto_delete_closed=自動刪除已關閉的回報單
+jm_at.infoa.set_budget_cap=基礎額度上限
+jm_at.infoa.set_categories=類別
+jm_at.infoa.set_claim_height=預設領地高度
+jm_at.infoa.set_custom_ranks=每名管理成員的自訂身分組
+jm_at.infoa.set_deathback=死亡返回
+jm_at.infoa.set_default_protections=預設保護
+jm_at.infoa.set_earned_area=取得面積
+jm_at.infoa.set_end_claims=終界領地
+jm_at.infoa.set_end_lock=終界鎖定
+jm_at.infoa.set_gamemode_access=遊戲模式存取（管理員）
+jm_at.infoa.set_hide_staff_ranks=隱藏管理成員身分組
+jm_at.infoa.set_homes=家
+jm_at.infoa.set_iw_banned=物品監控：禁止物品
+jm_at.infoa.set_iw_tracked=物品監控追蹤門檻
+jm_at.infoa.set_max_claims=每名玩家的頂層領地上限
+jm_at.infoa.set_max_homes=每個玩家的最大家數量
+jm_at.infoa.set_mod_tag=預設協管員標籤
+jm_at.infoa.set_nether_claims=地獄領地
+jm_at.infoa.set_nether_lock=地獄鎖定
+jm_at.infoa.set_override_manual=覆蓋手動身分組
+jm_at.infoa.set_player_claiming=玩家建立領地
+jm_at.infoa.set_player_protections=玩家可切換的保護
+jm_at.infoa.set_playtime_ranks=遊玩時間身分組
+jm_at.infoa.set_playtime_thresholds=遊玩時間門檻
+jm_at.infoa.set_restore_tools=死亡時恢復工具
+jm_at.infoa.set_scheduled_broadcasts=預定公告
+jm_at.infoa.set_scheduled_locks=預定鎖
+jm_at.infoa.set_scheduled_unlocks=預定解鎖
+jm_at.infoa.set_server_lock=伺服器鎖
+jm_at.infoa.set_starting_area=起始區
+jm_at.infoa.set_submission_cooldown=提交冷卻時間
+jm_at.infoa.set_threshold_count=門檻計數
+jm_at.infoa.set_ticket_limit=每名玩家的待處理回報單上限
+jm_at.infoa.set_ticketing=票務
+jm_at.infoa.set_tickets_warnings=回報單/警告
+jm_at.infoa.set_tpa=TPA
+jm_at.infoa.set_tpa_delay=TPA延遲
+jm_at.infoa.set_tracked_thresholds=追蹤項目門檻
+jm_at.infoa.set_visible_player_menu=在玩家選單中可見
+jm_at.infoa.set_warn_threshold=警告門檻
+jm_at.infoa.set_warps=傳送點
+jm_at.infoa.set_warps_visible=玩家選單中可見傳送點
+jm_at.infoa.set_whitelist_mode=白名單模式
+jm_at.infoa.set_whitelisted_players=白名單玩家
+## [tx] Template (same for setting_line below): %1$s = setting name, %2$s = its current value(s),
+## [tx] %3$s = the in-game menu path where it is changed — "Path" means menu navigation, not a file
+## [tx] path.
+jm_at.infoa.setting_block=%1$s:\n%2$s\n§8路徑: %3$s§r
+jm_at.infoa.setting_line=%1$s：%2$s\n§8路徑：%3$s§r
+jm_at.infoa.settings_claims_title=目前設定：領地
+jm_at.infoa.settings_hub_body=§9§l目前伺服器設定§r\n\n伺服器目前設定的只讀摘要。\n每次開啟類別頁面時，值都會重新整理。
+jm_at.infoa.settings_hub_title=目前伺服器設定
+jm_at.infoa.settings_monitoring_title=目前設定：監控
+jm_at.infoa.settings_player_title=目前設定：玩家工具
+jm_at.infoa.settings_ranks_title=目前設定：身分組和進度
+jm_at.infoa.settings_server_title=目前設定：伺服器和存取
+jm_at.infoa.settings_tickets_title=目前設定：回報單
+jm_at.infoa.st_admin_only=§c 僅限管理員§r
+jm_at.infoa.st_all_admins=§2所有管理員§r
+jm_at.infoa.st_allowed=§2允許§r
+jm_at.infoa.st_always=§2總是
+jm_at.infoa.st_blocked=§c已阻止§r
+jm_at.infoa.st_closed=§c關閉§r
+jm_at.infoa.st_default_admin_tag=§c[管理員]§r
+jm_at.infoa.st_default_mod_tag=§g[協管員]§r
+jm_at.infoa.st_disabled=§c停用§r
+jm_at.infoa.st_enabled=§2啟用§r
+jm_at.infoa.st_instant=即時
+jm_at.infoa.st_inventory_only=§e僅限物品欄
+jm_at.infoa.st_locked_caps=§c§l已鎖定
+jm_at.infoa.st_no=§c否§r
+jm_at.infoa.st_none=§c無
+jm_at.infoa.st_off=§c關閉§r
+jm_at.infoa.st_on=§2開§r
+jm_at.infoa.st_open=§2開啟§r
+## [tx] Server lock status, the counterpart of st_locked_caps ("LOCKED"): the server is unlocked and
+## [tx] joinable — not "open a menu". st_open/st_closed nearby are the ticket-system statuses.
+jm_at.infoa.st_open_plain=§2開啟
+jm_at.infoa.st_owner_only=§c僅限服主§r
+jm_at.infoa.st_yes=§2是§r
+jm_at.infoa.tickets_body=§w§l回報單§r %1$s\n檢視並管理玩家提交的回報單。\n• 每名玩家最多待處理回報單：§2%2$s§r\n• 提交冷卻時間：§2%3$s§r\n• 類別：%4$s\n• 自動刪除已關閉回報單：%5$s（提交者檢視後）\n\n§7§l處理流程：§r §2待處理§r → §6處理中§r → §s已解決§r → §8已關閉§r\n• 接手回報單以表明您正在處理該回報單\n• 回覆以新增玩家可見的備註\n• 新增處理說明並標記為已解決，或手動關閉\n• TP 到提交位置 §8（僅限管理員）§r\n• 刪除已關閉的回報單 §8（管理員 + 回報單設定）§r\n• 已解決的回報單在提交者檢視後自動關閉。\n\n──────────────────\n§w§l玩家§r\n瀏覽§w線上§r玩家，§w離線§r紀錄，或§w按姓名§r搜尋。選擇一名玩家以開啟其個人資料。\n\n§l個人資料頁面：§r\n• §6§l檢視回報單§r — 該玩家提交的回報單\n• §6§l懲罰歷史紀錄§r — 過去的封鎖、踢出和警告的完整紀錄\n• §6§l警告§r — 有效警告和待處理申訴 §8（有警告時顯示）§r\n• §6§l間諜歷史紀錄§r — 該玩家的間諜會話紀錄\n• §6§l管理備註§r — 僅供管理團隊使用的私人備註\n• §6§l身分組§r — 設定、隱藏或刪除自訂名稱標籤
+jm_at.infoa.tickets_title=回報單和玩家
+jm_at.infoa.val_broadcast_counts=§9%1$s 個啟用§r / §9共 %2$s 個§r
+jm_at.infoa.val_chunks=§9%1$s 塊§r
+## [tx] Claim budget earning rate: %1$s = number of chunks earned; %2$s = an already-formatted
+## [tx] playtime duration such as "1h" or "30m" (not a bare number of minutes).
+jm_at.infoa.val_earned_area=§9每 %2$s 取得 %1$s 個區塊§r
+jm_at.infoa.val_height_end=• 終界：%1$s → %2$s
+jm_at.infoa.val_height_nether=• 地獄：%1$s → %2$s
+jm_at.infoa.val_height_overworld=• 主世界：%1$s → %2$s
+
+## ----- jm_at.infop.* (player info pages) -----
+## [tx] The equivalent in-game manual pages shown to regular players via the Player Menu's Info
+## [tx] button: land claiming with the Claim Tool, teleportation (homes, warps, TPA, deathback,
+## [tx] dimension locks, elevators), tickets & warnings with appeals, kits, and personal stats/AFK
+## [tx] info, plus the same crafting-recipe pages. The short jm_at.infop.st_* keys are status words
+## [tx] (Enabled/Locked/Instant, etc.) injected into these page bodies at runtime.
+
+jm_at.infop.btn_claims=§l領地保護§r\n建立領地、保護設定、成員管理
+jm_at.infop.btn_general=§l常規§r\n統計、AFK、維度鎖定
+jm_at.infop.btn_kits=§l禮包§r\n可領取的物品包
+jm_at.infop.btn_recipes=§l食譜§r\n製作食譜
+jm_at.infop.btn_teleportation=§l傳送§r\n家、傳送點、TPA 等
+jm_at.infop.btn_tickets=§l回報單與警告§r\n提交、追蹤與申訴
+## [tx] Replaces the entire "Your Budget" block when regular players cannot create claims (only
+## [tx] admins can); keep the two trailing \n.
+jm_at.infop.cl_admin_managed=§c§l領地在此伺服器上由管理員管理。§r\n\n
+jm_at.infop.cl_body_1=§9§l領地保護§r\n使用§2領地工具§r（§8jm_at:claim_wand§r）管理領地。\n\n管理員工具的資訊頁面中提供更多管理員專用說明。\n\n§9§l領地工具§r\n§l1.§r §2蹲下 + 攻擊§r方塊，設定§l角落 1§r。\n§l2.§r §2蹲下 + 互動§r方塊，設定§l角落 2§r。\n§l3.§r 開啟領地選單並點選§l確認待建立領地§r。\n每個已選角落都會出現標記，讓你在確認前看見範圍；點選§l取消領地§r可清除選取範圍。\n領地會自動延伸至伺服器為該維度設定的高度範圍。如果選取範圍位於現有領地內、包住現有領地或貼近其邊界，系統會自動判斷並提供子領地、擴大或延伸選項。\n\n§9§l領地檢視器§r（§8jm_at:claim_viewer§r）\n放在副手時，動作列會顯示領地資訊。手持時蹲下可用粒子顯示領地邊界（範圍 20 個方塊）。\n\n
+jm_at.infop.cl_body_2=§8管理員還可以設定生物黑名單與白名單：領地中一律移除或一律允許的特定生物類型。§r\n\n§9§l成員§r\n將玩家新增到您的領地中，並具有以下角色：\n• §l訪客§r - 可以進入領地但不能互動\n• §l成員§r - 可以使用門、按鈕和拉桿\n• §l建造者§r - 完全存取建造和互動\n• §l共同擁有者§r — 可以管理領地（新增成員、變更設定、建立子領地）\n成員可以是暫時的（15 分鐘到 7 天）或永久的。\n\n§9§l受信任的身分組§r\n信任伺服器身分組，讓所有具有該身分組的玩家存取您的領地。每個可信身分組都有一個角色（訪客、成員、建造者或共同擁有者），並且可以設定為過期。用於授予群組存取權限，而無需個別新增玩家。\n\n§9§l擴大與延伸§r\n• §6擴大§r — 選擇一個完全包住現有領地的更大區域，以原地擴大領地。擴大帶有延伸區域的領地時，會將整體合併為一個矩形並重設延伸區域。\n• §6延伸§r — 選擇與您的領地相鄰的區域以新增延伸區域（每個領地最多 2 個）。延伸區域與主領地共享相同的保護和成員。\n\n§9§l子領地§r\n選擇現有領地內的區域以建立具有自己的保護和成員的子領地。每個領地最多 %1$s 個子領地。子領地最多可以巢狀兩層（例如城市→地區→房屋）。
+jm_at.infop.cl_budget=§9§l您的額度§r\n• 領地：%1$s/%2$s\n• 已使用面積：%3$s/%4$s 個區塊\n• 每遊玩 §2%6$s§r 分鐘可取得：§2%5$s§r 個區塊\n• 起始額度：%7$s 個區塊 • 額度上限：%8$s 個區塊\n\n
+jm_at.infop.cl_dimensions=§9§l維度§r\n• 地獄：%1$s§r • 終界：%2$s§r\n\n§9§l保護§r\n新領地使用伺服器的預設保護。您可以切換：\n
+jm_at.infop.cl_owner_only=\n\n§9§l僅服主領地§r\n作為服主，您可以在確認新領地時將其標記為§4僅服主§r，使其完全私密：其他管理員或協管員無法進入、建造、開啟容器、檢視或變更設定、擴大、延伸或刪除；它也不會出現在管理員領地清單中。
+## [tx] Line in the protections list of the claims info page (admin viewer): %1$s = a protection
+## [tx] toggle name; "(admin)" = only admins can change this one. Keep the two leading spaces.
+jm_at.infop.cl_prot_line_admin=  §6✓§r %1$s §8（管理員）§r
+## [tx] Same line as seen by regular players: this protection is admin-only, they can't toggle it.
+## [tx] Keep the two leading spaces.
+jm_at.infop.cl_prot_line_admin_only=  §8✗ %1$s（僅管理員）§r
+jm_at.infop.cl_title=土地領地資訊
+jm_at.infop.gen_afk_head=§9§lAFK 偵測§r %1$s§r\n
+jm_at.infop.gen_afk_kick_off=§2停用§r
+## [tx] Substituted after "AFK kick:" in gen_afk_on; %1$s = number of idle minutes before the player
+## [tx] is kicked (disconnected); "min" = minutes.
+jm_at.infop.gen_afk_kick_on=§c已啟用§r，延遲 §c%1$s§r 分鐘
+jm_at.infop.gen_afk_off=目前在此伺服器上停用 AFK 偵測。\n\n
+jm_at.infop.gen_afk_on=一段時間不活動後，您將被標記為「AFK」。移動、環顧四周或與方塊互動會重設計時器。\n• AFK 警告：§2%1$s§r 空閒時間\n• AFK 踢：%2$s\n
+jm_at.infop.gen_afk_staff_exempt=• 管理團隊免受 AFK 偵測\n
+jm_at.infop.gen_afk_title_note=• 當標記為「AFK」時，畫面上會出現一個標題，直到您移動為止\n\n
+jm_at.infop.gen_dimlocks_elevator=──────────────────\n§9§l維度鎖§r\n管理員可以暫時鎖定對地獄或終界的存取。鎖定時，到該維度的所有傳送（家、傳送點、TPA）都會被阻止，裡面的玩家將被送回世界重生點。\n• 地獄：%1$s§r • 終界：%2$s§r\n\n──────────────────\n§9§l電梯§r\n站在電梯墊上，§l跳躍§r 向上傳送，或 §l蹲下§r 向下傳送。電梯會在該方向搜尋最多 128 格以尋找下一個平台。如果目的地上方空間被方塊阻擋，傳送會取消。\n• 電梯墊是配方書中提供的可製作物品\n• 在同一列中的不同高度堆疊墊以連結樓層\n\n
+jm_at.infop.gen_ranks=──────────────────\n§9§l遊玩時間身分組§r §2啟用§r\n您的身分組是根據您的總遊玩時間自動指派的。您玩的時間越長，您的身分組就越高。只有在世界上度過的時間才算數。
+jm_at.infop.gen_ranks_override=\n• 覆蓋手動身分組：%1$s§r
+jm_at.infop.gen_stats=§2§l您的統計資料§r\n§8使用此附加元件在世界上收集的資料。§r\n• §f遊玩時間：§r %1$s\n• §f擊殺生物：§r %2$s • §f擊殺玩家：§r %3$s • §f死亡次數：§r %4$s\n• §f挖掘方塊：§r %5$s • §f放置方塊：§r %6$s\n• §f移動距離：§r %7$s 格\n• §8首次加入：%8$s§r\n\n────────────────────\n
+jm_at.infop.gen_title=一般
+jm_at.infop.hub_body=§9§lAdmin Tools§r — 玩家選單\n\n選擇下方類別以查看詳細說明。\n\n如需有關此附加元件的協助、提出建議或意見回饋，請加入 Discord：§r\n§9https://discord.gg/ZsrM5HqHdS§r\n\n或造訪 §9https://jmaddons.support§r\n\n
+jm_at.infop.hub_title=玩家選單資訊
+jm_at.infop.kits_body=§9§l禮包§r\n禮包是預先配置好的物品組合。有些會在您首次加入時自動發放；其他禮包可自行領取一次，或在冷卻時間結束後重複領取。部分禮包會隨遊玩時間解鎖。\n\n開啟§l禮包§r頁面（位於§2玩家工具§r中），即可查看並領取可用禮包。頁面內的§l禮包說明§r提供完整指南。
+jm_at.infop.kits_title=禮包
+jm_at.infop.recipes_body_1=§9§l管理員工具§r  (§8jm_at:admin_tool§r)  §8(僅管理團隊)§r\n製作地點：工作台\n\n§8⬛§p⬛§8⬛      §p⬛§r = 木板\n§8⬛§n⬛§8⬛      §n⬛§r = 原木\n§8⬛§8⬛§8⬛§r\n───────────────────\n§9§l玩家工具§r  (§8jm_at:ticket_menu§r)\n製作地點：工作台 (無序合成)\n\n§n⬛§n⬛§n⬛§r      §n⬛§r = 原木（不限種類，可混用） ×3\n§8⬛§8⬛§8⬛§r\n§8⬛§8⬛§8⬛§r\n───────────────────\n§9§l領地工具§r  (§8jm_at:claim_wand§r)\n製作地點：工作台\n\n§8⬛§n⬛§f⬛      §n⬛§r = 木棍\n§8⬛§n⬛§8⬛      §f⬛§r = 羊毛\n§8⬛§8⬛§8⬛§r\n───────────────────\n§9§l領地檢視器§r  (§8jm_at:claim_viewer§r)\n製作地點：工作台\n\n§8⬛§1⬛§8⬛      §1⬛§r = 青金石\n§1⬛§f⬛§1⬛      §f⬛§r = 玻璃\n§8⬛§1⬛§8⬛§r\n───────────────────\n
+jm_at.infop.recipes_body_2=§9§l全息圖工具§r  (§8jm_at:hologram_tool§r)  §8(僅管理員)§r\n製作地點：工作台 (無序合成)\n\n§n⬛§b⬛§8⬛      §n⬛§r = 告示牌\n§8⬛§8⬛§8⬛      §b⬛§r = 螢光墨囊\n§8⬛§8⬛§8⬛§r\n───────────────────\n§9§l箱子整理器§r  (§8jm_at:chest_sorter§r)\n製作地點：工作台\n\n§8⬛§f⬛§8⬛      §f⬛§r = 鐵錠\n§8⬛§n⬛§8⬛      §n⬛§r = 箱子\n§8⬛§f⬛§8⬛§r\n───────────────────\n§9§l電梯§r  (§8jm_at:elevator§r)\n製作地點：工作台\n\n§8⬛§f⬛§8⬛      §f⬛§r = 鐵錠\n§f⬛§t⬛§f⬛      §t⬛§r = 活塞\n§8⬛§f⬛§8⬛§r
+jm_at.infop.recipes_kit_block=§9§l禮包編輯器§r  (§8jm_at:kit_tool§r)  §8(管理團隊——管理禮包)§r\n製作地點：工作台\n\n§8⬛§n⬛§8⬛      §n⬛§r = 箱子\n§8⬛§c⬛§8⬛      §c⬛§r = 紅石\n§8⬛§8⬛§8⬛§r\n───────────────────\n
+jm_at.infop.recipes_title=食譜
+jm_at.infop.st_allowed=§2允許
+jm_at.infop.st_always=§2總是
+jm_at.infop.st_closed=§c關閉
+## [tx] Teleport delay rendered as e.g. "3s": %1$s = number of seconds and the trailing "s" after §r
+## [tx] is the seconds unit abbreviation — localize the unit, keep it directly after §r.
+jm_at.infop.st_delay_sec=§2%1$s§r秒
+jm_at.infop.st_disabled=§c停用
+jm_at.infop.st_enabled=§2啟用
+## [tx] Teleport delay value: the teleport happens immediately, with no countdown (same meaning as
+## [tx] jm_at.infoa.st_instant).
+jm_at.infop.st_instant=§2即時
+jm_at.infop.st_inventory_only=§e僅限物品欄
+jm_at.infop.st_locked=§c鎖定
+jm_at.infop.st_no=§c號
+jm_at.infop.st_open=§2開啟
+jm_at.infop.st_yes=§2是
+jm_at.infop.tp_body=§9§l家§r %1$s§r\n儲存自訂的家位置並隨時傳送回它們。您還可以傳送到床的重生點。\n• 每名玩家最多可設的家： §2%2$s§r\n• 傳送延遲：%3$s§r\n• 可從 11 種彩色圖示中選擇，方便整理您的家\n• 使用§l更新家§r 將現有家移動到目前位置，而不重新建立它\n• 倒計時期間請保持靜止，否則傳送會取消\n\n──────────────────\n§s§l傳送點§r\n前往伺服器設定的目的地，例如出生點、商店或競技場。圖示指示目標維度。傳送點由管理團隊管理。\n• 傳送延遲: %3$s§r\n• 某些傳送點可能僅限於管理團隊，不會出現在您的清單中\n• 重要傳送點（如重生）可能會由管理團隊置頂，並始終顯示在清單頂部\n• 傳送至鎖定維度被阻止\n\n────────────────────\n§9§l傳送§r %4$s§r\n向其他線上玩家送出傳送請求，或處理他們發來的請求。\n• 傳送延遲：%3$s§r\n• 倒計時期間兩名玩家必須保持靜止\n• 待處理的傳入請求將顯示在傳送選單中\n• 如果未接受或拒絕，請求將在 §260§r 秒後過期\n• §l最後位置§r — 返回上次傳送之前的位置\n\n──────────────────\n§6§l返回死亡地點§r %5$s§r\n返回您上次死亡的位置。\n• 傳送延遲：%3$s§r\n• 重生時歸還工具：%6$s§r\n• 如果該地點可能不安全（岩漿、火焰或虛空），則會出現警告\n• 即使出現警告，您仍然可以選擇傳送\n\n──────────────────\n§9§l維度鎖§r\n管理員可以暫時鎖定地獄或終界的進入權限。鎖定時，到該維度的所有傳送（家、傳送點、TPA）都會被阻止。\n• 地獄：%7$s§r • 終界：%8$s§r
+jm_at.infop.tp_title=傳送
+jm_at.infop.tw_auto_delete=• 檢視的已關閉回報單將在 §2%1$s§r 天後自動刪除\n\n
+jm_at.infop.tw_body_1=§9§l提交回報單§r %1$s§r\n回報問題或向管理團隊尋求協助。請選擇最符合的類別並清楚描述問題；提供越詳細的資訊，管理團隊就能越快處理。\n• 每次提交需間隔：§2%2$s§r\n• 每名玩家最多待處理回報單：§2%3$s§r\n• 類別：§9%4$s§r\n\n───────────────────\n§9§l回報單處理流程§r\n§2待處理§r → §6處理中§r → §s已解決§r → §8已關閉§r\n• 管理團隊會接手並處理您的回報單\n• 解決後您會收到通知；查看已解決的回報單會自動將其關閉\n• 管理團隊可以回覆備註或提出後續問題\n
+jm_at.infop.tw_body_2=──────────────────\n§6§l警告§r\n檢視您帳戶上的有效警告。\n• 您的有效警告：%1$s\n• 當玩家達到 §c%2$s§r 有效警告時，管理團隊會收到警示\n• 點選警告以確認\n• 如果您認為發出的警告有誤，您可以提交申訴\n• 管理員將審核並接受或拒絕您的申訴
+jm_at.infop.tw_kept_manual=• 關閉的回報單將一直保留，直至手動刪除\n\n
+jm_at.infop.tw_title=回報單和警告
+
+## ----- jm_at.itemwatch.* -----
+## [tx] Item Watch feature: the server scans player inventories for admin-flagged items. Alerts
+## [tx] broadcast to admins when a player carries too many of a watched item, plus messages when
+## [tx] items banned by server rules ("illegal items") are auto-removed.
+
+jm_at.itemwatch.alert_broadcast=§c⚠ [物品警示] §g%1$s §r持有 §9%2$sx %3$s §r（門檻：%4$s）。
+jm_at.itemwatch.removed_broadcast=§m[違禁物品] §g%1$s §c— 已移除違禁物品：§c%2$s
+jm_at.itemwatch.removed_tell=§c[管理員] 非法物品已從您的物品欄中移除。
+
+## ----- jm_at.pmenu.* -----
+## [tx] The Player Menu — the main menu regular (non-staff) players open: buttons for Homes, Warps,
+## [tx] TPA teleports, Deathback (return to death point), Kits, Tickets/Warnings, and a personal
+## [tx] statistics page. Most values are two-line button labels: a bold title on line 1 and a gray
+## [tx] §8 description on line 2 (the \n and § codes must be preserved).
+
+jm_at.pmenu.body=支援、旅行和玩家功能。
+jm_at.pmenu.btn_my_tickets=§l§0我的回報單§r
+jm_at.pmenu.btn_submit_ticket=§l§0提交回報單§r
+jm_at.pmenu.btn_warnings=§l§0警告§r
+jm_at.pmenu.deathback=§l§0死亡返回§r\n§8尚未紀錄死亡
+## [tx] Button that teleports you back to where you last died; %1$s/%2$s/%3$s = X/Y/Z coordinates of
+## [tx] that death. Keep the feature name consistent with jm_at.pmenu.deathback.
+jm_at.pmenu.deathback_pos=§l§0死亡返回§r\n§8X:%1$s Y:%2$s Z:%3$s
+jm_at.pmenu.homes=§l§0家§r\n§8管理您儲存的位置
+jm_at.pmenu.info=§l§0資訊§r\n附加元件資訊
+## [tx] Two-line button label. "Claim" here is the verb redeem/collect (pick up your kit items) —
+## [tx] NOT a land claim. Line 2 is a gray description.
+jm_at.pmenu.kits=§l§0禮包§r\n§8領取物品包
+jm_at.pmenu.my_stats=§l§0我的統計§r\n§8檢視您的遊戲統計
+jm_at.pmenu.stats_body=§9§l您的統計資料§r\n§8僅統計您在安裝此附加元件的世界中的活動。§r\n\n§l§2遊玩時間§r\n%1$s\n\n——————————————\n§l§2戰鬥§r\n§f擊殺生物：§r %2$s\n§f擊殺玩家：§r %3$s\n§f死亡次數：§r %4$s\n\n——————————————\n§l§2建造§r\n§f挖掘方塊：§r %5$s\n§f放置方塊：§r %6$s\n\n——————————————\n§l§2探索§r\n§f移動距離：§r %7$s 格\n\n——————————————\n§8• 首次加入：%8$s
+jm_at.pmenu.stats_title=我的統計資料
+jm_at.pmenu.teleport=§l§0傳送§r\n§8TPA、最後位置等
+jm_at.pmenu.teleport_pending=§l§0傳送§r\n§8%1$s 個待處理的 TPA 請求
+jm_at.pmenu.tickets_warnings=§l§0回報單/警告§r\n§8提交回報單或檢視警告
+jm_at.pmenu.title=玩家選單
+jm_at.pmenu.tw_body=提交、追蹤和檢視警告。\n\n使用回報單報告問題或向管理員和協管員尋求幫助。
+jm_at.pmenu.tw_title=回報單/警告
+jm_at.pmenu.warps=§l§0傳送點§r\n§8伺服器傳送位置
+
+## ----- jm_at.sorter.* -----
+## [tx] Chest Sorter: chat feedback after a player uses the sorter on a chest, barrel, or shulker
+## [tx] box. The kind_* keys are container-type nouns inserted into the success message "Sorted X
+## [tx] items in %2$s."
+
+jm_at.sorter.empty=§2[箱子整理器]§r 容器為空。
+jm_at.sorter.error=§c[箱子分揀機]§r 分揀時出現問題。
+jm_at.sorter.failed_restored=§c[箱子分類器]§r 分類失敗 — 內容已恢復。
+jm_at.sorter.kind_barrel=桶
+## [tx] Noun inserted into "Sorted X items in %2$s." — add an article or case ending here if your
+## [tx] language needs one (same for the other kind_* keys).
+jm_at.sorter.kind_chest=胸部
+jm_at.sorter.kind_double_chest=雙胸
+jm_at.sorter.kind_shulker=潛影盒
+jm_at.sorter.no_access=§c[箱子分揀機]§r 無法存取集裝箱物品欄。
+jm_at.sorter.no_longer_sortable=§c[箱子分類器]§r 該塊不再是可分類容器。
+jm_at.sorter.no_permission=§c[箱子分類器]§r §c您無法在此處對容器進行分類。
+jm_at.sorter.not_sortable=§c[箱子分類器]§r 這不是一個可分類的容器。
+jm_at.sorter.single=§2[寶箱分類器]§r 只有一件物品 — 已分類。
+## [tx] Chat result: %1$s = number of item stacks arranged, %2$s = a container noun from
+## [tx] jm_at.sorter.kind_* ("chest", "double chest", "barrel", "shulker box").
+jm_at.sorter.sorted=§2[箱子分揀機]§r 已對 %2$s 中的 %1$s 件物品進行分類。
+
+## ----- jm_at.spectator.* -----
+## [tx] Rescue dialog for players stuck in Spectator game mode (which blocks the normal menu items):
+## [tx] buttons return them to Survival/Creative/Adventure or open an admin/mod/player tool while
+## [tx] staying in spectator. Game-mode names must match official Minecraft localization.
+
+jm_at.spectator.body=§r您目前處於§9旁觀者模式§r。\n\n旁觀者模式無法用一般方式重新開啟選單。請選擇一種模式返回，或開啟工具並繼續保持旁觀者模式：
+jm_at.spectator.btn_admin_tool=§l開啟管理員工具
+jm_at.spectator.btn_adventure=§l冒險
+jm_at.spectator.btn_creative=§l創意
+jm_at.spectator.btn_mod_tool=§l開啟協管員工具
+jm_at.spectator.btn_player_menu=§l開啟玩家選單
+jm_at.spectator.btn_stay=§l留在旁觀者模式
+jm_at.spectator.btn_survival=§l生存
+jm_at.spectator.change_failed=§c[旁觀者] 無法變更您的模式 - 請詢問其他管理員。
+jm_at.spectator.returned=§2[旁觀者] 已返回正常遊戲。
+jm_at.spectator.title=退出旁觀者模式
+
+## ----- jm_at.prot.* (PROTECTION_DEFS labels) -----
+## [tx] Labels for the per-claim grief-protection toggles in the land-claims feature: the long form
+## [tx] appears next to the on/off switch in the claim-settings form, the matching _short form
+## [tx] appears in compact summary lists. Each pair must clearly stay in sync.
+
+## [tx] Claim-protection toggle: "vehicles" = boats and minecarts; lets visitors use/break them even
+## [tx] while other entities in the claim are protected.
+jm_at.prot.allow_vehicles=使載具不受實體保護限制
+jm_at.prot.allow_vehicles_short=允許車輛使用
+jm_at.prot.blocks=保護方塊（建造和破壞）
+jm_at.prot.blocks_short=積木
+jm_at.prot.containers=保護容器（箱子、桶等）
+jm_at.prot.containers_short=集裝箱
+jm_at.prot.crop_trampling=保護農作物（農田踐踏）
+jm_at.prot.crop_trampling_short=農作物踐踏
+jm_at.prot.eject_players=驅逐不受信任的玩家
+jm_at.prot.eject_players_short=驅逐不受信任的玩家
+## [tx] Claim-protection toggle: "Block" is the verb (prevent) — stops players teleporting INTO the
+## [tx] claim with thrown ender pearls; not a Minecraft block.
+jm_at.prot.ender_pearls=阻止終界珍珠入口
+jm_at.prot.ender_pearls_short=終界珍珠
+jm_at.prot.entities=保護實體（生物）
+jm_at.prot.entities_short=實體（生物）
+jm_at.prot.explosions=防止爆炸
+jm_at.prot.explosions_short=爆炸
+jm_at.prot.fire_spread=防止火勢蔓延
+jm_at.prot.fire_spread_short=火勢蔓延
+jm_at.prot.hostile_mobs=防止敵對生物生成
+jm_at.prot.hostile_mobs_short=敵對生物
+jm_at.prot.interactions=保護互動（門、按鈕、杠桿）
+jm_at.prot.interactions_short=互動
+jm_at.prot.item_use=保護物品的使用（水桶、打火石和鋼）
+jm_at.prot.item_use_short=物品用途
+jm_at.prot.pvp=停用領地內的 PvP
+jm_at.prot.pvp_short=玩家對戰
+
+## ----- jm_at.stat.* (TRACKED_STATS picker labels) -----
+## [tx] Names of the player statistics the addon tracks (kills, deaths, playtime...), shown in the
+## [tx] picker when creating a Stat Leaderboard hologram and used as the resulting scoreboard's
+## [tx] display name.
+
+jm_at.stat.deaths=死亡次數
+jm_at.stat.mined=開採的區塊
+jm_at.stat.mobkills=生物殺戮
+## [tx] Leaderboard stat label: number of players this player has killed (kills they made, not times
+## [tx] they were killed by players).
+jm_at.stat.pkills=玩家擊殺數
+jm_at.stat.placed=放置的方塊
+jm_at.stat.playtime=遊玩時間
+jm_at.stat.traveled=行駛過的方塊
+
+## ----- jm_at.spy.* -----
+## [tx] Chat/command spy: an admin covertly observes another player during a temporary "session";
+## [tx] the admin's original position and game mode are saved and restored afterward. These strings
+## [tx] announce the session ending, being interrupted, or the watched player going offline.
+
+jm_at.spy.ended=§2[監視] §r工作階段已結束。
+jm_at.spy.interrupted=§2[監視] §r工作階段已中斷。您的位置和遊戲模式已恢復。
+## [tx] Action-bar hint shown continuously during a spy session. Crouch/Jump are game controls — use
+## [tx] the official Minecraft control names; keep the "|" separators and keep the whole line short
+## [tx] (it renders on one action-bar line).
+jm_at.spy.reminder=§g[監視模式已開啟] §r轉動視角進行環繞 | 前後移動調整距離 | 蹲下或跳躍退出
+jm_at.spy.target_offline=§2[監視] §r%1$s 已離線。工作階段已結束。
+
+## ----- jm_at.storage.* (live admin alerts; queued copies stay English) -----
+## [tx] Technical chat alerts sent to admins about the addon's internal save-data storage (dynamic
+## [tx] properties with hard byte limits): capacity warnings, failed writes, corrupted pages, and
+## [tx] migrations. Internal area/property names inside these messages intentionally stay English.
+
+jm_at.storage.health_header=§e[儲存] §r以下區域的容量已達到§c百分之 %1$s 以上§r：\n%2$s
+## [tx] Bullet line in a storage-capacity alert: %1$s = internal data-area name (stays English, e.g.
+## [tx] "claims"), %2$s = percent number, %3$s/%4$s = used and maximum entry counts.
+jm_at.storage.health_line_area=§e• %1$s：百分之 %2$s (%3$s/%4$s)
+jm_at.storage.health_line_bytes=§e• %1$s：32KB 的%2$s (%3$sB)
+jm_at.storage.health_line_total=§e• 總儲存空間：已使用建議上限 %2$s MB（%3$s B）的百分之 %1$s
+jm_at.storage.log_page_corrupt=§e[管理員工具儲存] 日誌頁 %1$s 已損壞並已重設。
+jm_at.storage.player_write_failed=§c[管理員工具儲存] %1$s 的玩家屬性寫入失敗。儲存空間可能已滿。錯誤：%2$s
+jm_at.storage.prop_near_limit=§e[管理員工具儲存]「%1$s」為 %2$s 位元組 — 接近 %3$s 位元組限制。考慮在無法再儲存之前對其進行修剪。
+jm_at.storage.prop_too_large=§c[管理員工具儲存] 無法儲存「%1$s」：%2$s 位元組已超過單一儲存項目的 %3$s 位元組上限。變更並未儲存——請移除部分項目或物品後再試一次。
+jm_at.storage.registry_migrated=§2[管理員工具儲存] 玩家註冊表已遷移為分頁格式（%2$s 頁面中的 %1$s 項目）。
+jm_at.storage.ticket_page_corrupt=§e[管理員工具儲存] 回報單頁 %1$s 已損壞並已重設。
+jm_at.storage.world_write_failed=§c[管理員工具儲存] 索引鍵「%1$s」的世界屬性寫入失敗。儲存空間可能已滿。錯誤：%2$s
+
+## ----- jm_at.support.* (owner-consented support access) -----
+## [tx] Rarely-seen feature: the server owner can grant a designated support technician temporary
+## [tx] admin access by typing a command into Admin Tool → Commands → Quick Run. These strings are
+## [tx] the owner/admin-facing feedback; the technician-facing diagnostics menu stays English.
+
+jm_at.support.gate_grant=§c只有操作員或服主可以授予支援存取權限。
+jm_at.support.gate_revoke=§c只有操作員或服主可以撤銷支援存取權限。
+## [tx] Broadcast to online admins: %1$s = the granting owner/admin's name, %2$s = the technician's name.
+jm_at.support.granted_broadcast=§e[支援] %1$s 已向 §f%2$s§e 授予支援存取權限。
+## [tx] %1$s = the technician's name (used twice). The quoted commands "open diag menu" and
+## [tx] "revoke "%1$s" access" are typed literally and MUST stay English; "Commands → Quick Run"
+## [tx] names menus — match their translations elsewhere.
+jm_at.support.granted_feedback=§2已向 %1$s 授予支援存取權限。對方可透過「指令 → 快速執行 → §fopen diag menu§2」開啟。可隨時使用 §frevoke "%1$s" access§2 撤銷。
+## [tx] "Commands → Quick Run" is a menu path — match those menu-name translations.
+jm_at.support.no_access=§c您沒有支援存取權限。服主必須先透過「指令 → 快速執行」授予權限。
+## [tx] %1$s = the name the owner typed; it did not match the fixed list of support technicians.
+jm_at.support.not_recognized=§c「%1$s」不是已知的支援技術人員。
+jm_at.support.revoke_none=§e%1$s 沒有支援存取權限。
+## [tx] Broadcast to online admins: %1$s = who revoked, %2$s = the technician's name.
+jm_at.support.revoked_broadcast=§e[支援] %1$s 已撤銷 §f%2$s§e 的支援存取權限。
+jm_at.support.revoked_feedback=§2已撤銷 %1$s 的支援存取權限。
+
+## ----- jm_at.tickets.* -----
+## [tx] Support ticket system: players submit help requests via a form (category, description,
+## [tx] location); staff see new-ticket alerts and can claim, reply to, resolve, close, and delete
+## [tx] tickets from the admin panel, while players manage their own list under "My Tickets". Mix of
+## [tx] button labels, form fields, status badges (OPEN/CLAIMED/RESOLVED/CLOSED), and chat
+## [tx] confirmations where %1$s is usually the ticket ID.
+
+## [tx] Button: a staff member assigns this support ticket to themselves ("take it on"). NOT the
+## [tx] land-claim feature, not an insurance claim.
+jm_at.tickets.btn_claim=§l接單
+jm_at.tickets.btn_close_exit=關閉回報單並退出
+jm_at.tickets.btn_close_plain=關閉回報單
+jm_at.tickets.btn_close_ticket=§l關閉回報單
+jm_at.tickets.btn_delete=§l§c刪除回報單
+## [tx] Button: opens the admin-panel profile page for the player who submitted the ticket; %1$s =
+## [tx] that player's name.
+jm_at.tickets.btn_profile=§l個人資料：%1$s
+jm_at.tickets.btn_reply=§l回覆
+jm_at.tickets.btn_reply_send=發送回覆
+jm_at.tickets.btn_reply_send_exit=發送回覆並退出
+jm_at.tickets.btn_resolve=§l標記為已解決
+jm_at.tickets.btn_resolve_exit=標記為已解決並退出
+jm_at.tickets.btn_resolve_plain=標記為已解決
+## [tx] Button: teleports the admin to the in-game coordinates where the ticket was submitted. TP =
+## [tx] teleport (gamer abbreviation).
+jm_at.tickets.btn_tp=§lTP 到位置
+## [tx] Button: the staff member releases the ticket assignment back to the queue (opposite of the
+## [tx] Claim button above).
+jm_at.tickets.btn_unclaim=§l取消接單
+## [tx] Chat confirmation to staff after taking a ticket; %1$s = the ticket ID (e.g. "T-0042"). Same
+## [tx] %1$s pattern in unclaimed/resolved/closed_done/deleted.
+jm_at.tickets.claimed=§2已接手回報單 %1$s。
+jm_at.tickets.close_note_desc=原因/備註
+jm_at.tickets.close_note_label=關閉備註（可選）
+jm_at.tickets.close_title=關閉回報單
+jm_at.tickets.closed_done=§2%1$s 關閉。
+jm_at.tickets.delete_body=§c永久刪除回報單§9%1$s§c？\n\n此操作無法撤消。
+jm_at.tickets.delete_title=刪除回報單
+jm_at.tickets.deleted=§2回報單 %1$s 已刪除。
+jm_at.tickets.detail_category=§r類別：§r %1$s
+jm_at.tickets.detail_claimed_by=§r接單人：§r%1$s
+jm_at.tickets.detail_closed_note=§r關閉備註：§r%1$s
+jm_at.tickets.detail_created=§r已建立：§r %1$s
+jm_at.tickets.detail_location=§r位置：§r %1$s
+jm_at.tickets.detail_resolution=§2處理結果：§r%1$s
+## [tx] Ticket detail block: %1$s = the reply message text, %2$s = the name of the staff member who
+## [tx] wrote it (the em dash line is a signature).
+jm_at.tickets.detail_staff_reply=§s管理團隊回覆：§r %1$s\n§r— %2$s§r
+jm_at.tickets.detail_status=§r狀態：§r %1$s
+jm_at.tickets.detail_submitter=§r提交者：§r %1$s
+jm_at.tickets.detail_title=回報單詳細資料
+## [tx] Broadcast to staff when a ticket is filed. %1$s = ticket ID, %2$s = submitting player's
+## [tx] name, %3$s = ticket category. "New" refers to the ticket (agree gender/number with
+## [tx] 'ticket').
+jm_at.tickets.new_alert=§9[回報單] §r新回報單 §r%1$s§r，提交人：§g%2$s§r（§r%3$s§r）
+jm_at.tickets.not_found=§c找不到回報單。
+jm_at.tickets.reply_desc=輸入您的回覆...
+jm_at.tickets.reply_label=給玩家的訊息
+jm_at.tickets.reply_saved=§2回覆已儲存。
+jm_at.tickets.reply_title=回覆票
+jm_at.tickets.resolve_note_desc=做了什麼？
+jm_at.tickets.resolve_note_label=決議說明（必填）
+jm_at.tickets.resolve_title=解決回報單
+jm_at.tickets.resolved=§2已解決%1$s。
+jm_at.tickets.status_claimed=處理中
+jm_at.tickets.status_closed=已關閉
+jm_at.tickets.status_open=待處理
+jm_at.tickets.status_resolved=已解決
+jm_at.tickets.storage_full=§c回報單儲存空間已滿。請聯絡管理員清除已關閉的回報單。
+## [tx] %1$s = number of seconds; the letter s right after it is the seconds unit (renders like
+## [tx] "30s"). Replace with your locale's seconds abbreviation, not a plural marker.
+jm_at.tickets.submit_cooldown=§c請等待 %1$ss，然後再提交另一張回報單。
+jm_at.tickets.submit_limit=§c您已經有 %1$s 個有效回報單。等待它們解決或關閉，然後再開啟另一個。
+## [tx] 'Closed' here means the ticket feature is disabled/turned off by admins — NOT the CLOSED
+## [tx] ticket status; use a 'disabled/unavailable' word.
+jm_at.tickets.system_closed=§c票務系統目前已關閉。
+jm_at.tickets.unclaimed=§2已取消接手回報單 %1$s。
+jm_at.tickets.btn_clean_up=§l§c清理 (%1$s)§r\n%2$s 已關閉 - %3$s 已刪除
+jm_at.tickets.btn_my_tickets=§l我的回報單§r
+jm_at.tickets.btn_remove=§l刪除
+jm_at.tickets.btn_remove_deleted=§l§c刪除已刪除 (%1$s)§r\n回報單已被管理團隊刪除
+jm_at.tickets.btn_submit_exit=提交並退出
+jm_at.tickets.cleanup_body=從您的清單中刪除 %1$s 回報單嗎？\n（%2$s 已關閉，%3$s 已被管理團隊刪除）\n管理團隊仍然可以存取已關閉的回報單。
+jm_at.tickets.cleanup_done=§2已從您的清單中移除 %1$s 個回報單。
+jm_at.tickets.cleanup_title=清理回報單
+jm_at.tickets.my_body=選擇回報單以查看詳細資料。
+jm_at.tickets.my_body_empty=您還沒有提交任何回報單。
+jm_at.tickets.my_title=我的回報單
+jm_at.tickets.staff_offline=§c[目前沒有管理成員在線上；他們下次登入時會收到通知]
+jm_at.tickets.staff_online=§2[線上管理成員：%1$s]
+jm_at.tickets.submit_category=類別
+jm_at.tickets.submit_desc_hint=發生了什麼事？
+jm_at.tickets.submit_desc_label=描述（最多 %1$s 個字元）
+jm_at.tickets.submit_title=提交回報單
+## [tx] %1$s = ticket ID; %2$s = a complete pre-translated sentence inserted at runtime (the
+## [tx] staff_online or staff_offline line below). Same pattern in submitted_chat.
+jm_at.tickets.submitted_body=回報單§9%1$s§r已建立。\n\n%2$s
+jm_at.tickets.submitted_chat=§2回報單 §9%1$s§r 已提交。 %2$s
+jm_at.tickets.submitted_title=回報單已提交
+
+## ----- jm_at.grave.* -----
+## [tx] Gravestone (death chest) feature: messages shown when a player interacts with a grave to
+## [tx] recover the item stacks stored there when someone died, including partial recovery when
+## [tx] their inventory is full.
+
+jm_at.grave.not_yours=§c這是§g%1$s§c的墓碑。
+## [tx] Chat: %1$s = number of item stacks recovered, %2$s = the grave owner's player name — note
+## [tx] the order is opposite to jm_at.grave.not_yours, where %1$s is the name.
+jm_at.grave.recovered_other=§2從§g%2$s§2的墳墓中回收了§9%1$s§2堆。
+jm_at.grave.recovered_own=§2從您的墳墓中恢復了§9%1$s§2層。
+jm_at.grave.recovered_partial=§e已恢復§9%1$s§e堆疊。物品欄已滿 — §9%2$s§e 留在墳墓裡。
+
+## ----- jm_at.tpa.* -----
+## [tx] TPA = player-to-player teleport requests: one player asks to teleport to another, who
+## [tx] accepts or declines within a time limit. Includes chat notifications ([TPA] prefix), the
+## [tx] Teleport menu with its Last Location shortcut, the send/accept forms, and on-screen titles
+## [tx] during the movement-cancellable countdown.
+
+jm_at.tpa.acceptor_offline=§c[TPA] %1$s 已不線上。
+jm_at.tpa.already_pending=§9[TPA] 對該玩家的請求已待處理。
+jm_at.tpa.arrived=§2[TPA] %1$s 傳送到您身邊。
+jm_at.tpa.cancel_left=§c[TPA] 傳送已取消 - 一名玩家離開。
+jm_at.tpa.cancel_moved=§c[TPA] 傳送已取消 - 偵測到移動。
+jm_at.tpa.declined=§9[TPA] %1$s 拒絕了您的傳送請求。
+## [tx] %1$s = a dimension name ('Nether' or 'The End'); locked = admins have disabled travel there,
+## [tx] not locked with a key.
+jm_at.tpa.dim_locked=§c%1$s 目前已鎖定。
+jm_at.tpa.disabled=§c[TPA] TPA 目前已停用。
+jm_at.tpa.expired_incoming=§9[TPA] 來自§g%1$s§r 的請求已過期。
+jm_at.tpa.expired_outgoing=§9[TPA] 您對 §g%1$s§r 的請求已過期。
+jm_at.tpa.failed=§c[TPA] 傳送失敗。
+## [tx] %1$s = requesting player's name; 'Player Menu' and 'TPA' are the names of menus elsewhere in
+## [tx] this addon — match those translations exactly.
+jm_at.tpa.incoming=§9[TPA] §g%1$s§r 想傳送到您身邊。開啟玩家選單 -> TPA 接受。
+jm_at.tpa.request_expired=§9[TPA] 該請求已過期。
+jm_at.tpa.requester_offline=§9[TPA] %1$s 不再線上。
+jm_at.tpa.sent=§9[TPA] 請求已發送至 §g%1$s§r。
+jm_at.tpa.teleported=§2[TPA] 傳送到§9%1$s§2。
+jm_at.tpa.title_arrived=§r到達§9%1$s
+jm_at.tpa.title_canceled=§c取消
+## [tx] On-screen title shown when the teleport completes: means 'finished/arrived', not the
+## [tx] crafting sense of 'made'.
+jm_at.tpa.title_done=§2完成
+jm_at.tpa.title_incoming=§9%1$s§r正在傳送到您身邊...
+jm_at.tpa.title_moved=§r您或其他玩家移動了。
+jm_at.tpa.title_teleporting_to=§r正在傳送到§9%1$s§r...
+jm_at.tpa.btn_accept=§l接受
+jm_at.tpa.btn_decline=§l拒絕
+jm_at.tpa.confirm_body=§g%1$s§r 想傳送到您身邊。\n\n接受還是拒絕？
+jm_at.tpa.confirm_title=來自 %1$s 的 TPA
+## [tx] Destination label = the spot you stood at before your most recent teleport (a 'go back'
+## [tx] option); injected into 'Teleporting to %1$s...' etc. Not 'last known location' of another
+## [tx] player.
+jm_at.tpa.dest_last_location=最後地點
+jm_at.tpa.incoming_body=接受或拒絕請求：
+jm_at.tpa.incoming_entry=§l§2%1$s§r\n想要傳送到您身邊
+jm_at.tpa.incoming_title=傳入的 TPA 請求
+jm_at.tpa.menu_body=沒有待處理的 TPA 請求。
+jm_at.tpa.menu_body_pending=§9%1$s 個待處理的 TPA 請求給您。
+jm_at.tpa.menu_btn_accept=§l§9接受 TPA 請求§r\n%1$s 待處理
+jm_at.tpa.menu_btn_last=§l§2最後位置§r\nX:%1$s Y:%2$s Z:%3$s
+jm_at.tpa.menu_btn_send=§l§2發送 TPA 請求§r\n請求傳送到玩家處
+jm_at.tpa.menu_title=傳送
+jm_at.tpa.no_players=§c目前沒有其他玩家線上。
+jm_at.tpa.send_body=選擇一名玩家：
+jm_at.tpa.send_title=發送 TPA 請求
+
+## ----- jm_at.tp.* (delayed teleport shared by homes/warps/deathback) -----
+## [tx] Shared feedback for the delayed teleport (a short countdown that cancels if the player
+## [tx] moves), reused by homes, warps, and last-location/back teleports. %1$s is always the
+## [tx] destination label — a player-typed home/warp name or the 'Bed'/'Last Location' strings.
+
+jm_at.tp.canceled=§7傳送已取消。
+jm_at.tp.canceled_moved=§c傳送已取消——您移動了。
+jm_at.tp.done=§2傳送到§s%1$s§2。
+jm_at.tp.failed=§c傳送失敗。
+jm_at.tp.title_arrived=§r到達§9%1$s
+jm_at.tp.title_canceled=§c取消
+jm_at.tp.title_teleporting_to=§r正在傳送到§9%1$s...
+jm_at.tp.title_you_moved=§r您移動了。
+
+## ----- jm_at.warn.* -----
+## [tx] The player-facing "Warnings" screens: a punished player lists their active disciplinary
+## [tx] warnings, opens one to read the reason and issuer, acknowledges it, or submits a written
+## [tx] appeal that staff later approve or deny. Includes the appeal form and the per-warning status
+## [tx] words (Pending, Acknowledged, Appeal pending, Appeal denied).
+
+jm_at.warn.acked=§2警告已確認。
+jm_at.warn.acked_broadcast=§r[警告] §g%1$s§r 確認警告：§r%2$s
+jm_at.warn.appeal_broadcast=§s[申訴] §r%1$s§r 對警告「§r%2$s§r」提出申訴：§r%3$s
+jm_at.warn.appeal_denied=§c被管理團隊拒絕。
+jm_at.warn.appeal_field=您的申訴
+jm_at.warn.appeal_field_desc=解釋為什麼您認為這個警告不公平......
+jm_at.warn.appeal_pending_review=§8等待管理團隊審核……
+jm_at.warn.appeal_submitted=§2申訴已提交。管理團隊會審核。
+jm_at.warn.appeal_title=提交申訴
+jm_at.warn.btn_ack=§l確認
+jm_at.warn.btn_appeal=§l提交申訴
+jm_at.warn.btn_submit_close=提交並關閉
+jm_at.warn.detail_appeal=§r您的申訴：§r%1$s\n§r狀態：%2$s
+jm_at.warn.detail_head=§c警告§r\n§r原因：§r %1$s\n§r發布者：§r %2$s\n§r發布者：§r %3$s
+jm_at.warn.detail_title=警告詳細資料
+jm_at.warn.list_body=選擇要確認或申訴的警告。
+## [tx] Warning-list button label: %1$s = warning reason (truncated), %2$s = staff member who issued
+## [tx] it, %3$s = status word (Pending/Acknowledged/Appeal pending/Appeal denied).
+jm_at.warn.list_entry=§c§l%1$s§r\n由 %2$s - %3$s
+jm_at.warn.list_title=警告
+jm_at.warn.list_title_count=警告（%1$s）
+jm_at.warn.none=§2您目前沒有警告。
+jm_at.warn.status_acked=§8確認
+jm_at.warn.status_denied=§c申訴被駁回
+## [tx] Warning status: the player has NOT yet acknowledged this warning (pending acknowledgment) —
+## [tx] distinct from status_pending_appeal, where an appeal awaits staff review.
+jm_at.warn.status_pending=§s待定
+jm_at.warn.status_pending_appeal=§8申訴待決
+
+## ----- jm_at.warps.* -----
+## [tx] The Warps menu: named server-wide teleport points created by staff that players can visit.
+## [tx] Some warps are restricted by role, shown as a bracketed [Staff]/[Admin] tag appended after
+## [tx] the warp's name in the list.
+
+jm_at.warps.body=選擇要前往的傳送點：
+jm_at.warps.none=管理團隊尚未設定傳送點。
+## [tx] Short tag appended after a warp's name meaning only Admins can use that warp (tag_staff is
+## [tx] the same for Staff); keep the square brackets and keep it short.
+jm_at.warps.tag_admin=§c[管理員]
+jm_at.warps.tag_staff=§m[管理團隊]
+jm_at.warps.title=傳送點

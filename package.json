@@ -1,0 +1,32 @@
+{
+  "name": "admin-tools-xa",
+  "version": "2.5.3",
+  "private": true,
+  "type": "module",
+  "description": "Admin Tools 相安二改版：家园管理、传送规则、税务收益与中文完善",
+  "author": "相安 <3199912548@qq.com>",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xiangan666/admin-tools-xa.git"
+  },
+  "bugs": "https://github.com/xiangan666/admin-tools-xa/issues",
+  "homepage": "https://github.com/xiangan666/admin-tools-xa#readme",
+  "scripts": {
+    "test": "node tools/test.mjs && python -m unittest discover -s tests -p test_*.py",
+    "validate": "node tools/version.mjs --check && node tools/validate.mjs && node tools/check-locales.mjs && node tools/check-static-chinese.mjs && node tools/check-docs.mjs",
+    "build": "python tools/build.py",
+    "check": "npm run validate && npm test",
+    "version": "node tools/version.mjs",
+    "version:sync": "node tools/version.mjs",
+    "release": "node tools/release.mjs"
+  },
+  "devDependencies": {
+    "@minecraft/server": "2.8.0",
+    "@minecraft/server-ui": "2.1.0",
+    "acorn": "8.15.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

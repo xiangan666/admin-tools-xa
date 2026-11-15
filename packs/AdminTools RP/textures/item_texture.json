@@ -1,0 +1,27 @@
+{
+  "resource_pack_name": "Admin Tools",
+  "texture_name": "atlas.items",
+  "texture_data": {
+    "jm_at_admin_tool": {
+      "textures": "textures/items/jm_at_admin_tool"
+    },
+    "jm_at_ticket_menu": {
+      "textures": "textures/items/jm_at_ticket_menu"
+    },
+    "jm_at_claim_wand": {
+      "textures": "textures/items/jm_at_claim_wand"
+    },
+    "jm_at_claim_viewer": {
+      "textures": "textures/items/jm_at_claim_viewer"
+    },
+    "jm_at_hologram_tool": {
+      "textures": "textures/items/jm_at_hologram_tool"
+    },
+    "jm_at_chest_sorter": {
+      "textures": "textures/items/jm_at_chest_sorter"
+    },
+    "jm_at_kit_tool": {
+      "textures": "textures/items/jm_at_kit_tool"
+    }
+  }
+}

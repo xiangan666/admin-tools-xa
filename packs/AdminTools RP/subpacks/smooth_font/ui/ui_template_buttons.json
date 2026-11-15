@@ -1,0 +1,8 @@
+{
+  "namespace": "common_buttons",
+
+  "new_ui_binding_button_label": {
+    "font_type": "smooth",
+    "backup_font_type": "default"
+  }
+}

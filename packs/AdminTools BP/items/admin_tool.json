@@ -1,0 +1,24 @@
+{
+  "format_version": "1.21.130",
+  "minecraft:item": {
+    "description": {
+      "identifier": "jm_at:admin_tool",
+      "menu_category": {
+        "category": "equipment"
+      }
+    },
+    "components": {
+      "minecraft:icon": {
+        "textures": {
+          "default": "jm_at_admin_tool"
+        }
+      },
+      "minecraft:display_name": {
+        "value": "item.jm_at:admin_tool.name"
+      },
+      "minecraft:max_stack_size": 64,
+      "minecraft:glint": true,
+      "minecraft:hand_equipped": true
+    }
+  }
+}

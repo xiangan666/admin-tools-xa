@@ -1,0 +1,23 @@
+{
+  "project": "Admin Tools (Achievement Friendly)",
+  "author": "JM_Addons / JM",
+  "projectId": 1485587,
+  "fileId": 8470997,
+  "version": "2.3 Beta [v2.2.2]",
+  "releaseType": "beta",
+  "releaseDate": "2026-07-20",
+  "verifiedDate": "2026-11-08",
+  "projectUrl": "https://www.curseforge.com/minecraft-bedrock/addons/admin-tools-achievement-friendly",
+  "fileUrl": "https://www.curseforge.com/minecraft-bedrock/addons/admin-tools-achievement-friendly/files/8470997",
+  "downloadUrl": "https://mediafilez.forgecdn.net/files/8470/997/Admin%20Tools%202.3%20Beta%20%5Bv2.2.2%5D.mcaddon",
+  "license": "All Rights Reserved",
+  "sha256": "0aa5d68be75b1fb2992688acda03600f92312b49d473876e07cc241eff986ae6",
+  "originalFileName": "Admin Tools 2.3 Beta [v2.2.2].mcaddon",
+  "gameVersion": "26.30",
+  "minEngineVersion": [
+    1,
+    26,
+    30
+  ],
+  "verification": "CurseForge project and all-files page, latest entry expanded in browser; archive manifests inspected."
+}
